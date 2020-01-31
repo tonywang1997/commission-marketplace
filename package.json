@@ -1,5 +1,5 @@
 {
-  "name": "commission_marketplace",
+  "name": "commision_market",
   "private": true,
   "dependencies": {
     "@rails/actioncable": "^6.0.0",
