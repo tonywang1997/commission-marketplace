@@ -1,8 +1,7 @@
 class ArtistsController < ApplicationController
-
-  def storefront
+  def edit
   end
 
-  def dashboard
+  def show
   end
 end
