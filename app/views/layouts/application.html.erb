@@ -15,8 +15,9 @@
         <nav>
           <ul class="nav navbar-nav navbar-center">
             <li><%= link_to 'Home', root_path %></li>
-            <li><%= link_to 'Dashboard', dashboard_path %></li>
-            <li><%= link_to 'Storefront', storefront_path %></li>
+            <li><%= link_to 'Register', register_path %></li>
+            <li><%= link_to 'Dashboard', edit_user_path(1) %></li>
+            <li><%= link_to 'Storefront', user_path(1) %></li>
           </ul>
         </nav>
       </div>

@@ -1,3 +1,3 @@
 class User < ApplicationRecord
-  belongs_to :artist
+  has_many :portfolios
 end
