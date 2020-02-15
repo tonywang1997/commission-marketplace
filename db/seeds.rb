@@ -11,5 +11,6 @@ User.new(
   user_name: 'user_1',
   email_address: 'user_1@example.com',
   password: 'password_1',
+  password_confirmation: 'password_1',
   profile_thumbnail: 'some_profile_pic'
 ).save
