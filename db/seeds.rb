@@ -50,7 +50,7 @@ while x < 25 do
     tags_hash = [:tags_id = tag_id, :tag_name = Faker::Beer.unique.brand]
     tags << tags_hash
 
-    has_tag_hash = [portf_id: = port_id, arti_id: = art_id]
+    has_tag_hash = [tag_id: = tag_id, arti_id: = art_id]
     has_tag << has_tag_hash
 
     has_images_hash = [portfolioid: = port_id, imageid: = image_id]
@@ -63,7 +63,8 @@ while x < 25 do
 end
 
 User.import user_c, user, validate: false
-Artist.import artist_c, artist, validate: false
 Portfolio.import portfolio_c, portfolio, validate: false
+Tag.import tags_c, tags, validate: false
+Has_tag.import has_tag_c, has_tag, validate: false
 Has_images.import has_images_c, has_images, validate: false
 Images.import images_c, import, validate: false
