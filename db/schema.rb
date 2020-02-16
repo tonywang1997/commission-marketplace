@@ -15,12 +15,6 @@ ActiveRecord::Schema.define(version: 2020_02_15_210129) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "artists", force: :cascade do |t|
-    t.integer "user_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   create_table "has_images", force: :cascade do |t|
     t.integer "portfolio_id"
     t.integer "image_id"
