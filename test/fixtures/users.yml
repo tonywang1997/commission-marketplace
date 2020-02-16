@@ -3,7 +3,7 @@
 # one:
 #   user_name: MyString
 #   email_address: MyString
-#   password: MyString
+#   password_digest: MyString
 #   profile_thumbnail: MyString
 
 # two:

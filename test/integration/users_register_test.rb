@@ -4,16 +4,6 @@ class UsersRegisterTest < ActionDispatch::IntegrationTest
   # test "the truth" do
   #   assert true
   # end
-  def setup
-    @user = User.new(
-      user_name: 'test_user',
-      email_address: 'test_user@x.com',
-      password: 'test123',
-      password_confirmation: 'test123',
-      profile_thumbnail: 'idk',
-    )
-    @user.save
-  end
 
   test 'does not create user when invalid params' do
     get register_path

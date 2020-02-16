@@ -21,7 +21,8 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     if @user.save
       # handle successful save
-      flash[:success] = "Welcome to the Sample App!"
+      flash[:success] = "Welcome to the Commission Marketplace!"
+      log_in @user
       redirect_to @user
     else
       render 'new'
