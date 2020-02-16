@@ -6,4 +6,5 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  # todo: write test for logging in, correct redirection
 end

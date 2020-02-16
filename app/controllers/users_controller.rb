@@ -3,14 +3,15 @@ class UsersController < ApplicationController
   before_action :correct_user, only: [:edit, :update]
 
   def show
-    @user = User.find(params[:id])
-  end
-
-  def storefront
     @user = User.find_by(user_name: params[:user_name])
   end
 
   def edit
+  end
+
+  def dashboard
+    @user = current_user
+    render 'edit'
   end
 
   def new
@@ -23,7 +24,7 @@ class UsersController < ApplicationController
       # handle successful save
       flash[:success] = "Welcome to the Commission Marketplace!"
       log_in @user
-      redirect_to @user
+      redirect_to user_path(@user.user_name)
     else
       render 'new'
     end
@@ -44,7 +45,7 @@ class UsersController < ApplicationController
     end
 
     def correct_user
-      @user = User.find(params[:id])
+      @user = User.find_by(user_name: params[:user_name])
       redirect_to(edit_user_url(current_user)) unless @user == current_user
     end
 end

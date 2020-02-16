@@ -17,12 +17,12 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get show" do
-    get user_url(@user)
+    get user_url(@user.user_name)
     assert_response :success
   end
 
   test "should get edit" do
-    get edit_user_url(@user)
+    get edit_user_url(@user.user_name)
     assert_response :success
   end
 
