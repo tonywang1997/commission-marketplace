@@ -5,6 +5,7 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+<<<<<<< HEAD
 
 require 'faker'
 require 'activerecord-import'
@@ -51,6 +52,3 @@ Artist.import artist_c, artist, validate: false
 Portfolio.import portfolio_c, portfolio, validate: false
 Has_images.import has_images_c, has_images, validate: false
 Images.import images_c, import, validate: false
-
-
-

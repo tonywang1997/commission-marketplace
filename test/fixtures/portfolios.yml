@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  artist_id: 1
+  description: MyString
+  price_low: 1.5
+  price_high: 1.5
+  date_created: 2020-02-12
+
+two:
+  artist_id: 1
+  description: MyString
+  price_low: 1.5
+  price_high: 1.5
+  date_created: 2020-02-12
