@@ -9,6 +9,14 @@ h1 {
   text-align: center;
 }
 
+.nav-link a {
+  color: white;
+}
+
+.nav-link:hover a {
+  color: lightgray;
+}
+
 @mixin box_sizing {
   -moz-box-sizing:    border-box;
   -webkit-box-sizing: border-box;
