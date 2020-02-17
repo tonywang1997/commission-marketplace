@@ -1,1 +1,35 @@
-<h1>Home</h1>
+<h1>Commission Marketplace</h1>
+<div class="sticky-top sticky-offset">
+  <%= form_with(url: '#', scope: :session, local: true, method: :get, class: 'form-inline') do |f| %>
+    <div class='container text-center'>
+      <%= f.text_field :search, class: 'form-control ml-3 w-50', placeholder: "Search (eg, 'full body sketch $20-30')" %>
+
+      <%= button_tag :submit, class: 'btn-primary btn form-control' do %>
+          <%= material_icon.search %>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+<div class="d-flex flex-wrap p-2">
+  <div class="col-lg-4 col-md-4 col-xs-4 thumb">
+      <a class="thumbnail" href="#">
+          <img class="img-responsive" src="http://placehold.it/400x300" alt="">
+      </a>
+  </div>
+  <div class="col-lg-4 col-md-4 col-xs-4 thumb">
+      <a class="thumbnail" href="#">
+          <img class="img-responsive" src="http://placehold.it/400x300" alt="">
+      </a>
+  </div>
+  <div class="col-lg-4 col-md-4 col-xs-4 thumb">
+      <a class="thumbnail" href="#">
+          <img class="img-responsive" src="http://placehold.it/400x300" alt="">
+      </a>
+  </div>
+  <div class="col-lg-4 col-md-4 col-xs-4 thumb">
+      <a class="thumbnail" href="#">
+          <img class="img-responsive" src="http://placehold.it/400x300" alt="">
+      </a>
+  </div>
+
+</div>

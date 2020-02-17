@@ -57,6 +57,8 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'bcrypt'
 # gem 'bootstrap-sass'
 gem 'bootstrap', '~> 4.4.1'
+gem 'material_icons'
+gem 'imgurapi'
 
 
 
