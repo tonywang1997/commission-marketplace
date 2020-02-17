@@ -1,35 +1,50 @@
 <h1>Commission Marketplace</h1>
-<div class="sticky-top sticky-offset">
-  <%= form_with(url: '#', scope: :session, local: true, method: :get, class: 'form-inline') do |f| %>
-    <div class='container text-center'>
-      <%= f.text_field :search, class: 'form-control ml-3 w-50', placeholder: "Search (eg, 'full body sketch $20-30')" %>
 
-      <%= button_tag :submit, class: 'btn-primary btn form-control' do %>
-          <%= material_icon.search %>
-      <% end %>
+<div class="container">
+
+  <!--reference: https://mdbootstrap.com/snippets/jquery/ascensus/127193-->
+
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4">
+
+    <div class="col px-1">
+      <div class="img-wrapper my-2">
+        <img src="http://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(58).jpg" class="img-fluid" alt="">
+      </div>
+      <div class="img-wrapper my-2">
+        <img src="http://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(66).jpg" class="img-fluid" alt="">
+      </div>
     </div>
-  <% end %>
-</div>
-<div class="d-flex flex-wrap p-2">
-  <div class="col-lg-4 col-md-4 col-xs-4 thumb">
-      <a class="thumbnail" href="#">
-          <img class="img-responsive" src="http://placehold.it/400x300" alt="">
-      </a>
-  </div>
-  <div class="col-lg-4 col-md-4 col-xs-4 thumb">
-      <a class="thumbnail" href="#">
-          <img class="img-responsive" src="http://placehold.it/400x300" alt="">
-      </a>
-  </div>
-  <div class="col-lg-4 col-md-4 col-xs-4 thumb">
-      <a class="thumbnail" href="#">
-          <img class="img-responsive" src="http://placehold.it/400x300" alt="">
-      </a>
-  </div>
-  <div class="col-lg-4 col-md-4 col-xs-4 thumb">
-      <a class="thumbnail" href="#">
-          <img class="img-responsive" src="http://placehold.it/400x300" alt="">
-      </a>
+
+    <div class="col px-1">
+      <div class="img-wrapper my-2">
+        <img src="http://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(74).jpg" class="img-fluid" alt="">
+      </div>
+      <div class="img-wrapper my-2">
+        <img src="http://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(1).jpg" class="img-fluid" alt="">
+      </div>
+    </div>
+
+    <div class="col px-1">
+      <div class="img-wrapper my-2">
+        <img src="http://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(152).jpg" class="img-fluid" alt="">
+      </div>
+      <div class="img-wrapper my-2">
+        <img src="http://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(67).jpg" class="img-fluid" alt="">
+      </div>
+    </div>
+
+    <div class="col px-1">
+      <div class="img-wrapper my-2">
+        <img src="http://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(97).jpg" class="img-fluid" alt="">
+      </div>
+      <div class="img-wrapper my-2">
+        <img src="http://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(42).jpg" class="img-fluid" alt="">
+      </div>
+      <div class="img-wrapper my-2">
+        <img src="http://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(44).jpg" class="img-fluid" alt="">
+      </div>
+    </div>
+
   </div>
 
 </div>
