@@ -1,17 +1,12 @@
-/*@import "bootstrap-sprockets";*/
 @import "bootstrap";
-
-body {
-  padding-top: 60px;
-}
 
 h1 {
   text-align: center;
-  padding: 10px;
+  padding-top: 80px;
 }
 
-.sticky-offset {
-  top: 65px;
+h2 {
+  text-align: center;
 }
 
 .nav-link a {
@@ -33,9 +28,18 @@ h1 {
   right: 0;
 }
 
+.btn-group .btn.focus, .btn.active {
+  outline: none;
+  box-shadow: none;
+}
+
 .img-wrapper {
-  max-height: 300px;
+  max-height: 800px;
   overflow: hidden;
+}
+
+img {
+  width: 100%;
 }
 
 @mixin box_sizing {
