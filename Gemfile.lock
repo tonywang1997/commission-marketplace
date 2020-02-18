@@ -223,7 +223,7 @@ PLATFORMS
 DEPENDENCIES
   bcrypt
   bootsnap (>= 1.4.2)
-  bootstrap (~> 4.4.1)
+  bootstrap
   byebug
   capybara (>= 2.15)
   hirb

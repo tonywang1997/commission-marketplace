@@ -1,17 +1,12 @@
-/*@import "bootstrap-sprockets";*/
 @import "bootstrap";
-
-body {
-  padding-top: 60px;
-}
 
 h1 {
   text-align: center;
-  padding: 10px;
+  padding-top: 80px;
 }
 
-.sticky-offset {
-  top: 65px;
+h2 {
+  text-align: center;
 }
 
 .nav-link a {
@@ -33,24 +28,18 @@ h1 {
   right: 0;
 }
 
+.btn-group .btn.focus, .btn.active {
+  outline: none;
+  box-shadow: none;
+}
+
 .img-wrapper {
-  max-height: 300px;
-  min-height: 100px;
+  max-height: 800px;
   overflow: hidden;
 }
 
-.img-overlay {
-  color: transparent;
-}
-
-.img-overlay .img-info {
-  bottom: 10px;
-  left: 15px;
-}
-
-.img-overlay:hover {
-  color: white;
-  background-image: linear-gradient(transparent, rgba(0, 0, 0, .8));
+img {
+  width: 100%;
 }
 
 @mixin box_sizing {
