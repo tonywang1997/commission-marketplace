@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Tag:</strong>
+  <%= @has_tag.tag_id %>
+</p>
+
+<p>
+  <strong>Artist:</strong>
+  <%= @has_tag.artist_id %>
+</p>
+
+<%= link_to 'Edit', edit_has_tag_path(@has_tag) %> |
+<%= link_to 'Back', has_tags_path %>

@@ -1,0 +1,2 @@
+module HasTagsHelper
+end

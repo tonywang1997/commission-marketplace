@@ -65,5 +65,5 @@ User.import user_c, user, validate: false
 Portfolio.import portfolio_c, portfolio, validate: false
 Tag.import tags_c, tags, validate: false
 Has_tag.import has_tag_c, has_tag, validate: false
-Has_images.import has_images_c, has_images, validate: false
-Images.import images_c, import, validate: false
+Has_image.import has_images_c, has_images, validate: false
+Image.import images_c, import, validate: false
