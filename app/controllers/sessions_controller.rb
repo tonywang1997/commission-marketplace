@@ -1,4 +1,6 @@
 class SessionsController < ApplicationController
+  include ApplicationHelper
+
   def new
     respond_to do |format|
       format.html {
@@ -30,6 +32,16 @@ class SessionsController < ApplicationController
 
   def destroy
     log_out
-    redirect_to root_url
+    url = Rails.application.routes.recognize_path(request.referrer)
+    last_controller = url[:controller].to_sym
+    last_action = url[:action].to_sym
+    if logged_in_actions[last_controller] and logged_in_actions[last_controller].include? last_action
+      redirect_to root_url
+    else
+      respond_to do |format|
+        format.html { redirect_to root_url }
+        format.js
+      end
+    end
   end
 end

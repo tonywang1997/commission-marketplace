@@ -23,4 +23,8 @@ module ApplicationHelper
     puts placeholders[0]
     placeholders
   end
+
+  def logged_in_actions
+    return {users: [:edit, :update, :dashboard]}
+  end
 end

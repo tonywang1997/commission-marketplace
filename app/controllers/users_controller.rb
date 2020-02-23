@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
-  before_action :logged_in_user, only: [:edit, :update, :dashboard]
+  include ApplicationHelper
+  before_action :logged_in_user
   before_action :correct_user, only: [:edit, :update]
 
   def show
@@ -54,8 +55,10 @@ class UsersController < ApplicationController
     end
 
     def logged_in_user
-      unless logged_in?
-        redirect_to login_url
+      if logged_in_actions[:users].include? params[:action].to_sym
+        unless logged_in?
+          redirect_to login_url
+        end
       end
     end
 
