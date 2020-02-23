@@ -1,0 +1,29 @@
+<% @user ||= User.new %>
+<%= form_with(model: @user, remote: true, id: 'registerModalContent') do |f| %>
+  <div class="modal-header">
+    <h5 class="modal-title">Register</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body mx-3">
+    <%= render partial: 'shared/error_messages' %>
+    <%= f.label :user_name %>
+    <%= f.text_field :user_name, class: 'form-control', id: 'userName' %>
+
+    <%= f.label :email_address %>
+    <%= f.email_field :email_address, class: 'form-control' %>
+
+    <%= f.label :password %>
+    <%= f.password_field :password, class: 'form-control' %>
+
+    <%= f.label :password_confirmation, "Confirmation" %>
+    <%= f.password_field :password_confirmation, class: 'form-control' %>
+  </div>
+
+  <div class="modal-footer">
+    <%= f.submit "Create my account", class: "btn btn-primary" %>
+    <%= link_to "Already have an account? Login.", login_path, remote: true %>
+  </div>
+<% end %>

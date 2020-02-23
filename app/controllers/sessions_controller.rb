@@ -1,5 +1,14 @@
 class SessionsController < ApplicationController
+  layout :resolve_layout
+
   def new
+    respond_to do |format|
+      format.html {
+        flash[:misc_params] = { show_login: true }
+        redirect_to root_url
+      }
+      format.js
+    end
   end
 
   def create
@@ -8,10 +17,16 @@ class SessionsController < ApplicationController
     if user && user.authenticate(params[:session][:password])
       # successful login
       log_in user
-      redirect_to user_path(user.user_name)
+      respond_to do |format|
+        format.html { redirect_to user_path(user.user_name) }
+        format.js
+      end
     else
-      flash.now[:danger] = 'Invalid username/password combination'
-      render 'new'
+      @error = "Invalid username/password combination."
+      respond_to do |format|
+        format.html { render 'new' }
+        format.js { render 'create_error' }
+      end
     end
   end
 
@@ -20,4 +35,13 @@ class SessionsController < ApplicationController
     redirect_to root_url
   end
 
+  private
+    def resolve_layout
+      case action_name
+      when "new", "create"
+        "no-header"
+      else
+        "application"
+      end
+    end
 end

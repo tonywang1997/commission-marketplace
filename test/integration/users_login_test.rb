@@ -4,16 +4,9 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
   # test "the truth" do
   #   assert true
   # end
-  test 'flash disappears' do
+  test 'redirect and modal appears' do
     get login_path
-    assert_response :success
-    assert_template 'sessions/new'
-    post login_path, params: { session: {user_name: 'nonexistent',
-                                          password: '',
-                                        }}
-    assert_template 'sessions/new'
-    assert_not flash.empty?
-    get root_path
-    assert flash.empty?
+    assert_redirected_to root_path
+    assert flash[:misc_params][:show_login]
   end
 end

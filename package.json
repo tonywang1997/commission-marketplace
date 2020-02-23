@@ -7,9 +7,13 @@
     "@rails/activestorage": "^6.0.0",
     "@rails/ujs": "^6.0.0",
     "@rails/webpacker": "4.2.2",
+    "babel": "^6.23.0",
     "bootstrap": "4.3.1",
+    "css-element-queries": "^1.2.3",
+    "iframe-resizer": "^4.2.10",
     "jquery": "^3.4.1",
     "popper.js": "^1.16.1",
+    "rails-erb-loader": "^5.5.2",
     "turbolinks": "^5.2.0"
   },
   "version": "0.1.0",

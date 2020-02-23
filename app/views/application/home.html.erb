@@ -1,8 +1,7 @@
 <h1>Welcome to the Commission Marketplace!</h1>
 <hr>
-<div class="py-3">
-<div class="container">
-  <div class="d-flex align-items-center justify-content-between">
+<div class="container pt-3">
+  <div class="d-flex align-items-center justify-content-between mb-2">
     <%= material_icon.sort %>
     <span class="px-1">Sort:</span>
     <div class="px-1 btn-group btn-group-toggle" data-toggle="buttons">
@@ -17,14 +16,15 @@
       </label>
     </div>
 
-    <%= form_with(url: '#', scope: :session, local: true, method: :get, class: 'form-inline ml-4 w-100') do |f| %>
-      <%= f.text_field :search, class: 'search-input form-control bg-light text-dark mb-0 w-100', placeholder: "Search (eg, 'full body sketch $20-30')" %>
+    <%= form_with(url: '#', scope: :session, local: true, method: :get, class: 'form-inline ml-3 w-100') do |f| %>
+      <%= f.text_field :search, class: 'search-input form-control bg-light text-dark mb-0 pr-5 w-100', placeholder: "Search (eg, 'full body sketch $20-30')" %>
       <%= button_tag :submit, class: 'search-btn btn form-control text-dark px-2' do %>
           <%= material_icon.search %>
       <% end %>
     <% end %>
   </div>
-  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4">
+
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 mx-n1">
     <% placeholders = create_placeholder_array %>
     <% placeholders.in_groups(4, false).each do |group| %>
     <div class="col px-1">

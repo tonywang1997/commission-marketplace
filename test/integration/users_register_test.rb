@@ -7,7 +7,6 @@ class UsersRegisterTest < ActionDispatch::IntegrationTest
 
   test 'does not create user when invalid params' do
     get register_path
-    assert_response :success
     assert_no_difference 'User.count' do
       post users_path, params: { user: { user_name:  "",
                                          email_address: "user@invalid",
@@ -21,7 +20,6 @@ class UsersRegisterTest < ActionDispatch::IntegrationTest
 
   test 'creates user when valid params' do
     get register_path
-    assert_response :success
     assert_difference 'User.count', 1 do
       post users_path, params: {user: {
                                         user_name: "eberl",
@@ -35,4 +33,9 @@ class UsersRegisterTest < ActionDispatch::IntegrationTest
     assert !!flash[:success]
   end
 
+  test 'redirect and modal appears' do
+    get register_path
+    assert_redirected_to root_path
+    assert flash[:misc_params][:show_register]
+  end
 end
