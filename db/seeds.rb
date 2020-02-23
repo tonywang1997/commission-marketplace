@@ -9,61 +9,60 @@
 require 'faker'
 require 'activerecord-import'
 
-
-
-url_file = File.open('seed_url.txt')
+url_file = File.open(File.join(Dir.pwd, 'db', 'seed_url.txt'))
 url_file_lines = url_file.readlines.map(&:chomp)
 
 user = []
-user_c = [:user_name,email_address:,password:,profile_thumbnail:]
+user_c = [:user_name, :email_address, :password_digest, :profile_thumbnail]
 
 portfolio = []
-portfolio_c = [artist_id:,description:,price_low:,price_high:,date_created:]
+portfolio_c = [:artist_id, :description, :price_low, :price_high , :date_created]
 
 tags = []
 tags_c = [:tag_id, :tag_name]
 
-has_tag = []
+has_tags = []
 has_tag_c = [:tag_id, :artist_id]
 
 has_images = []
-has_images_c = [portfolio_id:,image_id:]
+has_images_c = [:portfolio_id, :image_id]
 
 image = []
-images_c = [url:]
+images_c = [:url]
 
 x = 0
 
 while x < 25 do
-    art_id = Faker.unique.number(digits: 5)
-    port_id = Faker.unique.number(digits: 5)
-    image_id = Faker.unique.number(digits: 5)
-    tag_id = Faker.unique.number(digits:5)
+    art_id = Faker::Number.unique.number(digits: 5)
+    port_id = Faker::Number.unique.number(digits: 5)
+    image_id = Faker::Number.unique.number(digits: 5)
+    tag_id = Faker::Number.unique.number(digits:5)
 
-    user_hash = [:username = Faker::Esport.unique.player, :email = Faker::Internet.unique.email , password: = Faker::Lorem.unique.word, profilethumbnail: = url_file_lines[x]]
+    user_hash = {:user_name => Faker::Name.unique.name, :email_address => Faker::Internet.unique.email , :password_digest => Faker::Lorem.unique.word, :profile_thumbnail => url_file_lines[x]}
     user << user_hash
 
-    portfolio_hash = [artistid: = art_id, description: = Faker::ChuckNorris.unique.fact, pricelow: = (x + (2*x) + 1) , pricehi: = (x+(3*x) + 1) , date_created: = Faker::Date.unique]
+    portfolio_hash = {:artist_id => art_id.to_i, :description => Faker::ChuckNorris.unique.fact, :price_low => (x + (2*x) + 1).to_f , :price_high => (x+(3*x) + 1).to_f , :date_created => (Faker::Date.unique).to_s}
     portfolio << portfolio_hash
 
-    tags_hash = [:tags_id = tag_id, :tag_name = Faker::Beer.unique.brand]
+    tags_hash = {:tag_id => tag_id, :tag_name => Faker::Beer.unique.brand}
     tags << tags_hash
 
-    has_tag_hash = [tag_id: = tag_id, arti_id: = art_id]
-    has_tag << has_tag_hash
+    has_tag_hash = {:tag_id => tag_id, :artist_id => art_id}
+    has_tags << has_tag_hash
 
-    has_images_hash = [portfolioid: = port_id, imageid: = image_id]
+    has_images_hash = {:portfolio_id => port_id, :image_id => image_id}
     has_images << has_images_hash
 
-    image_hash = [url: = url_file_lines[x]]
+    image_hash = {:url => url_file_lines[x]}
     image << image_hash
 
     x = x + 1
+    
 end
 
 User.import user_c, user, validate: false
 Portfolio.import portfolio_c, portfolio, validate: false
 Tag.import tags_c, tags, validate: false
-Has_tag.import has_tag_c, has_tag, validate: false
-Has_image.import has_images_c, has_images, validate: false
+HasTag.import has_tag_c, has_tags, validate: false
+HasImage.import has_images_c, has_images, validate: false
 Image.import images_c, import, validate: false
