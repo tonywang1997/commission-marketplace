@@ -7,7 +7,8 @@ document.addEventListener("turbolinks:load", function () {
 });
 
 window.hideModal = function(modal) {
-  $(modal).modal('hide')
+  $(modal).modal('hide').removeClass('show').css('display', 'none');
   $('body').removeClass('modal-open');
   $('.modal-backdrop').remove();
+  return modal
 }

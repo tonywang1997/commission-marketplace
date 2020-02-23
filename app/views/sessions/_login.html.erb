@@ -23,6 +23,6 @@
   <div class="modal-footer">
     <%= f.submit "Login", class: "btn btn-primary" %>
     <hr>
-    <%= link_to "Don't have an account? Register.", register_path, remote: true %>
+    <%= link_to "Don't have an account? Register.", register_path, remote: true, data: {dismiss: '#registerModal', target: '#loginModal', toggle: '#loginModal'} %>
   </div>
 <% end %>
