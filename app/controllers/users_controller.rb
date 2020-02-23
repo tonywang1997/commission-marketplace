@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
-  before_action :logged_in_user, only: [:edit, :update]
+  include ApplicationHelper
+  before_action :logged_in_user
   before_action :correct_user, only: [:edit, :update]
 
   def show
@@ -15,18 +16,34 @@ class UsersController < ApplicationController
   end
 
   def new
-    @user = User.new
+    respond_to do |format|
+      format.html {
+        flash[:misc_params] = { show_register: true }
+        redirect_to root_url
+      }
+      format.js
+    end
   end
 
   def create
     @user = User.new(user_params)
     if @user.save
       # handle successful save
-      flash[:success] = "Welcome to the Commission Marketplace!"
       log_in @user
-      redirect_to user_path(@user.user_name)
+      respond_to do |format|
+        format.html { 
+          flash[:success] = "Welcome to the Commission Marketplace!"
+          redirect_to user_path(@user.user_name)
+        }
+        format.js
+      end
     else
-      render 'new'
+      respond_to do |format|
+        format.html {
+          render 'new'
+        }
+        format.js { render :action => 'create_error' }
+      end
     end
   end
 
@@ -38,14 +55,17 @@ class UsersController < ApplicationController
     end
 
     def logged_in_user
-      unless logged_in?
-        flash[:danger] = 'Please log in.'
-        redirect_to login_url
+      if logged_in_actions[:users].include? params[:action].to_sym
+        unless logged_in?
+          redirect_to login_url
+        end
       end
     end
 
     def correct_user
       @user = User.find_by(user_name: params[:user_name])
-      redirect_to(edit_user_url(current_user)) unless @user == current_user
+      if @user != current_user
+        redirect_to root_url
+      end
     end
 end

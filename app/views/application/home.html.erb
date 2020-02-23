@@ -1,1 +1,115 @@
-<h1>Home</h1>
+<h1>Welcome to the Commission Marketplace!</h1>
+<hr>
+<div class="container pt-3">
+  <div class="d-flex align-items-center justify-content-between mb-2">
+    <%= material_icon.sort %>
+    <span class="px-1">Sort:</span>
+    <div class="px-1 btn-group btn-group-toggle" data-toggle="buttons">
+      <label class="btn btn-secondary active">
+        <input type="radio" name="options" id="none" autocomplete="off" checked>None
+      </label>
+      <label class="btn btn-secondary">
+        <input type="radio" name="options" id="new" autocomplete="off" checked>New
+      </label>
+      <label class="btn btn-secondary">
+        <input type="radio" name="options" id="price" autocomplete="off">Price
+      </label>
+    </div>
+
+    <%= form_with(url: '#', scope: :session, local: true, method: :get, class: 'form-inline ml-3 w-100') do |f| %>
+      <%= f.text_field :search, class: 'search-input form-control bg-light text-dark mb-0 pr-5 w-100', placeholder: "Search (eg, 'full body sketch $20-30')" %>
+      <%= button_tag :submit, class: 'search-btn btn form-control text-dark px-2' do %>
+          <%= material_icon.search %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 mx-n1">
+    <% placeholders = create_placeholder_array %>
+    <% placeholders.in_groups(4, false).each do |group| %>
+    <div class="col px-1">
+      <% group.each do |img| %>
+        <%= link_to(img[:url], class: 'img-outer-container my-2 btn-block position-relative', style: "line-height: 0") do %>
+          <div 
+            class="img-wrapper" 
+            data-toggle="tooltip" 
+            data-placement="right" 
+            data-content=""
+            data-html="true"
+            title="<%= img[:portfolio] %><br><%= img[:artist] %><br><%= img[:price] %>">
+            <%= image_tag(img[:url], class: 'img-fluid', height: img[:height], width: img[:width]) %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+    <% end %>
+
+  </div>
+</div>
+
+
+<div style="display:none">
+
+<div class="container">
+
+  <!--reference: https://mdbootstrap.com/snippets/jquery/ascensus/127193-->
+
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4">
+
+    <div class="col px-1">
+      <a href="#" class="img-wrapper my-2 btn-block position-relative">
+        <div class="img-overlay position-absolute h-100 w-100 align-bottom">
+          <span class="position-absolute img-info">artist_name<br>portrait<br>$15</span>
+        </div>
+        <img src="http://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(58).jpg" class="img-fluid" alt="">
+      </a>
+      <a href="#" class="img-wrapper my-2 btn-block position-relative">
+        <div class="img-overlay position-absolute h-100 w-100 align-bottom">
+          <span class="position-absolute img-info">artist_name<br>portrait<br>$15</span>
+        </div>
+        <img src="http://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(66).jpg" class="img-fluid" alt="">
+      </a>
+    </div>
+
+    <div class="col px-1">
+      <a href="#" class="img-wrapper my-2 btn-block">
+        <img src="http://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(74).jpg" class="img-fluid" alt="">
+      </a>
+      <!--this is the right format-->
+      <a href="#" class="img-wrapper my-2 btn-block position-relative d-flex align-items-center">
+        <div class="img-overlay position-absolute h-100 w-100 align-bottom">
+          <span class="position-absolute img-info">artist_name<br>portrait<br>$15</span>
+        </div>
+        <img src="https://via.placeholder.com/80x10" class="img-fluid" alt="">
+      </a>
+      <!--this is the end of the right format-->
+      <a href="#" class="img-wrapper my-2 btn-block">
+        <img src="http://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(1).jpg" class="img-fluid" alt="">
+      </a>
+    </div>
+
+    <div class="col px-1">
+      <a href="#"  class="img-wrapper my-2 btn-block">
+        <img src="http://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(152).jpg" class="img-fluid" alt="">
+      </a>
+      <a href="#"  class="img-wrapper my-2 btn-block">
+        <img src="http://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(67).jpg" class="img-fluid" alt="">
+      </a>
+    </div>
+
+    <div class="col px-1">
+      <a href="#"  class="img-wrapper my-2 btn-block">
+        <img src="http://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(97).jpg" class="img-fluid" alt="">
+      </a>
+      <a href="#"  class="img-wrapper my-2 btn-block">
+        <img src="http://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(42).jpg" class="img-fluid" alt="">
+      </a>
+      <a href="#"  class="img-wrapper my-2 btn-block">
+        <img src="http://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(44).jpg" class="img-fluid" alt="">
+      </a>
+    </div>
+
+  </div>
+
+</div>
+</div>
