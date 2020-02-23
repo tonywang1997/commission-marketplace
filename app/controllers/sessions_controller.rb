@@ -1,6 +1,4 @@
 class SessionsController < ApplicationController
-  layout :resolve_layout
-
   def new
     respond_to do |format|
       format.html {
@@ -34,14 +32,4 @@ class SessionsController < ApplicationController
     log_out
     redirect_to root_url
   end
-
-  private
-    def resolve_layout
-      case action_name
-      when "new", "create"
-        "no-header"
-      else
-        "application"
-      end
-    end
 end

@@ -32,18 +32,6 @@
       <% flash.each do |message_type, message| %>
         <% if not message_type == 'misc_params' %>
           <%= content_tag :div, message, class: "alert alert-#{message_type}" %>
-        <% else %>
-          <% if message['show_login'] %>
-            <script type="text/javascript">
-              hideModal($('.modal'));
-              $('#loginModal').modal('show');
-            </script>
-          <% elsif message['show_register'] %>
-            <script type="text/javascript">
-              hideModal($('.modal'));
-              $('#registerModal').modal('show');
-            </script>
-          <% end %>
         <% end %>
       <% end %>
       <%= yield %>

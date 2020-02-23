@@ -1,7 +1,6 @@
 class UsersController < ApplicationController
   before_action :logged_in_user, only: [:edit, :update, :dashboard]
   before_action :correct_user, only: [:edit, :update]
-  layout :resolve_layout
 
   def show
     @user = User.find_by(user_name: params[:user_name])
@@ -64,15 +63,6 @@ class UsersController < ApplicationController
       @user = User.find_by(user_name: params[:user_name])
       if @user != current_user
         redirect_to root_url
-      end
-    end
-
-    def resolve_layout
-      case action_name
-      when "new"
-        "no-header"
-      else
-        "application"
       end
     end
 end

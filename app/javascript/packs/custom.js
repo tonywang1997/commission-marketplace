@@ -5,10 +5,3 @@ document.addEventListener("turbolinks:load", function () {
          return false;
     });
 });
-
-window.hideModal = function(modal) {
-  $(modal).modal('hide').removeClass('show').css('display', 'none');
-  $('body').removeClass('modal-open');
-  $('.modal-backdrop').remove();
-  return modal
-}
