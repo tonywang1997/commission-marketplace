@@ -4,8 +4,8 @@
   <div class="d-flex align-items-center justify-content-between mb-2">
     <%= material_icon.sort %>
     <span class="px-1">Sort:</span>
-    <%= form_with(url: root_path, method: :get, class: 'form-inline flex-nowrap', remote: true) do |f| %>
-      <div class="px-1 btn-group btn-group-toggle" data-toggle="buttons">
+    <%= form_with(url: root_path, class: 'form-inline flex-nowrap', remote: true) do |f| %>
+      <div class="px-1 btn-group btn-group-toggle">
         <%= f.label :sortByNone, class: "btn btn-secondary #{'active' if @sort == 'none'}" do %>
           <%= radio_button_tag('sort', 'none', checked = (@sort == 'none'), id: 'sortByNone') %>
           None
@@ -20,7 +20,7 @@
         <% end %>
       </div>
 
-      <div class="px-1 btn-group btn-group-toggle" data-toggle="buttons">
+      <div class="px-1 btn-group btn-group-toggle">
         <%= f.label :sortAsc, class: "btn btn-secondary btn-direction px-1 #{'active' if @asc} #{'disabled' if @sort == 'none'}" do %>
           <%= radio_button_tag('dir', 'asc', checked = (@asc), id: 'sortAsc') %>
           <%= material_icon.arrow_drop_up %>

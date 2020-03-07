@@ -6,6 +6,7 @@ document.addEventListener("turbolinks:load", function() {
 
   $('input[type=radio]').on('change', function(e) {
     $(this).parent().siblings().removeClass('active');
+    $(this).parent().addClass('active');
     if (Rails.fire($(this).closest('form')[0], 'submit')) {
       $(this).closest('form').submit()
     }

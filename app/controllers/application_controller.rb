@@ -3,6 +3,7 @@ require 'yaml'
 class ApplicationController < ActionController::Base
   include SessionsHelper
   before_action :set_session_params, only: :home
+  after_action :log, only: :home
 
   def home
     @images = create_placeholder_array
@@ -32,11 +33,17 @@ class ApplicationController < ActionController::Base
 
   private
     def set_session_params
+      log
       params[:sort] ||= (session[:sort] ||= 'none')
       session[:sort] = params[:sort]
 
       params[:dir] ||= (session[:dir] ||= 'asc')
       session[:dir] = params[:dir]
+    end
+
+    def log
+      puts "params: #{params[:sort]}"
+      puts "session: #{session[:sort]}"
     end
 
     def sort_options
