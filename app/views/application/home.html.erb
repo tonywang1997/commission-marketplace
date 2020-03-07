@@ -4,17 +4,34 @@
   <div class="d-flex align-items-center justify-content-between mb-2">
     <%= material_icon.sort %>
     <span class="px-1">Sort:</span>
-    <div class="px-1 btn-group btn-group-toggle" data-toggle="buttons">
-      <label class="btn btn-secondary active">
-        <input type="radio" name="options" id="none" autocomplete="off" checked>None
-      </label>
-      <label class="btn btn-secondary">
-        <input type="radio" name="options" id="new" autocomplete="off" checked>New
-      </label>
-      <label class="btn btn-secondary">
-        <input type="radio" name="options" id="price" autocomplete="off">Price
-      </label>
-    </div>
+    <%= form_with(url: root_path, method: :get, class: 'form-inline flex-nowrap', remote: true) do |f| %>
+      <div class="px-1 btn-group btn-group-toggle" data-toggle="buttons">
+        <%= f.label :sortByNone, class: "btn btn-secondary #{'active' if @sort == 'none'}" do %>
+          <%= radio_button_tag('sort', 'none', checked = (@sort == 'none'), id: 'sortByNone') %>
+          None
+        <% end %>
+        <%= f.label :sortByDate, class: "btn btn-secondary #{'active' if @sort == 'date'}" do %>
+          <%= radio_button_tag('sort', 'date', checked = (@sort == 'date'), id: 'sortByDate') %>
+          Date
+        <% end %>
+        <%= f.label :sortByPrice, class: "btn btn-secondary #{'active' if @sort == 'price'}" do %>
+          <%= radio_button_tag('sort', 'price', checked = (@sort == 'price'), id: 'sortByPrice') %>
+          Price
+        <% end %>
+      </div>
+
+      <div class="px-1 btn-group btn-group-toggle" data-toggle="buttons">
+        <%= f.label :sortAsc, class: "btn btn-secondary btn-direction px-1 #{'active' if @asc} #{'disabled' if @sort == 'none'}" do %>
+          <%= radio_button_tag('dir', 'asc', checked = (@asc), id: 'sortAsc') %>
+          <%= material_icon.arrow_drop_up %>
+        <% end %>
+        <%= f.label :sortDesc, class: "btn btn-secondary btn-direction px-1 #{'active' if @asc == false} #{'disabled' if @sort == 'none'}" do %>
+          <%= radio_button_tag('dir', 'desc', checked = (@asc == false), id: 'sortDesc') %>
+          <%= material_icon.arrow_drop_down %>
+        <% end %>
+      </div>
+      <input type="submit" class="d-none" name="">
+    <% end %>
 
     <%= form_with(url: '#', scope: :session, local: true, method: :get, class: 'form-inline ml-3 w-100') do |f| %>
       <%= f.text_field :search, class: 'search-input form-control bg-light text-dark mb-0 pr-5 w-100', placeholder: "Search (eg, 'full body sketch $20-30')" %>
@@ -24,92 +41,57 @@
     <% end %>
   </div>
 
-  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 mx-n1">
-    <% placeholders = create_placeholder_array %>
-    <% placeholders.in_groups(4, false).each do |group| %>
-    <div class="col px-1">
-      <% group.each do |img| %>
-        <%= link_to(img[:url], class: 'img-outer-container my-2 btn-block position-relative', style: "line-height: 0") do %>
-          <div 
-            class="img-wrapper" 
-            data-toggle="tooltip" 
-            data-placement="right" 
-            data-content=""
-            data-html="true"
-            title="<%= img[:portfolio] %><br><%= img[:artist] %><br><%= img[:price] %>">
-            <%= image_tag(img[:url], class: 'img-fluid', height: img[:height], width: img[:width]) %>
-          </div>
+
+  <!-- ROW VIEW - NOT USED -->
+  <% if false %>
+    <div class="img-grid d-flex flex-wrap m-n1">
+      <% @images.each do |img| %>
+        <%= link_to(img[:url],
+          class: 'row-view img-wrapper position-relative m-1',
+          data: {
+            toggle: "tooltip",
+            placement: "right",
+            price: img[:price],
+            date: img[:date],
+            html: true,
+          },
+          title: simple_format("#{img[:portfolio]}\n#{img[:artist]}\n$#{img[:price]}", {}, wrapper_tag: 'span'),
+          style: "line-height: 0") do %>
+          <%= image_tag(img[:url], class: img[:height] / img[:width].to_f >= 1.5 ? 'grid-img-tall' : 'grid-img-wide', height: img[:height], width: img[:width]) %>
         <% end %>
       <% end %>
     </div>
-    <% end %>
+  <% end %>
 
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 mx-n1">
+    <div class="d-none">
+      <% @images.each_with_index do |img, idx| %>
+        <%= link_to(img[:url],
+          class: 'col-view img-wrapper my-2 btn-block position-relative', 
+          data: {
+            id: img[:id],
+            toggle: "tooltip",
+            placement: "right",
+            content: "",
+            html: true,
+            price: img[:price],
+            date: img[:date],
+            order: idx,
+          },
+          title: simple_format("#{img[:portfolio]}\n#{img[:artist]}\n$#{img[:price]}\n#{img[:date].strftime("%d-%m-%Y")}", {}, wrapper_tag: 'span'),
+          style: "line-height: 0") do %>
+          <%= image_tag(img[:url], class: 'img-fluid', height: img[:height], width: img[:width]) %>
+        <% end %>
+      <% end %>
+    </div>
+    <div class="col px-1" id="col-0">
+    </div>
+    <div class="col px-1" id="col-1">
+    </div>
+    <div class="col px-1" id="col-2">
+    </div>
+    <div class="col px-1" id="col-3">
+    </div>
   </div>
-</div>
-
-
-<div style="display:none">
-
-<div class="container">
-
-  <!--reference: https://mdbootstrap.com/snippets/jquery/ascensus/127193-->
-
-  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4">
-
-    <div class="col px-1">
-      <a href="#" class="img-wrapper my-2 btn-block position-relative">
-        <div class="img-overlay position-absolute h-100 w-100 align-bottom">
-          <span class="position-absolute img-info">artist_name<br>portrait<br>$15</span>
-        </div>
-        <img src="http://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(58).jpg" class="img-fluid" alt="">
-      </a>
-      <a href="#" class="img-wrapper my-2 btn-block position-relative">
-        <div class="img-overlay position-absolute h-100 w-100 align-bottom">
-          <span class="position-absolute img-info">artist_name<br>portrait<br>$15</span>
-        </div>
-        <img src="http://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(66).jpg" class="img-fluid" alt="">
-      </a>
-    </div>
-
-    <div class="col px-1">
-      <a href="#" class="img-wrapper my-2 btn-block">
-        <img src="http://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(74).jpg" class="img-fluid" alt="">
-      </a>
-      <!--this is the right format-->
-      <a href="#" class="img-wrapper my-2 btn-block position-relative d-flex align-items-center">
-        <div class="img-overlay position-absolute h-100 w-100 align-bottom">
-          <span class="position-absolute img-info">artist_name<br>portrait<br>$15</span>
-        </div>
-        <img src="https://via.placeholder.com/80x10" class="img-fluid" alt="">
-      </a>
-      <!--this is the end of the right format-->
-      <a href="#" class="img-wrapper my-2 btn-block">
-        <img src="http://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(1).jpg" class="img-fluid" alt="">
-      </a>
-    </div>
-
-    <div class="col px-1">
-      <a href="#"  class="img-wrapper my-2 btn-block">
-        <img src="http://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(152).jpg" class="img-fluid" alt="">
-      </a>
-      <a href="#"  class="img-wrapper my-2 btn-block">
-        <img src="http://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(67).jpg" class="img-fluid" alt="">
-      </a>
-    </div>
-
-    <div class="col px-1">
-      <a href="#"  class="img-wrapper my-2 btn-block">
-        <img src="http://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(97).jpg" class="img-fluid" alt="">
-      </a>
-      <a href="#"  class="img-wrapper my-2 btn-block">
-        <img src="http://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(42).jpg" class="img-fluid" alt="">
-      </a>
-      <a href="#"  class="img-wrapper my-2 btn-block">
-        <img src="http://mdbootstrap.com/img/Photos/Lightbox/Original/img%20(44).jpg" class="img-fluid" alt="">
-      </a>
-    </div>
-
   </div>
-
-</div>
 </div>

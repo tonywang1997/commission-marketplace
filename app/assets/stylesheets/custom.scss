@@ -22,18 +22,6 @@ h2 {
   text-decoration: none;
 }
 
-#registerForm {
-  width: 1px;
-  min-width: 100%;
-}
-
-.overlay {
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%,-50%);
-  z-index: 100;
-}
-
 .form-inline {
   position: relative;
 }
@@ -48,13 +36,32 @@ h2 {
   box-shadow: none;
 }
 
-.img-wrapper {
-  max-height: 800px;
+.row-view.img-wrapper {
+  max-width: 320px;
+  min-width: 100px;
+  height: 150px;
+  max-height: 500px;
   overflow: hidden;
 }
 
-img {
+.col-view.img-wrapper {
+  max-height: 500px;
+  overflow: hidden;
+}
+
+.col-view.img-wrapper img {
   width: 100%;
+}
+
+.grid-img-wide {
+  height: 100%;
+  width: auto;
+  flex-basis: auto;
+}
+
+.grid-img-tall {
+  width: 100%;
+  height: auto;
 }
 
 @mixin box_sizing {

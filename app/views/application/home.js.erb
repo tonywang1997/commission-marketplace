@@ -1,0 +1,11 @@
+if (<%= j @sort == "none" %>) {
+  $('.btn.btn-direction').addClass('disabled');
+} else {
+  $('.btn.btn-direction').removeClass('disabled');
+}
+
+<% @images.each_with_index do |img, idx| %>
+  $('.img-wrapper.col-view[data-id=<%= j img[:id] %>]').attr('data-order', '<%= j idx %>');
+<% end %>
+
+window.orderImages();
