@@ -3,14 +3,15 @@ require 'yaml'
 class ApplicationController < ActionController::Base
   include SessionsHelper
   before_action :set_session_params, only: :home
-  after_action :log, only: :home
 
   def home
     @images = create_placeholder_array
 
     @sort = (sort_options.include? params[:sort].downcase) ? params[:sort].downcase : 'none'
-    @asc = (params[:dir] and dir_options.key? params[:dir]) ? dir_options[params[:dir].downcase] : true
-    if params[:sort] and params[:sort] != 'none'
+    @asc = (dir_options.key? params[:dir]) ? dir_options[params[:dir].downcase] : true
+    if @sort == 'none'
+      @images = @images.shuffle
+    else
       # todo use later: Image.order(params[:sort] => :asc).limit(100)
       @images = sort_by(@images, @sort, @asc)
     end
@@ -19,31 +20,15 @@ class ApplicationController < ActionController::Base
       format.html
       format.js
     end
-
   end
-
-  # def search
-  #   home
-    
-  #   respond_to do |format|
-  #     format.html {render 'home'}
-  #     format.js
-  #   end
-  # end
 
   private
     def set_session_params
-      log
       params[:sort] ||= (session[:sort] ||= 'none')
       session[:sort] = params[:sort]
 
       params[:dir] ||= (session[:dir] ||= 'asc')
       session[:dir] = params[:dir]
-    end
-
-    def log
-      puts "params: #{params[:sort]}"
-      puts "session: #{session[:sort]}"
     end
 
     def sort_options
@@ -55,13 +40,11 @@ class ApplicationController < ActionController::Base
     end
 
     def sort_by(image_array, attribute, asc=true)
-      if asc != nil
-        image_array.sort! do |x, y|
-          if asc
-            x[attribute.to_sym] <=> y[attribute.to_sym]
-          else
-            y[attribute.to_sym] <=> x[attribute.to_sym]
-          end
+      image_array.sort! do |x, y|
+        if asc
+          x[attribute.to_sym] <=> y[attribute.to_sym]
+        else
+          y[attribute.to_sym] <=> x[attribute.to_sym]
         end
       end
 

@@ -5,7 +5,7 @@ if (<%= j @sort == "none" %>) {
 }
 
 <% @images.each_with_index do |img, idx| %>
-  $('.img-wrapper.col-view[data-id=<%= j img[:id] %>]').attr('data-order', '<%= j idx %>');
+  $('#img-<%= img[:id] %>').attr('data-order', '<%= j idx %>');
 <% end %>
 
 window.orderImages();

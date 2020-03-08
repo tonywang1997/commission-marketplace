@@ -68,8 +68,8 @@
       <% @images.each_with_index do |img, idx| %>
         <%= link_to(img[:url],
           class: 'col-view img-wrapper my-2 btn-block position-relative', 
+          id: "img-#{img[:id]}",
           data: {
-            id: img[:id],
             toggle: "tooltip",
             placement: "right",
             content: "",

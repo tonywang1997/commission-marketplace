@@ -34,7 +34,7 @@ window.addEventListener("turbolinks:load", function() {
   })
 
   function orderImages(numCols) {
-    let col_heights = []
+    let col_heights = [];
     for (let i = 0; i < numCols; i++) {
       col_heights.push(0)
     }
@@ -43,8 +43,8 @@ window.addEventListener("turbolinks:load", function() {
       .each(function() {
         // append to shortest column
         let col_idx = col_heights.indexOf(Math.min(...col_heights));
-        $(this).appendTo('#col-' + col_idx);
-        col_heights[col_idx] += $(this).outerHeight(true);
+        $('#col-' + col_idx).append($(this));
+        col_heights[col_idx] += $(this)[0].offsetHeight + (parseInt(window.getComputedStyle($(this)[0]).marginTop) * 2);
     });
   }
 
