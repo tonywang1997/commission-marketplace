@@ -1,40 +1,27 @@
 <h1>Welcome to the Commission Marketplace!</h1>
 <hr>
 <div class="container pt-3">
-  <div class="d-flex align-items-center justify-content-between mb-2">
-    <%= material_icon.sort %>
-    <span class="px-1">Sort:</span>
-    <%= form_with(url: root_path, class: 'form-inline flex-nowrap', remote: true) do |f| %>
-      <div class="px-1 btn-group btn-group-toggle">
-        <%= f.label :sortByNone, class: "btn btn-secondary #{'active' if @sort == 'none'}" do %>
-          <%= radio_button_tag('sort', 'none', checked = (@sort == 'none'), id: 'sortByNone') %>
-          None
-        <% end %>
-        <%= f.label :sortByDate, class: "btn btn-secondary #{'active' if @sort == 'date'}" do %>
-          <%= radio_button_tag('sort', 'date', checked = (@sort == 'date'), id: 'sortByDate') %>
-          Date
-        <% end %>
-        <%= f.label :sortByPrice, class: "btn btn-secondary #{'active' if @sort == 'price'}" do %>
-          <%= radio_button_tag('sort', 'price', checked = (@sort == 'price'), id: 'sortByPrice') %>
-          Price
-        <% end %>
-      </div>
+  <div class="d-flex align-items-stretch justify-content-between mb-2">
+    <div class="d-none d-md-flex flex-row align-items-center mr-1" id="sortOptions">
+      <%= render 'sort_options' %>
+    </div>
 
-      <div class="px-1 btn-group btn-group-toggle">
-        <%= f.label :sortAsc, class: "btn btn-secondary btn-direction px-1 #{'active' if @asc} #{'disabled' if @sort == 'none'}" do %>
-          <%= radio_button_tag('dir', 'asc', checked = (@asc), id: 'sortAsc') %>
-          <%= material_icon.arrow_drop_up %>
-        <% end %>
-        <%= f.label :sortDesc, class: "btn btn-secondary btn-direction px-1 #{'active' if @asc == false} #{'disabled' if @sort == 'none'}" do %>
-          <%= radio_button_tag('dir', 'desc', checked = (@asc == false), id: 'sortDesc') %>
-          <%= material_icon.arrow_drop_down %>
-        <% end %>
+    <!-- MOBILE/SMALL SCREEN -->
+    <div class="d-md-none">
+      <div class="modal fade" id="sortModal" tabindex="-1" role="dialog" aria-labelledby="sortModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered align-items-center" role="document">
+          <div class="modal-content" id="mSortOptions">
+            <%= render 'm_sort_options' %>
+          </div>
+        </div>
       </div>
-      <input type="submit" class="d-none" name="">
-    <% end %>
+      <button type="button" class="btn btn-secondary d-flex p-2 mr-2" data-toggle="modal" data-target="#sortModal">
+        <%= material_icon.sort %>
+      </button>
+    </div>
 
-    <%= form_with(url: '#', scope: :session, local: true, method: :get, class: 'form-inline ml-3 w-100') do |f| %>
-      <%= f.text_field :search, class: 'search-input form-control bg-light text-dark mb-0 pr-5 w-100', placeholder: "Search (eg, 'full body sketch $20-30')" %>
+    <%= form_with(url: '#', scope: :session, local: true, method: :get, class: 'form-inline w-100') do |f| %>
+      <%= f.text_field :search, class: 'search-input form-control bg-light text-dark mb-0 pr-5 w-100 h-100', placeholder: "Search (eg, 'full body sketch $20-30')" %>
       <%= button_tag :submit, class: 'search-btn btn form-control text-dark px-2' do %>
           <%= material_icon.search %>
       <% end %>

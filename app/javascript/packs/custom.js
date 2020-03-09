@@ -3,14 +3,6 @@ import Rails from '@rails/ujs';
 document.addEventListener("turbolinks:load", function() {
   $('[data-toggle="tooltip"]').tooltip();
   $('[data-toggle="popover"]').popover();
-
-  $('input[type=radio]').on('change', function(e) {
-    $(this).parent().siblings().removeClass('active');
-    $(this).parent().addClass('active');
-    if (Rails.fire($(this).closest('form')[0], 'submit')) {
-      $(this).closest('form').submit()
-    }
-  });
 });
 
 window.addEventListener("turbolinks:load", function() {
@@ -22,7 +14,6 @@ window.addEventListener("turbolinks:load", function() {
     'lg': 4,
     'xl': 4,
   }
-  orderImages(sizeToCols[bootstrapSize]);
 
   $(window).resize(function() {
     let newSize = $('#sizer').find('div:visible').data('size');
@@ -51,6 +42,27 @@ window.addEventListener("turbolinks:load", function() {
   window.orderImages = function() {
     orderImages(sizeToCols[bootstrapSize]);
   }
+
+  window.applySortButtonFuncs = function() {
+    $('input[type=radio].submit-form').on('change', function(e) {
+      $(this).parent().siblings().removeClass('active');
+      $(this).parent().addClass('active');
+      if (Rails.fire($(this).closest('form')[0], 'submit')) {
+        $(this).closest('form').submit()
+      }
+    });
+
+    $('#sort-select').on('change', function(e) {
+      if ($(this).val() == '') {
+        $('.m-sort-dir').attr('disabled', 'disabled');
+      } else {
+        $('.m-sort-dir').removeAttr('disabled');
+      }
+    });
+  }
+
+  window.orderImages();
+  window.applySortButtonFuncs();
 });
 
 
