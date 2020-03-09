@@ -1,5 +1,5 @@
 <% @user ||= User.new %>
-<%= form_with(model: @user, remote: true, id: 'registerModalContent') do |f| %>
+<%= form_with(url: register_url, model: @user, remote: true, id: 'registerModalContent') do |f| %>
   <div class="modal-header">
     <h5 class="modal-title">Register</h5>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -24,6 +24,6 @@
 
   <div class="modal-footer">
     <%= f.submit "Create my account", class: "btn btn-primary" %>
-    <%= link_to "Already have an account? Login.", login_path, remote: true, data: {dismiss: '#registerModal', target: '#loginModal', toggle: '#loginModal'} %>
+    <%= link_to "Already have an account? Login.", login_url, remote: true %>
   </div>
 <% end %>

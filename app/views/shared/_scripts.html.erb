@@ -4,11 +4,15 @@
 <% if flash['misc_params'] %>
   <% if flash['misc_params']['show_login'] %>
     <script type="text/javascript">
-      $('#loginModal').modal('show');
+      document.addEventListener("turbolinks:load", function () {
+        $('#loginModal').modal('show');
+      });
     </script>
   <% elsif flash['misc_params']['show_register'] %>
     <script type="text/javascript">
-      $('#registerModal').modal('show');
+      document.addEventListener("turbolinks:load", function () {
+        $('#registerModal').modal('show');
+      });
     </script>
   <% end %>
 <% end %>

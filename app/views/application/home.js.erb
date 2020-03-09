@@ -1,0 +1,9 @@
+<% @images.each_with_index do |img, idx| %>
+  $('#img-<%= img[:id] %>').attr('data-order', '<%= j idx %>');
+<% end %>
+
+$('#sortOptions').html("<%= j(render 'sort_options', data: @data) %>");
+$('#mSortOptions').html("<%= j(render 'm_sort_options', data: @data) %>");
+
+window.orderImages();
+window.applySortButtonFuncs();

@@ -1,2 +1,4 @@
-$('#registerModal').modal('show');
 $('#loginModal').modal('hide');
+$('#registerModal').on('show.bs.modal', function(e) {
+  $('#registerModalContent').replaceWith('<%= j(render "register") %>')
+}).modal('show');
