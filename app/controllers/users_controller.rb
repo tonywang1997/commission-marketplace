@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   include ApplicationHelper
-  before_action :logged_in_user
-  before_action :correct_user, only: [:edit, :update]
+  #before_action :logged_in_user
+  #before_action :correct_user, only: [:edit, :update]
 
   def show
     @user = User.find_by(user_name: params[:user_name])
@@ -12,7 +12,17 @@ class UsersController < ApplicationController
 
   def dashboard
     @user = current_user
-    render 'edit'
+    titles = ["3D", "Adoptables", "Animation", "Anime and Manga", "Artisan Crafts",
+      "Comics", "Cosplay", "Customization", "Digital Art", "Drawings and Paintings",
+      "Emoji and Emotion", "Fan Art", "Fan Fiction", "Fantasy", "Fractal", "Game Art",
+      "Horror", "Kinky", "Literature", "Nude Art", "Photo Manipulation", "Photography",
+      "Pixel Art", "Poetry", "Resources", "Science Fiction", "Sculpture", "Street Art",
+      "Streey Photography", "Traditional Art", "Tutorials", "Wallpaper"]
+    @topics = []
+    titles.each_with_index do |title, id|
+      @topics << {id: id, title: title}
+    end
+    render 'dashboard'
   end
 
   def new
