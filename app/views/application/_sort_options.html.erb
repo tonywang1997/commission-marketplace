@@ -1,0 +1,30 @@
+<%= material_icon.sort %>
+<span class="px-1">Sort:</span>
+<%= form_with(url: root_path, class: 'form-inline flex-nowrap', remote: true) do |f| %>
+  <div class="px-1 btn-group btn-group-toggle">
+    <%= f.label :sortByNone, class: "btn btn-secondary #{'active' if @sort == 'none'}" do %>
+      <%= radio_button_tag('sort', 'none', checked = (@sort == 'none'), id: 'sortByNone', class: 'submit-form') %>
+      None
+    <% end %>
+    <%= f.label :sortByDate, class: "btn btn-secondary #{'active' if @sort == 'date'}" do %>
+      <%= radio_button_tag('sort', 'date', checked = (@sort == 'date'), id: 'sortByDate', class: 'submit-form') %>
+      Date
+    <% end %>
+    <%= f.label :sortByPrice, class: "btn btn-secondary #{'active' if @sort == 'price'}" do %>
+      <%= radio_button_tag('sort', 'price', checked = (@sort == 'price'), id: 'sortByPrice', class: 'submit-form') %>
+      Price
+    <% end %>
+  </div>
+
+  <div class="px-1 btn-group btn-group-toggle">
+    <%= f.label :sortAsc, class: "btn btn-secondary btn-direction px-1 #{'active' if @asc} #{'disabled' if @sort == 'none'}" do %>
+      <%= radio_button_tag('dir', 'asc', checked = (@asc), id: 'sortAsc', class: 'submit-form') %>
+      <%= material_icon.arrow_drop_up %>
+    <% end %>
+    <%= f.label :sortDesc, class: "btn btn-secondary btn-direction px-1 #{'active' if @asc == false} #{'disabled' if @sort == 'none'}" do %>
+      <%= radio_button_tag('dir', 'desc', checked = (!@asc), id: 'sortDesc', class: 'submit-form') %>
+      <%= material_icon.arrow_drop_down %>
+    <% end %>
+  </div>
+  <input type="submit" class="d-none" name="">
+<% end %>

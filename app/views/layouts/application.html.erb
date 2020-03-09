@@ -1,30 +1,31 @@
 <!DOCTYPE html>
 <html>
   <head>
-     <%= render 'shared/head' %>
+    <%= render 'shared/head' %>
   </head>
 
-  <body>
+  <%= render 'sizer' %>
+  <body data-turbolinks="false">
     <!-- Modals -->
     <div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered align-items-center" role="document">
         <div class="modal-content">
-          <%= render partial: 'users/register' %>
+          <%= render 'users/register' %>
         </div>
       </div>
     </div>
     <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="registerModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered align-items-center" role="document">
         <div class="modal-content">
-          <%= render partial: 'sessions/login' %>
+          <%= render 'sessions/login' %>
         </div>
       </div>
     </div>
 
     <header>
-        <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
+        <nav class="navbar navbar-expand-sm fixed-top navbar-dark bg-dark">
           <div class="collapse navbar-collapse" id="navbar">
-            <%= render partial: 'navbar' %>
+            <%= render 'navbar' %>
           </div>
         </nav>
     </header>
@@ -38,5 +39,12 @@
       <%= debug(params) if Rails.env.development? %>
     </div>
     <%= render 'shared/scripts' %>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script>
+      $( document ).ready(function(){
+        $('#mycarousel').carousel();
+      });
+    </script>
   </body>
 </html>

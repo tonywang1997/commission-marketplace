@@ -1,0 +1,31 @@
+<%= form_with(url: root_path, remote: true) do |f| %>
+  <div class="modal-header">
+    <h5 class="modal-title align-items-center d-flex flex-row">
+      <%= material_icon.sort %>
+      <span class="px-1">Sort by:</span>
+    </h5>
+    <button type="button" class="close" id="dismissSortModal" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <select name='sort' class='custom-select mb-4' id='sort-select'>
+      <%= options_for_select([['None', ''], ['Price', 'price'], ['Date', 'date']], @sort) %>
+    </select>
+    
+    <div class="custom-control custom-radio align-middle my-1">
+      <%= radio_button_tag('dir', 'asc', checked = (@asc), id: 'mSortAsc', disabled: (@sort == 'none'), class: 'custom-control-input m-sort-dir')%>
+      <%= f.label :mSortAsc, 'Ascending', class: 'custom-control-label ml-2' %>
+    </div>
+    <div class="custom-control custom-radio align-middle my-1">
+      <%= radio_button_tag('dir', 'desc', checked = (!@asc), id: 'mSortDesc', disabled: (@sort == 'none'), class: 'custom-control-input m-sort-dir') %>
+      <%= f.label :mSortDesc, 'Descending', class: 'custom-control-label ml-2' %>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn btn-primary w-100 submit-form" data-toggle="modal" data-target="#sortModal">Sort</button>
+    <input type="submit" class="d-none" name="">
+  </div>
+<% end %>
