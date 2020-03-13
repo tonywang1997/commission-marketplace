@@ -59,5 +59,6 @@ gem 'bootstrap'
 gem 'material_icons'
 gem 'imgurapi'
 
+gem 'faker', :git => 'https://github.com/faker-ruby/faker.git', :branch => 'master'
 
-
+gem 'activerecord-import'
