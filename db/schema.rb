@@ -24,19 +24,22 @@ ActiveRecord::Schema.define(version: 2020_02_23_163923) do
 
   create_table "has_tags", force: :cascade do |t|
     t.integer "tag_id"
-    t.integer "artist_id"
+    t.integer "portfolio_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "images", force: :cascade do |t|
     t.string "url"
+    t.string "gallery_url"
+    t.float "price"
+    t.date "date"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "portfolios", force: :cascade do |t|
-    t.integer "artist_id"
+    t.integer "user_id"
     t.string "description"
     t.float "price_low"
     t.float "price_high"
