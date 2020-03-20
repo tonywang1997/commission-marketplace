@@ -1,3 +1,12 @@
+<!-- MODAL (MOBILE/SMALL SCREEN) -->
+<div class="modal fade" id="sortModal" tabindex="-1" role="dialog" aria-labelledby="sortModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content" id="mSortOptions">
+      <%= render 'm_sort_options' %>
+    </div>
+  </div>
+</div>
+
 <h1>Welcome to the Commission Marketplace!</h1>
 <hr>
 <div class="container pt-3">
@@ -8,13 +17,6 @@
 
     <!-- MOBILE/SMALL SCREEN -->
     <div class="d-md-none">
-      <div class="modal fade" id="sortModal" tabindex="-1" role="dialog" aria-labelledby="sortModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered align-items-center" role="document">
-          <div class="modal-content" id="mSortOptions">
-            <%= render 'm_sort_options' %>
-          </div>
-        </div>
-      </div>
       <button type="button" class="btn btn-secondary d-flex p-2 mr-2" data-toggle="modal" data-target="#sortModal">
         <%= material_icon.sort %>
       </button>
@@ -53,7 +55,7 @@
   <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 mx-n1">
     <div class="d-none">
       <% @images.each_with_index do |img, idx| %>
-        <%= link_to(img[:url],
+        <%= link_to("https://imgur.com/gallery/#{img[:gallery_url]}",
           class: 'col-view img-wrapper my-2 btn-block position-relative', 
           id: "img-#{img[:id]}",
           data: {
@@ -65,9 +67,9 @@
             date: img[:date],
             order: idx,
           },
-          title: simple_format("#{img[:portfolio]}\n#{img[:artist]}\n$#{img[:price]}\n#{img[:date].strftime("%d-%m-%Y")}", {}, wrapper_tag: 'span'),
+          title: simple_format("$#{img[:price]}\n#{img[:date].strftime("%d-%m-%Y")}", {}, wrapper_tag: 'span'),
           style: "line-height: 0") do %>
-          <%= image_tag(img[:url], class: 'img-fluid', height: img[:height], width: img[:width]) %>
+          <%= image_tag("https://i.imgur.com/#{img[:url]}", class: 'img-fluid', height: img[:height], width: img[:width]) %>
         <% end %>
       <% end %>
     </div>

@@ -3,6 +3,7 @@ import Rails from '@rails/ujs';
 document.addEventListener("turbolinks:load", function() {
   $('[data-toggle="tooltip"]').tooltip();
   $('[data-toggle="popover"]').popover();
+  $('#mycarousel').carousel();
 });
 
 window.addEventListener("turbolinks:load", function() {

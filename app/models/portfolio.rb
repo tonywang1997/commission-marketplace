@@ -1,5 +1,8 @@
 class Portfolio < ApplicationRecord
-  belongs_to :artist, optional: true
-  has_many :images, through: :has_image
+  belongs_to :user, optional: true
+  has_many :has_images
+  has_many :has_tags
+  has_many :images, through: :has_images
+  has_many :tags, through: :has_tags
   has_many_attached :files
 end

@@ -5,15 +5,16 @@ class ApplicationController < ActionController::Base
   before_action :set_session_params, only: :home
 
   def home
-    @images = create_placeholder_array
-
     @sort = (sort_options.include? params[:sort].downcase) ? params[:sort].downcase : 'none'
-    @asc = (dir_options.key? params[:dir]) ? dir_options[params[:dir].downcase] : true
+    @dir = (dir_options.include? params[:dir].downcase) ? params[:dir].downcase : 'asc'
+    puts '*****'
+    puts @dir
+    puts '*****'
     if @sort == 'none'
-      @images = @images.shuffle
+      @images = Image.all.shuffle
     else
-      # todo use later: Image.order(params[:sort] => :asc).limit(100)
-      @images = sort_by(@images, @sort, @asc)
+      @images = Image.order(params[:sort] => @dir).limit(100)
+      # @images = sort_by(@images, @sort, @asc)
     end
 
     respond_to do |format|
@@ -36,7 +37,7 @@ class ApplicationController < ActionController::Base
     end
     
     def dir_options
-      {'asc' => true, 'desc' => false}
+      ['asc', 'desc']
     end
 
     def sort_by(image_array, attribute, asc=true)
@@ -61,7 +62,7 @@ class ApplicationController < ActionController::Base
                 price: rand(4000),
                 width: width,
                 height: height,
-                date: Time.at(Time.now.to_f * rand),
+                date: Time.at(Time.now.to_f * rand).to_date,
               }
     end
 

@@ -17,12 +17,12 @@
   </div>
 
   <div class="px-1 btn-group btn-group-toggle">
-    <%= f.label :sortAsc, class: "btn btn-secondary btn-direction px-1 #{'active' if @asc} #{'disabled' if @sort == 'none'}" do %>
-      <%= radio_button_tag('dir', 'asc', checked = (@asc), id: 'sortAsc', class: 'submit-form') %>
+    <%= f.label :sortAsc, class: "btn btn-secondary btn-direction px-1 #{'active' if @dir == 'asc'} #{'disabled' if @sort == 'none'}" do %>
+      <%= radio_button_tag('dir', 'asc', checked = (@dir == 'asc'), id: 'sortAsc', class: 'submit-form') %>
       <%= material_icon.arrow_drop_up %>
     <% end %>
-    <%= f.label :sortDesc, class: "btn btn-secondary btn-direction px-1 #{'active' if @asc == false} #{'disabled' if @sort == 'none'}" do %>
-      <%= radio_button_tag('dir', 'desc', checked = (!@asc), id: 'sortDesc', class: 'submit-form') %>
+    <%= f.label :sortDesc, class: "btn btn-secondary btn-direction px-1 #{'active' if @dir == 'desc'} #{'disabled' if @sort == 'none'}" do %>
+      <%= radio_button_tag('dir', 'desc', checked = (@dir == 'desc'), id: 'sortDesc', class: 'submit-form') %>
       <%= material_icon.arrow_drop_down %>
     <% end %>
   </div>

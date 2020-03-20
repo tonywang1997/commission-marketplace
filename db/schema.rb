@@ -12,6 +12,7 @@
 
 ActiveRecord::Schema.define(version: 2020_03_20_014617) do
 
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -43,18 +44,35 @@ ActiveRecord::Schema.define(version: 2020_03_20_014617) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "has_tags", force: :cascade do |t|
+    t.integer "tag_id"
+    t.integer "portfolio_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "images", force: :cascade do |t|
     t.string "url"
+    t.string "gallery_url"
+    t.float "price"
+    t.date "date"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "portfolios", force: :cascade do |t|
-    t.integer "artist_id"
+    t.integer "user_id"
     t.string "description"
     t.float "price_low"
     t.float "price_high"
     t.date "date_created"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.integer "tag_id"
+    t.text "tag_name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

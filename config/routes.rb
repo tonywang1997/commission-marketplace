@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :has_tags
+  resources :tags
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   root 'application#home'
   post '/', to: 'application#home'
@@ -9,6 +11,7 @@ Rails.application.routes.draw do
   delete '/logout', to: 'sessions#destroy'
 
   get '/register', to: 'users#new'
+  post '/register', to: 'users#create'
   get '/dashboard', to: 'users#dashboard'
   get '/submit', to: 'portfolios#new', as: :user_submit
   resources :users, param: :user_name
