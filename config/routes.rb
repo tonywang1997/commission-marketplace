@@ -13,9 +13,7 @@ Rails.application.routes.draw do
   get '/register', to: 'users#new'
   post '/register', to: 'users#create'
   get '/dashboard', to: 'users#dashboard'
-  get '/submit', to: 'portfolios#new', as: :user_submit
   resources :users, param: :user_name
-  resources :portfolios
 end
 
 
