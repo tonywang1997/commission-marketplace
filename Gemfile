@@ -58,6 +58,7 @@ gem 'bcrypt'
 gem 'bootstrap'
 gem 'material_icons'
 gem 'imgurapi'
+gem "aws-sdk-s3", require: false
 
 
 

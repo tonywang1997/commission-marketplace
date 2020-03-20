@@ -25,6 +25,9 @@ class UsersController < ApplicationController
     render 'dashboard'
   end
 
+  def submit
+  end
+
   def new
     respond_to do |format|
       format.html {

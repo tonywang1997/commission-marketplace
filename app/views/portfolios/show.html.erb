@@ -1,0 +1,10 @@
+<p id="notice"><%= notice %></p>
+<ul>
+  <% @portfolio.files.each do |file| %>
+    <li>
+      <%= image_tag(file) %>
+    </li>
+  <% end %>
+</ul>
+<%= link_to 'Edit', edit_portfolio_path(@portfolio) %> |
+<%= link_to 'Back', portfolios_path %>
