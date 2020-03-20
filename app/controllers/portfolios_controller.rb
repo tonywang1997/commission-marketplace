@@ -1,4 +1,6 @@
 class PortfoliosController < ApplicationController
+  include ApplicationHelper
+  before_action :logged_in_user
   before_action :set_portfolio, only: [:show, :edit, :update, :destroy]
 
   # GET /portfolios
@@ -25,6 +27,7 @@ class PortfoliosController < ApplicationController
   # POST /portfolios.json
   def create
     @portfolio = Portfolio.new(portfolio_params)
+    @portfolio.user_id = session[:user_id]
 
     respond_to do |format|
       if @portfolio.save
@@ -70,5 +73,13 @@ class PortfoliosController < ApplicationController
     # Only allow a list of trusted parameters through.
     def portfolio_params
       params.require(:portfolio).permit(:description, :content, files: [])
+    end
+
+    def logged_in_user
+      if logged_in_actions[:portfolios].include? params[:action].to_sym
+        unless logged_in?
+          redirect_to login_url
+        end
+      end
     end
 end

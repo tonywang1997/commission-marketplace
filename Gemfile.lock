@@ -284,8 +284,8 @@ PLATFORMS
   x86-mswin32
 
 DEPENDENCIES
-  aws-sdk-s3
   activerecord-import
+  aws-sdk-s3
   bcrypt
   bootsnap (>= 1.4.2)
   bootstrap

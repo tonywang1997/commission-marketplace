@@ -1,8 +1,10 @@
 <p id="notice"><%= notice %></p>
+<p>The created portfolio belongs to <%=@portfolio.user.user_name%></p>
+<p>The user has already created <%=@portfolio.user.portfolios.length %> portfolios </p>
 <ul>
   <% @portfolio.files.each do |file| %>
     <li>
-      <%= image_tag(file) %>
+      <%= image_tag(file, style: 'width:200px; height:auto') %>
     </li>
   <% end %>
 </ul>
