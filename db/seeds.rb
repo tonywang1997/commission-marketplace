@@ -78,7 +78,7 @@ end
 Portfolio.import portfolios_c, portfolios, validate: false
 puts "Created portfolios."
 
-puts "Creating HasImage m:n relationship between portfolios and images..."
+puts "Creating HasImage and HasTag relationships..."
 Portfolio.all.each do |portfolio|
     images = Image.all.sample(rand(10) + 1)
     portfolio.price_low = images.min do |a, b|
@@ -95,17 +95,16 @@ Portfolio.all.each do |portfolio|
             :image_id => image.id,
         }
     end
+
+    tags = Tag.all.sample(rand(10) + 1)
+    tags.each do |tag|
+        has_tags << {
+            :portfolio_id => portfolio.id,
+            :tag_id => tag.id,
+        }
+    end
 end
 HasImage.import has_images_c, has_images, validate: false
-puts "Created HasImage relationship."
-
-puts "Creating HasTag m:n relationship between portfolios and tags..."
-50.times do
-    has_tags << {
-        :portfolio_id => Portfolio.all.sample.id,
-        :tag_id => Tag.all.sample.id, 
-    }
-end
 HasTag.import has_tags_c, has_tags, validate: false
-puts "Created HasTag relationship."
+puts "Created HasImage and HasTag relationships."
 

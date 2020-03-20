@@ -1,5 +1,9 @@
+<% if @tags.any? %>
+  $('.img-wrapper.col-view').hide();
+<% end %>
+
 <% @images.each_with_index do |img, idx| %>
-  $('#img-<%= img[:id] %>').attr('data-order', '<%= j idx %>');
+  $('#img-<%= img[:id] %>').attr('data-order', '<%= j idx %>').show();
 <% end %>
 
 $('#sortOptions').html("<%= j(render 'sort_options', data: @data) %>");

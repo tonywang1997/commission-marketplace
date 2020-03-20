@@ -30,7 +30,7 @@ window.addEventListener("turbolinks:load", function() {
     for (let i = 0; i < numCols; i++) {
       col_heights.push(0)
     }
-    $('.img-wrapper.col-view')
+    $('.img-wrapper.col-view:visible')
       .sort((a, b) => $(a).attr('data-order') - $(b).attr('data-order'))
       .each(function() {
         // append to shortest column
@@ -64,6 +64,12 @@ window.addEventListener("turbolinks:load", function() {
 
   window.orderImages();
   window.applySortButtonFuncs();
+
+  // this fixes issue where pressing the 'back' button doesn't order images correctly
+  window.addEventListener('load', function() {
+    window.orderImages();
+    window.applySortButtonFuncs();
+  });
 });
 
 

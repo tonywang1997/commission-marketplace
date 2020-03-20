@@ -7,15 +7,28 @@ class ApplicationController < ActionController::Base
   def home
     @sort = (sort_options.include? params[:sort].downcase) ? params[:sort].downcase : 'none'
     @dir = (dir_options.include? params[:dir].downcase) ? params[:dir].downcase : 'asc'
-    puts '*****'
-    puts @dir
-    puts '*****'
-    if @sort == 'none'
-      @images = Image.all.shuffle
+    @tags = session[:tags]
+
+    if @tags.any?
+      if @sort == 'none'
+        @images = Image.tagged(@tags).shuffle
+      else
+        @images = Image.tagged(@tags).order(params[:sort] => @dir).limit(100)
+      end
     else
-      @images = Image.order(params[:sort] => @dir).limit(100)
-      # @images = sort_by(@images, @sort, @asc)
+      if @sort == 'none'
+        @images = Image.all.shuffle
+      else
+        @images = Image.order(params[:sort] => @dir).limit(100)
+        # @images = sort_by(@images, @sort, @asc)
+      end
     end
+    
+    @hidden_images = Image.all - @images
+
+    puts '*******'
+    puts @images
+    puts '*******'
 
     respond_to do |format|
       format.html
@@ -30,6 +43,13 @@ class ApplicationController < ActionController::Base
 
       params[:dir] ||= (session[:dir] ||= 'asc')
       session[:dir] = params[:dir]
+
+      params[:search] ||= (session[:tags] ||= []).join(' ')
+      session[:tags] = params[:search].split(' ')
+
+      puts '*******'
+      puts session[:tags]
+      puts '*******'
     end
 
     def sort_options

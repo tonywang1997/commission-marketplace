@@ -10,24 +10,10 @@
 <h1>Welcome to the Commission Marketplace!</h1>
 <hr>
 <div class="container pt-3">
-  <div class="d-flex align-items-stretch justify-content-between mb-2">
-    <div class="d-none d-md-flex flex-row align-items-center mr-1" id="sortOptions">
+  <div>
+    <div class="flex-row align-items-center mb-2" id="sortOptions">
       <%= render 'sort_options' %>
     </div>
-
-    <!-- MOBILE/SMALL SCREEN -->
-    <div class="d-md-none">
-      <button type="button" class="btn btn-secondary d-flex p-2 mr-2" data-toggle="modal" data-target="#sortModal">
-        <%= material_icon.sort %>
-      </button>
-    </div>
-
-    <%= form_with(url: '#', scope: :session, local: true, method: :get, class: 'form-inline w-100') do |f| %>
-      <%= f.text_field :search, class: 'search-input form-control bg-light text-dark mb-0 pr-5 w-100 h-100', placeholder: "Search (eg, 'full body sketch $20-30')" %>
-      <%= button_tag :submit, class: 'search-btn btn form-control text-dark px-2' do %>
-          <%= material_icon.search %>
-      <% end %>
-    <% end %>
   </div>
 
 
@@ -53,26 +39,45 @@
   <% end %>
 
   <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 mx-n1">
-    <div class="d-none">
-      <% @images.each_with_index do |img, idx| %>
-        <%= link_to("https://imgur.com/gallery/#{img[:gallery_url]}",
-          class: 'col-view img-wrapper my-2 btn-block position-relative', 
-          id: "img-#{img[:id]}",
-          data: {
-            toggle: "tooltip",
-            placement: "right",
-            content: "",
-            html: true,
-            price: img[:price],
-            date: img[:date],
-            order: idx,
-          },
-          title: simple_format("$#{img[:price]}\n#{img[:date].strftime("%d-%m-%Y")}", {}, wrapper_tag: 'span'),
-          style: "line-height: 0") do %>
-          <%= image_tag("https://i.imgur.com/#{img[:url]}", class: 'img-fluid', height: img[:height], width: img[:width]) %>
-        <% end %>
+    <% @hidden_images.each do |img| %>
+      <%= link_to("https://imgur.com/gallery/#{img[:gallery_url]}",
+        class: 'col-view img-wrapper my-2 btn-block position-relative', 
+        id: "img-#{img[:id]}",
+        data: {
+          toggle: "tooltip",
+          placement: "right",
+          content: "",
+          html: true,
+          price: img[:price],
+          date: img[:date],
+        },
+        title: simple_format("$#{img[:price]}\n#{img[:date].strftime("%d-%m-%Y")}", {}, wrapper_tag: 'span'),
+        style: "line-height: 0") do %>
+        <%= image_tag("https://i.imgur.com/#{img[:url]}", class: 'img-fluid', height: img[:height], width: img[:width]) %>
       <% end %>
-    </div>
+    <% end %>
+
+    <script>$('.img-wrapper.col-view').hide()</script>
+
+    <% @images.each_with_index do |img, idx| %>
+      <%= link_to("https://imgur.com/gallery/#{img[:gallery_url]}",
+        class: 'col-view img-wrapper my-2 btn-block position-relative', 
+        id: "img-#{img[:id]}",
+        data: {
+          toggle: "tooltip",
+          placement: "right",
+          content: "",
+          html: true,
+          price: img[:price],
+          date: img[:date],
+          order: idx,
+        },
+        title: simple_format("$#{img[:price]}\n#{img[:date].strftime("%d-%m-%Y")}", {}, wrapper_tag: 'span'),
+        style: "line-height: 0") do %>
+        <%= image_tag("https://i.imgur.com/#{img[:url]}", class: 'img-fluid', height: img[:height], width: img[:width]) %>
+      <% end %>
+    <% end %>
+
     <div class="col px-1" id="col-0">
     </div>
     <div class="col px-1" id="col-1">

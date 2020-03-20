@@ -1,7 +1,17 @@
-<%= material_icon.sort %>
-<span class="px-1">Sort:</span>
-<%= form_with(url: root_path, class: 'form-inline flex-nowrap', remote: true) do |f| %>
-  <div class="px-1 btn-group btn-group-toggle">
+<%= form_with(url: root_path, class: 'form-inline d-flex flex-nowrap align-items-stretch w-100', remote: true) do |f| %>
+  <div class="d-none d-md-flex align-items-center">
+    <%= material_icon.sort %>
+    <span class="px-1">Sort:</span>
+  </div>
+
+  <!-- MOBILE/SMALL SCREEN -->
+  <div class="d-flex d-md-none">
+    <button type="button" class="btn btn-secondary d-flex p-2 mr-2" data-toggle="modal" data-target="#sortModal">
+      <%= material_icon.sort %>
+    </button>
+  </div>
+
+  <div class="d-none d-md-flex px-1 btn-group btn-group-toggle">
     <%= f.label :sortByNone, class: "btn btn-secondary #{'active' if @sort == 'none'}" do %>
       <%= radio_button_tag('sort', 'none', checked = (@sort == 'none'), id: 'sortByNone', class: 'submit-form') %>
       None
@@ -16,7 +26,7 @@
     <% end %>
   </div>
 
-  <div class="px-1 btn-group btn-group-toggle">
+  <div class="d-none d-md-flex px-1 btn-group btn-group-toggle">
     <%= f.label :sortAsc, class: "btn btn-secondary btn-direction px-1 #{'active' if @dir == 'asc'} #{'disabled' if @sort == 'none'}" do %>
       <%= radio_button_tag('dir', 'asc', checked = (@dir == 'asc'), id: 'sortAsc', class: 'submit-form') %>
       <%= material_icon.arrow_drop_up %>
@@ -26,5 +36,11 @@
       <%= material_icon.arrow_drop_down %>
     <% end %>
   </div>
-  <input type="submit" class="d-none" name="">
+
+  <div class="pl-1 d-flex align-items-center w-100">
+    <%= f.text_field :search, class: 'search-input form-control bg-light text-dark mb-0 pr-5 h-100 w-100', value: params[:search], placeholder: "Search (eg, 'full body sketch $20-30')" %>
+    <%= button_tag :submit, class: 'search-btn btn form-control text-dark px-2' do %>
+        <%= material_icon.search %>
+    <% end %>
+  </div>
 <% end %>
