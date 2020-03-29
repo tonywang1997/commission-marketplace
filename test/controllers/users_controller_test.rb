@@ -21,8 +21,8 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "should get edit" do
-    get edit_user_url(@user.user_name)
+  test "should get dashboard" do
+    get dashboard_url
     assert_response :success
   end
 

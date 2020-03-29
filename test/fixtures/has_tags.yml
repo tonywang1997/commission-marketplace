@@ -1,9 +1,4 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 one:
-  tag_id: 
-  artist_id: 1
-
-two:
-  tag_id: 
-  artist_id: 1
+  id: 1
+  portfolio_id: 1
+  tag_id: 1
