@@ -12,8 +12,8 @@
  *
  */
 /*
-  *= require custom
-  *= require bootstrap
-  *= require material_icons
 */
 
+@import 'material_icons';
+@import "custom";
+@import 'bootstrap';
