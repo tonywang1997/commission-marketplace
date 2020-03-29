@@ -108,3 +108,15 @@ HasImage.import has_images_c, has_images, validate: false
 HasTag.import has_tags_c, has_tags, validate: false
 puts "Created HasImage and HasTag relationships."
 
+puts "Creating test user..."
+u = User.new({
+    user_name: 'testuser',
+    email_address: 'testuser@test.com',
+    password: '123456',
+    password_confirmation: '123456',
+})
+if u.save
+    puts "Created test user."
+else
+    puts "Error(s) creating test user: ", u.errors.messages
+end
