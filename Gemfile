@@ -60,6 +60,7 @@ gem 'bootstrap', '~> 4.4.1'
 gem 'material_icons'
 gem 'imgurapi'
 gem 'jquery-rails'
+gem "aws-sdk-s3", require: false
 
 gem 'faker', :git => 'https://github.com/faker-ruby/faker.git', :branch => 'master'
 
