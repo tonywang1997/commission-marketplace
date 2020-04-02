@@ -17,6 +17,8 @@ class PortfoliosController < ApplicationController
   # GET /portfolios/new
   def new
     @portfolio = Portfolio.new
+    # create an empty tag child shown to the user
+    1.times { @portfolio.tags.build }
   end
 
   # GET /portfolios/1/edit
@@ -72,7 +74,12 @@ class PortfoliosController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def portfolio_params
-      params.require(:portfolio).permit(:description, :content, files: [])
+      params.require(:portfolio).permit(
+        :description, 
+        :price_low,
+        :price_high,
+        tags_attributes: [:tag_name],
+        files: [])
     end
 
     def logged_in_user

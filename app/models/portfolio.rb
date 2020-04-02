@@ -7,4 +7,7 @@ class Portfolio < ApplicationRecord
   
   scope :tagged, -> (tags) { joins(:tags).where("tags.tag_name IN (?)", tags).group("portfolios.id").having('count(*) = ?', tags.count) }
   has_many_attached :files
+  # use nested form to dynamically add/remove tags
+  # https://guides.rubyonrails.org/form_helpers.html#configuring-the-model
+  accepts_nested_attributes_for :tags, allow_destroy: true
 end
