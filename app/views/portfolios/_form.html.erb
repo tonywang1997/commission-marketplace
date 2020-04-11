@@ -45,7 +45,7 @@
       <%= form.fields_for :tags do |tag_form| %>
         <%= render 'tag_form', tag_form: tag_form %>
       <% end %>
-      <%= link_to "add tag", '#', class: "add_tag" %>
+      <%= link_to fa_icon("plus-square"), '#', class: "add_tag" %>
     </div>
   </div>
   
