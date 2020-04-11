@@ -27,10 +27,6 @@ input[type=submit] {
   border-bottom: none;
   border-top: none;
   z-index: 99;
-  /*position the autocomplete items to be the same width as the container:*/
-  top: 100%;
-  left: 0;
-  right: 0;
 }
 .autocomplete-items div {
   padding: 10px;
@@ -46,4 +42,48 @@ input[type=submit] {
   /*when navigating through the items using the arrow keys:*/
   background-color: DodgerBlue !important;
   color: #ffffff;
+}
+
+.field {
+  margin-bottom: 20px;
+}
+
+.desc_field {
+  width: 40%;
+}
+
+.img_field {
+  width: 40%;
+}
+
+.tags_field {
+  display: flex;
+}
+
+.tag-input {
+  width: 20%;
+}
+
+.tag {
+  display: flex;
+}
+
+.price_range {
+  display: flex;
+  .price_low {
+    margin-right: 10px;
+  }
+  .price_high {
+    margin-left: 10px;
+  }
+}
+
+.range_sign {
+  display: block;
+  border: 1px solid #566573;
+  background-color: #566573;
+  width: 10px;
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-top: 20px;
 }

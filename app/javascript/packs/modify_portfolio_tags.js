@@ -15,7 +15,7 @@ $(document).on('click', '.add_tag', function(event) {
   time = new Date().getTime()
   id = time.toString()
   tag_input = 
-  `<fieldset>\
+  `<fieldset class="tag">\
        <input type="text" \
        class="tag-input" \
        name="portfolio[tags_attributes][${id}][tag_name]" \

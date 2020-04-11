@@ -10,36 +10,45 @@
       </ul>
     </div>
   <% end %>
+  
 
-  <div class="field">
-    <%= form.label :description %>
-    <%= form.text_field :description %>
+  <div class="field desc_field">
+    <%= form.label "Description" %>
+    <%= form.text_area :description, placeholder: 'Introduce your work to the community' %>
   </div>
 
   <div class="field">
-    <%= form.label "lowest price" %>
-    <%= form.text_field :price_low %>
+    <%= form.label "Price Range" %>
+    <div class="price_range">
+      <div class="price_low">
+      <%= form.text_field :price_low, placeholder: '0', required: true %>
+      </div>
+      <hr class="range_sign">
+      <div class="price_high">
+        <%= form.text_field :price_low, placeholder: '1000', required: true %>
+      </div>
+    </div>
   </div>
+  
 
-  <div class="field">
-    <%= form.label "highest price" %>
-    <%= form.text_field :price_low %>
-  </div>
-
-  <div class="field">
-    <%= form.label :images %>
+  <div class="field img_field">
+    <%= form.label "Upload images" %>
     <%= form.file_field :files, 
+                        required: true,
                         multiple: true, 
                         direct_upload: true %>
   </div>
-
-  <%= form.label "Tag the portfolio" %>
-  <%= form.fields_for :tags do |tag_form| %>
-    <%= render 'tag_form', tag_form: tag_form %>
-  <% end %>
-  <%= link_to "add tag", '#', class: "add_tag" %>
-
-
+  
+  <div class="field">
+    <%= form.label "Tag the portfolio" %>
+    <div class="tags_field">  
+      <%= form.fields_for :tags do |tag_form| %>
+        <%= render 'tag_form', tag_form: tag_form %>
+      <% end %>
+      <%= link_to "add tag", '#', class: "add_tag" %>
+    </div>
+  </div>
+  
 
   <div class="actions">
     <%= form.submit %>
