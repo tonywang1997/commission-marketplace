@@ -150,7 +150,7 @@ a.portfolio-image:hover .info{
 }
 
 .username {
-  display: block;
+  display: flex;
   font-weight: 400;
   font-size: 48px;
   letter-spacing: 0.3px;
@@ -237,4 +237,12 @@ a.portfolio-image:hover .info{
     white-space: nowrap;
     max-width: 100%;
     text-decoration: none;
+}
+
+.bio {
+  display: flex;
+}
+
+.edit_bio {
+  margin-left: 10px;
 }

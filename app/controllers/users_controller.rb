@@ -12,15 +12,11 @@ class UsersController < ApplicationController
 
   def dashboard
     @user = current_user
-    titles = ["3D", "Adoptables", "Animation", "Anime and Manga", "Artisan Crafts",
-      "Comics", "Cosplay", "Customization", "Digital Art", "Drawings and Paintings",
-      "Emoji and Emotion", "Fan Art", "Fan Fiction", "Fantasy", "Fractal", "Game Art",
-      "Horror", "Kinky", "Literature", "Nude Art", "Photo Manipulation", "Photography",
-      "Pixel Art", "Poetry", "Resources", "Science Fiction", "Sculpture", "Street Art",
-      "Streey Photography", "Traditional Art", "Tutorials", "Wallpaper"]
-    @topics = []
-    titles.each_with_index do |title, id|
-      @topics << {id: id, title: title}
+    @portfolios = []
+    @user.portfolios.each do |portfolio|
+      if portfolio.files.length > 0
+        @portfolios << portfolio
+      end
     end
     render 'dashboard'
   end

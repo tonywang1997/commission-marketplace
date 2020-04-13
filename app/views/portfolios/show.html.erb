@@ -1,10 +1,10 @@
 <p id="notice"><%= notice %></p>
 <div class="portfolio_carousal">
-  <div id="myCarousel" class="carousel slide w-100" data-ride="carousel">
+  <div id="myCarousel" class="carousel slide w-100">
     <div class="carousel-inner w-100" role="listbox">
       <div class="carousel-item row no-gutters active">
             <div class="col d-flex justify-content-center">
-            	<%= image_tag(@portfolio.files[0], style: 'width:200px; height:auto', class: "img-fluid") %>
+            	<%= image_tag(@portfolio.files[0], style: 'width:600px; height:500px', class: "img-fluid") %>
             </div>
       </div>
     	<% @portfolio.files[1..-1].each do |file| %>

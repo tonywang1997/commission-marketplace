@@ -132,4 +132,6 @@ $(document).ready(function(){
   for (i = 0; i < tag_inputs.length; i++) {
     autocomplete(tag_inputs[i], tags);
   }
+  console.log("pause the carousal");
+  $('.carousel').carousel('pause');
 });

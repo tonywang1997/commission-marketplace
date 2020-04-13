@@ -1,10 +1,14 @@
-<div class="panel panel-default">
-	<%= render '/users/profile' %>
+<div>
+	<%= render partial: '/users/profile' %>
 </div>
-<hr>
-<div class="panel panel-default border">
-	<%= render '/users/portfolio' %>
-</div>
-<div class="panel panel-default border">
-	<%= render '/users/submit_section' %>
+
+<% @portfolios.each do |portfolio| %>
+	<div class="panel panel-default border">
+		<%= render partial: '/users/portfolio', 
+		    locals: {portfolio: portfolio} %>
+	</div>
+<% end %>
+
+<div class="d-flex justify-content-center mt-3">
+	<%= link_to 'Add a portfolio', user_submit_path, class: "btn btn-primary" %>
 </div>

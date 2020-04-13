@@ -130,3 +130,4 @@ window.addEventListener("turbolinks:load", function() {
 
   resize(5);
 }) */
+
