@@ -1,12 +1,56 @@
 <p id="notice"><%= notice %></p>
-<p>The created portfolio belongs to <%=@portfolio.user.user_name%></p>
-<p>The user has already created <%=@portfolio.user.portfolios.length %> portfolios </p>
-<ul>
-  <% @portfolio.files.each do |file| %>
-    <li>
-      <%= image_tag(file, style: 'width:200px; height:auto') %>
-    </li>
-  <% end %>
-</ul>
+<div class="portfolio_carousal">
+  <div id="myCarousel" class="carousel slide w-100" data-ride="carousel">
+    <div class="carousel-inner w-100" role="listbox">
+      <div class="carousel-item row no-gutters active">
+            <div class="col d-flex justify-content-center">
+            	<%= image_tag(@portfolio.files[0], style: 'width:200px; height:auto', class: "img-fluid") %>
+            </div>
+      </div>
+    	<% @portfolio.files[1..-1].each do |file| %>
+    	    <div class="carousel-item row no-gutters">
+            <div class="col d-flex justify-content-center">
+            	<%= image_tag(file, style: 'width:600px; height:500px', 
+            	              class: "img-fluid") %>
+            </div>
+          </div>
+		  <% end %>
+        
+    </div>
+    <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
+    	<span class="_3g6BC _33ljh"><svg width="27" height="48" viewBox="0 0 27 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M3 21L24 0l3 3L6 24l21 21-3 3L0 24l3-3z" fill-rule="evenodd"></path></svg></span>
+    </a>
+    <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
+        <span><svg width="27" height="48" viewBox="0 0 27 48" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M24 27L3 48l-3-3 21-21L0 3l3-3 24 24-3 3z" fill-rule="evenodd"></path></svg></span>
+    </a>
+  </div>
+</div>
+
+<div class="details_container">
+    <div class="profile_container">
+    	<span class="avatar_show"><img src="https://assets.currencycloud.com/wp-content/uploads/2018/01/profile-placeholder.gif" loading="lazy" width="50" height="50"></a></span>
+      <div class="info_container">
+          <div class="title_container">
+              <h1 data-hook="deviation_title" class="title_show">untitled</h1>
+              <p>from <%= @portfolio.price_low%> to <%=@portfolio.price_high%></p>
+          </div>
+          <div class="author_container">
+              <div>
+              	<span>By</span>
+              	<a href=<%="/storefront/#{@portfolio.user.id}"%> 
+              		 class='user_link_show'><%= @portfolio.user.user_name %></a>
+              </div>
+              <div class="_1TgrW"><span>Published: <%=@portfolio.created_at %></span></div>
+          </div>
+      </div>
+    </div>
+    <div class="_2Vvqa">
+        <div class="_2ogLQ">
+          <% @portfolio.tags.each do |tag|%>
+            <a href="https://www.deviantart.com/tag/america" class="j9kGS"><span class="_3uQxz"><%=tag.tag_name%></span></a>
+    	    <% end %>
+        </div>
+    </div>
+</div>
 <%= link_to 'Edit', edit_portfolio_path(@portfolio) %> |
 <%= link_to 'Back', portfolios_path %>

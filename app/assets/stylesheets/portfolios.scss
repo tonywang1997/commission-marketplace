@@ -111,3 +111,130 @@ input[type=submit] {
 .portfolio_form {
   margin: 0, auto;
 }
+
+.portfolio {
+  margin-bottom: 20px;
+}
+
+
+.info {
+  margin: 15px;
+  color: #fff;
+  position: absolute;
+  bottom: 10px;
+  opacity: 0;
+  transition-property: opacity;
+  transition-duration: 0.25s;
+  transition-timing-function: ease-in-out;
+  transition-delay: 0s;
+}
+
+a.portfolio-image:hover .info{
+  opacity: 1
+}
+
+.profile {
+  display: inline-flex;
+}
+
+
+.avatar {
+  margin-top: 10px;
+}
+
+.profile_info {
+  margin-left: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.username {
+  display: block;
+  font-weight: 400;
+  font-size: 48px;
+  letter-spacing: 0.3px;
+  line-height: normal;
+  color: var(--D8);
+  text-decoration: none;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.email {
+  margin: 2px 0;
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 1.22;
+  letter-spacing: 0.3px;
+  display: flex;
+  align-items: center;
+}
+
+.carousel-control-prev-icon {
+  background-image: url("");
+}
+
+.profile_container {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.avatar_show {
+  margin-top: 10px;
+  margin-right: 16px;
+}
+
+.info_container {
+  width: 60%;
+}
+
+.title_container {
+  margin-bottom: 8px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.title_show {
+  margin: 0;
+  font-weight: 800;
+  line-height: 1.22;
+  letter-spacing: 0.3px;
+  font-size: 16px;
+}
+
+.author_container {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.details_container {
+  margin-top: 20px;
+}
+
+.j9kGS {
+    font-family: devioussans02regular,Helvetica Neue,Helvetica,Arial,メイリオ, meiryo,ヒラギノ角ゴ pro w3,hiragino kaku gothic pro,sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 20px;
+    letter-spacing: .3px;
+    display: inline-flex;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    padding: 0 16px;
+}
+
+._3uQxz {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+    text-decoration: none;
+}
