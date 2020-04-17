@@ -24,6 +24,15 @@ h2 {
   position: relative;
 }
 
+.image-upload {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+
 .search-btn {
   position: absolute;
   right: 0;
@@ -35,17 +44,10 @@ h2 {
   box-shadow: none;
 }
 
-.row-view.img-wrapper {
-  max-width: 320px;
-  min-width: 100px;
-  height: 150px;
-  max-height: 500px;
-  overflow: hidden;
-}
-
 .col-view.img-wrapper {
   max-height: 500px;
   overflow: hidden;
+  min-height: 100px;
 }
 
 .col-view.img-wrapper img {

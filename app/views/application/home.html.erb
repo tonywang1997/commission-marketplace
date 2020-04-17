@@ -16,32 +16,10 @@
     </div>
   </div>
 
-
-  <!-- ROW VIEW - NOT USED -->
-  <% if false %>
-    <div class="img-grid d-flex flex-wrap m-n1">
-      <% @images.each do |img| %>
-        <%= link_to(img[:url],
-          class: 'row-view img-wrapper position-relative m-1',
-          data: {
-            toggle: "tooltip",
-            placement: "right",
-            price: img[:price],
-            date: img[:date],
-            html: true,
-          },
-          title: simple_format("#{img[:portfolio]}\n#{img[:artist]}\n$#{img[:price]}", {}, wrapper_tag: 'span'),
-          style: "line-height: 0") do %>
-          <%= image_tag(img[:url], class: img[:height] / img[:width].to_f >= 1.5 ? 'grid-img-tall' : 'grid-img-wide', height: img[:height], width: img[:width]) %>
-        <% end %>
-      <% end %>
-    </div>
-  <% end %>
-
-  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 mx-n1">
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 mx-n2 mt-1">
     <% @hidden_images.each do |img| %>
       <%= link_to("https://imgur.com/gallery/#{img[:gallery_url]}",
-        class: 'col-view img-wrapper my-2 btn-block position-relative', 
+        class: 'col-view img-wrapper my-3 btn-block position-relative img-thumbnail', 
         id: "img-#{img[:id]}",
         data: {
           toggle: "tooltip",
@@ -61,7 +39,7 @@
 
     <% @images.each_with_index do |img, idx| %>
       <%= link_to("https://imgur.com/gallery/#{img[:gallery_url]}",
-        class: 'col-view img-wrapper my-2 btn-block position-relative', 
+        class: 'col-view img-wrapper my-3 btn-block position-relative img-thumbnail', 
         id: "img-#{img[:id]}",
         data: {
           toggle: "tooltip",
@@ -78,13 +56,13 @@
       <% end %>
     <% end %>
 
-    <div class="col px-1" id="col-0">
+    <div class="col px-2" id="col-0">
     </div>
-    <div class="col px-1" id="col-1">
+    <div class="col px-2" id="col-1">
     </div>
-    <div class="col px-1" id="col-2">
+    <div class="col px-2" id="col-2">
     </div>
-    <div class="col px-1" id="col-3">
+    <div class="col px-2" id="col-3">
     </div>
   </div>
   </div>

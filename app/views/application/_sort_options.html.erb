@@ -39,8 +39,18 @@
 
   <div class="pl-1 d-flex align-items-center w-100">
     <%= f.text_field :search, class: 'search-input form-control bg-light text-dark mb-0 pr-5 h-100 w-100', value: params[:search], placeholder: "Search (eg, 'full body sketch $20-30')" %>
-    <%= button_tag :submit, class: 'search-btn btn form-control text-dark px-2' do %>
-        <%= material_icon.search %>
-    <% end %>
+    <div class="search-btn">
+      <%= f.file_field :files, 
+                        multiple: true, 
+                        direct_upload: true, 
+                        id: 'addImage', 
+                        class: 'image-upload' %>
+      <%= f.label :addImage, class: 'btn form-control text-dark w-auto mb-0 px-1' do %>
+        <%= material_icon.add_a_photo %>
+      <% end %>
+      <%= button_tag :submit, class: 'btn form-control text-dark w-auto px-1 mr-1' do %>
+          <%= material_icon.search %>
+      <% end %>
+    </div>
   </div>
 <% end %>
