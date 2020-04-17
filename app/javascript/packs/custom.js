@@ -71,3 +71,4 @@ window.addEventListener("turbolinks:load", function() {
     window.applySortButtonFuncs();
   });
 });
+

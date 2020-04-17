@@ -65,3 +65,4 @@ gem "aws-sdk-s3", require: false
 gem 'faker', :git => 'https://github.com/faker-ruby/faker.git', :branch => 'master'
 
 gem 'activerecord-import'
+gem "font-awesome-rails"

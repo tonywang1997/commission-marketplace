@@ -15,12 +15,12 @@ $(document).on('click', '.add_tag', function(event) {
   time = new Date().getTime()
   id = time.toString()
   tag_input = 
-  `<fieldset>\
+  `<fieldset class="tag">\
        <input type="text" \
        class="tag-input" \
        name="portfolio[tags_attributes][${id}][tag_name]" \
        id="portfolio_tags_attributes_${id}_tag_name"> \
-       <a class="remove_tag" href="#">remove</a>\
+       <a class="remove_tag" href="#"><i class="fa fa-minus-square fa-lg"></i></a>\
     </fieldset>`
   $(this).before(tag_input);
 
@@ -132,4 +132,6 @@ $(document).ready(function(){
   for (i = 0; i < tag_inputs.length; i++) {
     autocomplete(tag_inputs[i], tags);
   }
+  console.log("pause the carousal");
+  $('.carousel').carousel('pause');
 });
