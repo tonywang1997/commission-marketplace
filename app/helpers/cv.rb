@@ -12,8 +12,14 @@ class Cv
 		diff = 0
 		for i in 0..127
 			for j in 0..127
-				xrbg = dot(x[i][j])
-				yrbg = dot(y[i][j])
+				xrbg = [0, 0, 0]
+				yrbg = [0, 0, 0]
+				if x[i] and x[i][j]
+					xrbg = dot(x[i][j])
+				end
+				if y[i] and y[i][j]
+					yrbg = dot(y[i][j])
+				end
 				z=xrbg.zip(yrbg).map { |x, y| (y - x)**2 }
 				diff += z.sum
 			end
@@ -28,9 +34,9 @@ class Cv
 	end
 	def to_rbg(input)
 		ret = []
-		ret << input/(256**3)
-		ret << input/(256**2)%256
-		ret << input/256%256
+		ret << (input || 0)/(256**3)
+		ret << (input || 0)/(256**2)%256
+		ret << (input || 0)/256%256
 		return ret
 	end
 	def dot(input)

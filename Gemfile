@@ -42,6 +42,7 @@ group :development do
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'hirb'
+  gem 'rack-mini-profiler'
 end
 
 group :test do

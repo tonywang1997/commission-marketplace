@@ -19,7 +19,7 @@ class ApplicationController < ActionController::Base
       end
     else
       if @sort == 'none'
-        @images = Image.all.shuffle
+        @images = Image.select(:id, :price, :date).all.shuffle
       elsif @sort == 'sim' and params[:files]
         # calculate matrices for each attached file
         matrices_att = []
@@ -39,28 +39,25 @@ class ApplicationController < ActionController::Base
         @images.each_with_index do |image_db, idx|
           sim_sums[image_db.id] = 0
           matrices_att.each do |matrix_att|
-            if image_db.matrix
+            if image_db.matrix and image_db.matrix.size > 0
+              puts "id: #{image_db.id}"
               p image_db.matrix.first[0..5]
               sim_sums[image_db.id] += Cv.new(image_db.matrix, matrix_att).sim
             end
           end
         end
+
         puts sim_sums
         puts '*****'
 
         @images = @images.sort { |a, b| sim_sums[a.id] <=> sim_sums[b.id] }
-
       else
-        @images = Image.all
-        # doesn't work because image metadata isn't accessible right now
-        # @images = ActiveStorage::Attachment.order(params[:sort] => @dir).limit(100)
+        @images = Image.select(:id, :price, :date).order(params[:sort] => @dir).limit(100)
         # @images = sort_by(@images, @sort, @asc)
       end
     end
     
-    @hidden_images = Image.all - @images
-
-
+    @hidden_images = Image.select(:id, :price, :date).all - @images
 
     respond_to do |format|
       format.html

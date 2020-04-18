@@ -17,8 +17,6 @@ HasImage.destroy_all
 HasTag.destroy_all
 Faker::UniqueGenerator.clear
 
-urls_file_lines = File.open('db/seed_urls.txt').readlines.map(&:chomp)
-gallery_urls_file_lines = File.open('db/seed_gallery_urls.txt').readlines.map(&:chomp)
 tags_file_lines = File.open('db/seed_tags.txt').readlines.map(&:chomp)
 
 users = []
@@ -36,31 +34,54 @@ has_tags_c = [:portfolio_id, :tag_id]
 has_images = []
 has_images_c = [:portfolio_id, :image_id]
 
-images = []
-images_c = [:url, :gallery_url, :price, :date]
-
-puts "Creating users, tags, and images..."
+puts "Creating users and tags..."
 (0...25).to_a.each do |x|
     users << {
-        :user_name => Faker::Name.unique.name, 
-        :email_address => Faker::Internet.unique.email , 
+        :user_name => "user#{x}", # Faker::Name.unique.name
+        :email_address => "user#{x}@test.com", # Faker::Internet.unique.email 
         :password_digest => User.digest('123456'), 
-        :profile_thumbnail => urls_file_lines[x],
+        :profile_thumbnail => '',
     }
-
-    images << {
-        :url => urls_file_lines[x], 
-        :gallery_url => gallery_urls_file_lines[x],
-        :price => rand(100000) / 100.0,
-        :date => Time.at(Time.now.to_f * rand).to_date,
-    } 
 
     tags << { :tag_name => tags_file_lines[x] }
 end
 User.import users_c, users, validate: false
 Tag.import tags_c, tags, validate: false
+puts "Created users and tags."
+
+puts "Creating images..."
+image_paths = Dir.glob('app/assets/images/**/*.png')
+images_c = [:id, :price, :date, :matrix]
+images = []
+puts "\tCreating metadata..."
+image_paths.each_with_index do |path, id|
+    puts "\t\t#{path}"
+    images.push({
+        id: id,
+        price: rand(100000) / 100.0,
+        date: Time.at(Time.now.to_f * rand).to_date,
+        matrix: Img.new(path).to_matrix,
+    })
+end
+puts "\tCreated metadata."
+puts "\tInserting images..."
 Image.import images_c, images, validate: false
-puts "Created users, tags, and images."
+puts "\tInserted images."
+puts "\tAttaching image files..."
+image_paths.each_with_index do |path, id|
+    puts "\t\t#{path}"
+    image = Image.find(id)
+    image.file.attach({
+        io: File.open(path),
+        filename: File.basename(path),
+        content_type: 'image/png',
+    })
+    if not image.file.attached?
+        puts "Failed to attach image #{File.basename(path)}"
+    end
+end
+puts "\tAttached image files."
+puts "Created images."
 
 puts "Creating portfolios..."
 User.all.each do |user|
@@ -80,19 +101,18 @@ puts "Created portfolios."
 
 puts "Creating HasImage and HasTag relationships..."
 Portfolio.all.each do |portfolio|
-    images = Image.all.sample(rand(10) + 1)
-    portfolio.price_low = images.min do |a, b|
-        a.price <=> b.price
-    end.price
-    portfolio.price_high = images.max do |a, b|
-        a.price <=> b.price
-    end.price
+    images_sample = images.sample(rand(10) + 1)
+    minmax = images_sample.minmax do |a, b|
+        a[:price] <=> b[:price]
+    end
+    portfolio.price_low = minmax[0][:price]
+    portfolio.price_high = minmax[1][:price]
     portfolio.save
 
-    images.each do |image|
+    images_sample.each do |image|
         has_images << {
             :portfolio_id => portfolio.id,
-            :image_id => image.id,
+            :image_id => image[:id],
         }
     end
 
