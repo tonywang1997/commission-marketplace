@@ -11,49 +11,45 @@ class ApplicationController < ActionController::Base
     @dir = (dir_options.include? params[:dir].downcase) ? params[:dir].downcase : 'asc'
     @tags = session[:tags]
 
-    if @tags.any?
-      if @sort == 'none'
-        @images = Image.tagged(@tags).shuffle
-      else
-        @images = Image.tagged(@tags).order(params[:sort] => @dir).limit(100)
+    if @sort == 'sim' and params[:files] # sort by similarity
+      # calculate matrices for each attached file
+      matrices_att = []
+      params[:files].each do |file_param|
+        image = Image.new(file: file_param)
+        image.file.open do |file_att|
+          matrices_att.push(Img.new(file_att.path).to_matrix)
+        end
       end
-    else
+
+      puts '*****'
+      puts "Analyzing attachments:"
+      matrices_att.each_with_index { |matrix_att, idx| puts "\t#{idx}: #{matrix_att.first[0..5]}" }
+
+      # for each image, calculate its sim with each attachment and sum
+      sim_sums = {}
+      @images = Image.tagged(@tags).all
+      puts "Analyzing images:"
+      @images.each_with_index do |image_db, idx|
+        sim_sums[image_db.id] = 0
+        matrices_att.each do |matrix_att|
+          if image_db.matrix and image_db.matrix.size > 0
+            puts "\t#{image_db.id}: #{image_db.matrix.first[0..5]}"
+            sim_sums[image_db.id] += Cv.new(image_db.matrix, matrix_att).sim
+          end
+        end
+      end
+
+      puts sim_sums
+      puts '*****'
+
+      # sort by sum of similarity values
+      @images = @images.sort { |a, b| sim_sums[a.id] <=> sim_sums[b.id] }
+    else 
+      # sort by price, date, or none
       if @sort == 'none'
-        @images = Image.select(:id, :price, :date).all.shuffle
-      elsif @sort == 'sim' and params[:files]
-        # calculate matrices for each attached file
-        matrices_att = []
-        params[:files].each do |file_param|
-          image = Image.new(file: file_param)
-          image.file.open do |file_att|
-            matrices_att.push(Img.new(file_att.path).to_matrix)
-          end
-        end
-
-        puts '*****'
-        p matrices_att.first.first[0..5]
-
-        # for each image, calculate its sim with each attachment and average
-        sim_sums = {}
-        @images = Image.all
-        @images.each_with_index do |image_db, idx|
-          sim_sums[image_db.id] = 0
-          matrices_att.each do |matrix_att|
-            if image_db.matrix and image_db.matrix.size > 0
-              puts "id: #{image_db.id}"
-              p image_db.matrix.first[0..5]
-              sim_sums[image_db.id] += Cv.new(image_db.matrix, matrix_att).sim
-            end
-          end
-        end
-
-        puts sim_sums
-        puts '*****'
-
-        @images = @images.sort { |a, b| sim_sums[a.id] <=> sim_sums[b.id] }
+        @images = Image.select(:id, :price, :date).tagged(@tags).all.shuffle
       else
-        @images = Image.select(:id, :price, :date).order(params[:sort] => @dir).limit(100)
-        # @images = sort_by(@images, @sort, @asc)
+        @images = Image.select(:id, :price, :date).tagged(@tags).order(params[:sort] => @dir).all
       end
     end
     
@@ -76,9 +72,9 @@ class ApplicationController < ActionController::Base
       params[:search] ||= (session[:tags] ||= []).join(' ')
       session[:tags] = params[:search].split(' ')
 
-      puts '*******'
+      puts '*****'
       puts session[:tags]
-      puts '*******'
+      puts '*****'
     end
 
     def sort_options

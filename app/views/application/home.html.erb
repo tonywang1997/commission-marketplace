@@ -53,7 +53,7 @@
             date: img[:date],
             order: idx,
           },
-          title: simple_format("$#{img[:price]}\n#{img[:date].strftime("%d-%m-%Y")}", {}, wrapper_tag: 'span'),
+          title: simple_format("$#{img[:price]}\n#{img[:date].strftime("%d-%m-%Y")}\n#{img.tags}", {}, wrapper_tag: 'span'),
           style: "line-height: 0") do %>
           <%= image_tag(img.file, class: 'img-fluid', height: img[:height], width: img[:width]) %>
         <% end %>
