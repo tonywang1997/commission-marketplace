@@ -1,4 +1,6 @@
 require 'yaml'
+require_relative '../helpers/img'
+require_relative '../helpers/cv'
 
 class ApplicationController < ActionController::Base
   include SessionsHelper
@@ -18,17 +20,47 @@ class ApplicationController < ActionController::Base
     else
       if @sort == 'none'
         @images = Image.all.shuffle
+      elsif @sort == 'sim' and params[:files]
+        # calculate matrices for each attached file
+        matrices_att = []
+        params[:files].each do |file_param|
+          image = Image.new(file: file_param)
+          image.file.open do |file_att|
+            matrices_att.push(Img.new(file_att.path).to_matrix)
+          end
+        end
+
+        puts '*****'
+        p matrices_att.first.first[0..5]
+
+        # for each image, calculate its sim with each attachment and average
+        sim_sums = {}
+        @images = Image.all
+        @images.each_with_index do |image_db, idx|
+          sim_sums[image_db.id] = 0
+          matrices_att.each do |matrix_att|
+            if image_db.matrix
+              p image_db.matrix.first[0..5]
+              sim_sums[image_db.id] += Cv.new(image_db.matrix, matrix_att).sim
+            end
+          end
+        end
+        puts sim_sums
+        puts '*****'
+
+        @images = @images.sort { |a, b| sim_sums[a.id] <=> sim_sums[b.id] }
+
       else
-        @images = Image.order(params[:sort] => @dir).limit(100)
+        @images = Image.all
+        # doesn't work because image metadata isn't accessible right now
+        # @images = ActiveStorage::Attachment.order(params[:sort] => @dir).limit(100)
         # @images = sort_by(@images, @sort, @asc)
       end
     end
     
     @hidden_images = Image.all - @images
 
-    puts '*******'
-    puts @images
-    puts '*******'
+
 
     respond_to do |format|
       format.html
@@ -53,7 +85,7 @@ class ApplicationController < ActionController::Base
     end
 
     def sort_options
-      ['none', 'date', 'price']
+      ['none', 'date', 'price', 'sim']
     end
     
     def dir_options

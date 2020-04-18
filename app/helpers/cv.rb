@@ -1,4 +1,4 @@
-class CV
+class Cv
 	@matrix
 	@other
 	def initialize(matrix,other)
@@ -68,7 +68,7 @@ class CV
 		end
 		
 		xDif = x1Dist.zip(x2Dist).map{|x,y| (y-x)**2}
-		yDif = y1Dist.zip(y2Dist).map{|x,y| (y-x)**2)
+		yDif = y1Dist.zip(y2Dist).map{|x,y| (y-x)**2}
 		tDist = 0
 		xDif.each{|x| tDist+=x}
 		yDif.each{|x| tDist+=x}

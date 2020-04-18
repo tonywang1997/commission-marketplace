@@ -55,6 +55,7 @@ ActiveRecord::Schema.define(version: 2020_03_20_014617) do
     t.string "gallery_url"
     t.float "price"
     t.date "date"
+    t.bigint "matrix", array: true
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

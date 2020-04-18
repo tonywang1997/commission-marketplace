@@ -1,4 +1,3 @@
-require 'chunky_png'
 
 class Img
 
@@ -36,15 +35,15 @@ end
 
 
 
-x=Img.new('chunk.png')
-y=x.getMatrix
-puts y.column(0).class
-z=Array(y.column(0))
-puts z.class
-asdf=x.to_matrix
-asdf2=x.sample(asdf)
-puts asdf2.length
-puts asdf2[2].length
+# x=Img.new('chunk.png')
+# y=x.getMatrix
+# puts y.column(0).class
+# z=Array(y.column(0))
+# puts z.class
+# asdf=x.to_matrix
+# asdf2=x.sample(asdf)
+# puts asdf2.length
+# puts asdf2[2].length
 
 
 

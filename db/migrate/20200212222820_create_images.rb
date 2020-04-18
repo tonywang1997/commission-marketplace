@@ -5,6 +5,7 @@ class CreateImages < ActiveRecord::Migration[6.0]
       t.string :gallery_url
       t.float :price
       t.date :date
+      t.bigint :matrix, :array => true
 
       t.timestamps
     end

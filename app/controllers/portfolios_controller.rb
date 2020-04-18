@@ -1,3 +1,5 @@
+require_relative '../helpers/img'
+
 class PortfoliosController < ApplicationController
   include ApplicationHelper
   include SessionsHelper
@@ -31,6 +33,13 @@ class PortfoliosController < ApplicationController
   # POST /portfolios.json
   def create
     @portfolio = Portfolio.new(portfolio_params)
+    portfolio_files[:files].each do |blob|
+      image = Image.new(file: blob)
+      image.file.open do |file_db|
+        image.matrix = Img.new(file_db.path).to_matrix
+      end
+      @portfolio.images.push(image)
+    end
     @portfolio.user_id = session[:user_id]
 
     respond_to do |format|
@@ -80,8 +89,11 @@ class PortfoliosController < ApplicationController
         :description, 
         :price_low,
         :price_high,
-        tags_attributes: [:tag_name],
-        files: [])
+        tags_attributes: [:tag_name])
+    end
+
+    def portfolio_files
+      params.require(:portfolio).permit(files: [])
     end
 
     def logged_in_user
