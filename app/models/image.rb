@@ -15,7 +15,7 @@ class Image < ApplicationRecord
     if price_range.empty?
       return all
     end
-    where('images.price > ? and images.price < ?', price_range[0], price_range[1])
+    where('price > ? and price < ?', price_range[0], price_range[1])
   end
 
   def tags
