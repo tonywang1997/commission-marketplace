@@ -14,29 +14,39 @@ class ApplicationController < ActionController::Base
 
     if @sort == 'sim' and params[:files] # sort by similarity
       # calculate matrices for each attached file
+      puts '*****'
+      puts "Calculating attachment image matrices:"
       matrices_att = []
-      params[:files].each do |file_param|
+      params[:files].each_with_index do |file_param, idx|
         image = Image.new(file: file_param)
         image.file.open do |file_att|
-          matrices_att.push(Img.new(file_att.path).to_matrix)
+          matrix_att = Img.new(file_att.path).to_matrix
+          puts "\t#{idx}: #{matrix_att.first[0..5]}"
+          matrices_att.push(matrix_att)
         end
       end
 
-      puts '*****'
-      puts "Analyzing attachments:"
-      matrices_att.each_with_index { |matrix_att, idx| puts "\t#{idx}: #{matrix_att.first[0..5]}" }
-
       # for each image, calculate its sim with each attachment and sum
       sim_sums = {}
-      @images = Image.in_price_range(@price_range).tagged(@tags).all
+      @images = Image.select(:id, :price, :date).in_price_range(@price_range).tagged(@tags).all
+
+      puts "Calculating DB image matrices:"
+      matrices_db = {}
+      @images.each do |image_db|
+        image_db.file.open do |file_db|
+          matrix_db = Img.new(file_db.path).to_matrix
+          puts "\t#{image_db.id}: #{matrix_db.first[0..5]}"
+          matrices_db[image_db.id] = matrix_db
+        end
+      end
+
       puts "Analyzing images:"
-      @images.each_with_index do |image_db, idx|
-        sim_sums[image_db.id] = 0
-        matrices_att.each do |matrix_att|
-          if image_db.matrix and image_db.matrix.size > 0
-            puts "\t#{image_db.id}: #{image_db.matrix.first[0..5]}"
-            sim_sums[image_db.id] += Cv.new(image_db.matrix, matrix_att).sim
-          end
+      matrices_db.keys.each do |image_db_id|
+        sim_sums[image_db_id] = 0
+        matrices_att.each_with_index do |matrix_att, idx|
+          puts "\tDB image #{image_db_id} with attachment #{idx}"
+          matrix_db = matrices_db[image_db_id]
+          sim_sums[image_db_id] += Cv.new(matrix_db, matrix_att).sim
         end
       end
 
