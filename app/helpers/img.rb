@@ -2,8 +2,17 @@
 class Img
 
 	@image
-	def initialize(imgpath)
-		@image = ChunkyPNG::Image.from_file(imgpath)
+	def initialize(imginfo, options = {})
+		# if options[:binary] == true, imginfo contains blob string
+		# if options[:rgba] == true, imginfo contains rgba pixel stream
+		# else, imginfo contains file path
+		if options[:binary]
+			@image = ChunkyPNG::Image.from_blob(imginfo)
+		elsif options[:rgba]
+			@image = ChunkyPNG::Image.from_rgba_stream(options[:width], options[:height], imginfo)
+		else
+			@image = ChunkyPNG::Image.from_file(imginfo)
+		end
 	end
 
 	def to_rbg(input)
@@ -28,6 +37,18 @@ class Img
 		asdf = []
 		sMatrix.each {|x| asdf << x.sample(128)}
 		return asdf
+	end
+
+	def height
+		@image.dimension.height
+	end
+
+	def width
+		@image.dimension.width
+	end
+
+	def to_rgba_stream
+		@image.to_rgba_stream
 	end
 end	
 	

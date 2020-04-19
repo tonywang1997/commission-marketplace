@@ -51,22 +51,25 @@ puts "Created users and tags."
 
 puts "Creating images..."
 image_paths = Dir.glob('app/assets/images/**/*.png')
-images_c = [:id, :price, :date, :matrix]
+images_c = [:id, :price, :date, :binary_matrix]
 images = []
 puts "\tCreating metadata..."
 image_paths.each_with_index do |path, id|
     puts "\t\t#{path}"
+    img = Img.new(path)
     images.push({
         id: id,
         price: rand(100000) / 100.0,
         date: Time.at(Time.now.to_f * rand).to_date,
-        matrix: [], #Img.new(path).to_matrix
+        binary_matrix: MessagePack.pack(img.to_matrix)
     })
 end
 puts "\tCreated metadata."
+
 puts "\tInserting images..."
 Image.import images_c, images, validate: false
 puts "\tInserted images."
+
 puts "\tAttaching image files..."
 image_paths.each_with_index do |path, id|
     puts "\t\t#{path}"

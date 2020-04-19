@@ -36,7 +36,7 @@ class PortfoliosController < ApplicationController
     portfolio_files[:files].each do |blob|
       image = Image.new(file: blob)
       image.file.open do |file_db|
-        image.matrix = Img.new(file_db.path).to_matrix
+        image.binary_matrix = MessagePack.pack(Img.new(file_db.path).to_matrix)
       end
       @portfolio.images.push(image)
     end

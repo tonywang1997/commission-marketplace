@@ -1,4 +1,3 @@
-require 'yaml'
 require_relative '../helpers/img'
 require_relative '../helpers/cv'
 
@@ -11,34 +10,56 @@ class ApplicationController < ActionController::Base
     @dir = (dir_options.include? params[:dir].downcase) ? params[:dir].downcase : 'asc'
     @tags = session[:tags]
     @price_range = session[:price_range]
+    @image_tags = Image.tags
 
-    if @sort == 'sim' and params[:files] # sort by similarity
+    # sort by price, date, or none
+    if @sort == 'none' or @sort == 'sim'
+      if not params[:files]
+        @sort = 'none'
+      end
+      @images = Image.select(:id, :price, :date).
+                      in_price_range(@price_range).
+                      tagged(@tags).with_attached_file.all.shuffle
+    else
+      @images = Image.select(:id, :price, :date).
+                      in_price_range(@price_range).tagged(@tags).
+                      order(params[:sort] => @dir).with_attached_file.all
+    end
+
+    # sort by similarity
+    if @sort == 'sim' 
       # calculate matrices for each attached file
       puts '*****'
       puts "Calculating attachment image matrices:"
+      start = Time.now
       matrices_att = []
       params[:files].each_with_index do |file_param, idx|
-        image = Image.new(file: file_param)
-        image.file.open do |file_att|
-          matrix_att = Img.new(file_att.path).to_matrix
-          puts "\t#{idx}: #{matrix_att.first[0..5]}"
-          matrices_att.push(matrix_att)
-        end
+        blob_att = Image.new(file: file_param).file.download
+        matrix_att = Img.new(blob_att, binary: true).to_matrix
+        puts "\t#{idx}: #{matrix_att.first[0..5]}"
+        matrices_att.push(matrix_att)
       end
+      puts "Calculated attachment image matrices in: #{Time.now - start} s."
 
       # for each image, calculate its sim with each attachment and sum
       sim_sums = {}
-      @images = Image.select(:id, :price, :date).in_price_range(@price_range).tagged(@tags).all
-
       puts "Calculating DB image matrices:"
+      start = Time.now
       matrices_db = {}
-      @images.each do |image_db|
-        image_db.file.open do |file_db|
-          matrix_db = Img.new(file_db.path).to_matrix
-          puts "\t#{image_db.id}: #{matrix_db.first[0..5]}"
-          matrices_db[image_db.id] = matrix_db
-        end
+
+      # @images.each do |image_db|
+      #   matrix_db = Img.new(image_db.rgba, rgba: true, width: image_db.width, height: image_db.height).to_matrix
+      #   puts "\t#{image_db.id}: #{matrix_db.first[0..5]}"
+      #   matrices_db[image_db.id] = matrix_db
+      # end
+
+      plucked_id_matrix = Image.where('images.id IN (?)', @images.pluck(:id)).pluck(:id, :binary_matrix)
+      plucked_id_matrix.each do |image_db_id, binary_matrix|
+        matrix_db = MessagePack.unpack(binary_matrix)
+        puts "\t#{image_db_id}: #{matrix_db.first[0..5]}"
+        matrices_db[image_db_id] = matrix_db
       end
+      puts "Calculated DB image matrices in: #{Time.now - start} s."
 
       puts "Analyzing images:"
       matrices_db.keys.each do |image_db_id|
@@ -55,18 +76,6 @@ class ApplicationController < ActionController::Base
 
       # sort by sum of similarity values
       @images = @images.sort { |a, b| sim_sums[a.id] <=> sim_sums[b.id] }
-    else 
-      # sort by price, date, or none
-      if @sort == 'none' or @sort == 'sim'
-        @sort = 'none'
-        @images = Image.select(:id, :price, :date).
-                        in_price_range(@price_range).
-                        tagged(@tags).all.shuffle
-      else
-        @images = Image.select(:id, :price, :date).
-                        in_price_range(@price_range).tagged(@tags).
-                        order(params[:sort] => @dir).all
-      end
     end
     
     @hidden_images = Image.select(:id, :price, :date).where('images.id NOT IN (?)', @images.pluck(:id))
@@ -93,7 +102,7 @@ class ApplicationController < ActionController::Base
       price_range_regex = /\A\$?(\d*(?:\.\d*)?)-\$?(\d*(?:\.\d*)?)\Z/
       params[:search].split(' ').each do |tag|
         md = price_range_regex.match tag
-        if md
+        if md and session[:price_range].empty?
           # lower limit
           if md.captures[0] == ''
             session[:price_range].push(0)
@@ -107,7 +116,7 @@ class ApplicationController < ActionController::Base
             session[:price_range].push(md.captures[1].to_f)
           end
         else
-          session[:tags].push(tag)
+          session[:tags] |= [tag.downcase]
         end
       end
 
