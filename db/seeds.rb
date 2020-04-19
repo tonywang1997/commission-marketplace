@@ -60,7 +60,7 @@ image_paths.each_with_index do |path, id|
         id: id,
         price: rand(100000) / 100.0,
         date: Time.at(Time.now.to_f * rand).to_date,
-        matrix: Img.new(path).to_matrix,
+        matrix: [], #Img.new(path).to_matrix
     })
 end
 puts "\tCreated metadata."
