@@ -57,18 +57,20 @@ puts "\tCreating metadata..."
 image_paths.each_with_index do |path, id|
     puts "\t\t#{path}"
     img = Img.new(path)
-    images.push({
+    Image.create({
         id: id,
         price: rand(100000) / 100.0,
         date: Time.at(Time.now.to_f * rand).to_date,
         binary_matrix: MessagePack.pack(img.to_matrix)
     })
+    # images.push({
+    # })
 end
 puts "\tCreated metadata."
 
-puts "\tInserting images..."
-Image.import images_c, images, validate: false
-puts "\tInserted images."
+# puts "\tInserting images..."
+# Image.import images_c, images, validate: false
+# puts "\tInserted images."
 
 puts "\tAttaching image files..."
 image_paths.each_with_index do |path, id|
