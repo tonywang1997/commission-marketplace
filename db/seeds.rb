@@ -52,19 +52,22 @@ puts "Created users and tags."
 puts "Creating images..."
 image_paths = Dir.glob('app/assets/images/**/*.png')
 images_c = [:id, :price, :date, :binary_matrix]
-images = []
+image_prices = []
 puts "\tCreating metadata..."
 image_paths.each_with_index do |path, id|
     puts "\t\t#{path}"
     img = Img.new(path)
+    price = rand(100000) / 100.0
     Image.create({
         id: id,
-        price: rand(100000) / 100.0,
+        price: price,
         date: Time.at(Time.now.to_f * rand).to_date,
-        binary_matrix: MessagePack.pack(img.to_matrix)
+        binary_matrix: MessagePack.pack(img.to_matrix),
     })
-    # images.push({
-    # })
+    image_prices.push({
+        id: id,
+        price: price,
+    })
 end
 puts "\tCreated metadata."
 
@@ -106,7 +109,7 @@ puts "Created portfolios."
 
 puts "Creating HasImage and HasTag relationships..."
 Portfolio.all.each do |portfolio|
-    images_sample = images.sample(rand(10) + 1)
+    images_sample = image_prices.sample(rand(10) + 1)
     minmax = images_sample.minmax do |a, b|
         a[:price] <=> b[:price]
     end
