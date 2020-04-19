@@ -10,6 +10,7 @@ class ApplicationController < ActionController::Base
     @sort = (sort_options.include? params[:sort].downcase) ? params[:sort].downcase : 'none'
     @dir = (dir_options.include? params[:dir].downcase) ? params[:dir].downcase : 'asc'
     @tags = session[:tags]
+    @price_range = session[:price_range]
 
     if @sort == 'sim' and params[:files] # sort by similarity
       # calculate matrices for each attached file
@@ -27,7 +28,7 @@ class ApplicationController < ActionController::Base
 
       # for each image, calculate its sim with each attachment and sum
       sim_sums = {}
-      @images = Image.tagged(@tags).all
+      @images = Image.in_price_range(@price_range).tagged(@tags).all
       puts "Analyzing images:"
       @images.each_with_index do |image_db, idx|
         sim_sums[image_db.id] = 0
@@ -46,14 +47,19 @@ class ApplicationController < ActionController::Base
       @images = @images.sort { |a, b| sim_sums[a.id] <=> sim_sums[b.id] }
     else 
       # sort by price, date, or none
-      if @sort == 'none'
-        @images = Image.select(:id, :price, :date).tagged(@tags).all.shuffle
+      if @sort == 'none' or @sort == 'sim'
+        @sort = 'none'
+        @images = Image.select(:id, :price, :date).
+                        in_price_range(@price_range).
+                        tagged(@tags).all.shuffle
       else
-        @images = Image.select(:id, :price, :date).tagged(@tags).order(params[:sort] => @dir).all
+        @images = Image.select(:id, :price, :date).
+                        in_price_range(@price_range).tagged(@tags).
+                        order(params[:sort] => @dir).all
       end
     end
     
-    @hidden_images = Image.select(:id, :price, :date).all - @images
+    @hidden_images = Image.select(:id, :price, :date).where('images.id NOT IN (?)', @images.pluck(:id))
 
     respond_to do |format|
       format.html
@@ -69,11 +75,35 @@ class ApplicationController < ActionController::Base
       params[:dir] ||= (session[:dir] ||= 'asc')
       session[:dir] = params[:dir]
 
-      params[:search] ||= (session[:tags] ||= []).join(' ')
-      session[:tags] = params[:search].split(' ')
+      params[:search] ||= (session[:search] ||= '')
+      session[:search] = params[:search]
+      session[:tags] = []
+      session[:price_range] = []
+
+      price_range_regex = /\A\$?(\d*(?:\.\d*)?)-\$?(\d*(?:\.\d*)?)\Z/
+      params[:search].split(' ').each do |tag|
+        md = price_range_regex.match tag
+        if md
+          # lower limit
+          if md.captures[0] == ''
+            session[:price_range].push(0)
+          else
+            session[:price_range].push(md.captures[0].to_f)
+          end
+          # upper limit
+          if md.captures[1] == ''
+            session[:price_range].push(Float::INFINITY)
+          else
+            session[:price_range].push(md.captures[1].to_f)
+          end
+        else
+          session[:tags].push(tag)
+        end
+      end
 
       puts '*****'
-      puts session[:tags]
+      p session[:tags]
+      p session[:price_range]
       puts '*****'
     end
 

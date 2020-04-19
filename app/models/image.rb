@@ -7,7 +7,15 @@ class Image < ApplicationRecord
     if tags.empty?
       return all
     end
-    joins(:portfolios).where('portfolios.id IN (?)', Portfolio.tagged(tags).distinct.pluck(:id))
+    # select(:id).joins(:portfolios => :tags).where("tags.tag_name IN (?)", tags).distinct.group(:id).having('count(*) = ?', tags.count)
+    from(Image.joins(:portfolios => :tags).where("tags.tag_name IN (?)", tags).select('"tags"."tag_name"').distinct, :filtered_images).group(:id, :price, :date).having('count(*) = ?', tags.count)
+  end
+
+  def self.in_price_range(price_range)
+    if price_range.empty?
+      return all
+    end
+    where('images.price > ? and images.price < ?', price_range[0], price_range[1])
   end
 
   def tags

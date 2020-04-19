@@ -13,7 +13,7 @@ class Portfolio < ApplicationRecord
 
   def files
     attached_files = []
-    self.images.all.each do |img|
+    self.images.select(:id).all.each do |img|
       attached_files.push(img.file)
     end
     attached_files
