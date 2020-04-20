@@ -16,7 +16,7 @@
   <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 mx-n2 mt-1">
     <% @hidden_images.each do |img| %>
       <% if img.file.attached? %>
-        <%= link_to(portfolio_path(@image_portfolios[img[:id]].first),
+        <%= link_to(@image_portfolios[img[:id]] ? portfolio_path(@image_portfolios[img[:id]].first) : '#',
           class: 'col-view img-wrapper my-3 btn-block position-relative', 
           id: "img-#{img[:id]}",
           data: {
@@ -27,7 +27,7 @@
           },
           style: "line-height: 0; display: none") do %>
           <div class="img-overlay">
-            <%= simple_format("$#{img[:price]}\n#{img[:date]}\n#{@image_tags[img[:id]].join(', ')}") %>
+            <%= simple_format("$#{img[:price]}\n#{img[:date]}\n#{@image_tags[img[:id]] ? @image_tags[img[:id]].join(', ') : 'No tags found.'}") %>
           </div>
           <%= image_tag(img.file, class: 'img-fluid', size: ("#{img.file.metadata[:width]}x#{img.file.metadata[:height]}" if img.file.analyzed?)) %>
         <% end %>
@@ -36,7 +36,7 @@
 
     <% @images.each_with_index do |img, idx| %>
       <% if img.file.attached? %>
-        <%= link_to(portfolio_path(@image_portfolios[img[:id]].first),
+        <%= link_to(@image_portfolios[img[:id]] ? portfolio_path(@image_portfolios[img[:id]].first) : '#',
           class: 'col-view img-wrapper my-3 btn-block position-relative', 
           id: "img-#{img[:id]}",
           data: {
@@ -48,7 +48,7 @@
           },
           style: "line-height: 0") do %>
           <div class="img-overlay">
-            <%= simple_format("$#{img[:price]}\n#{img[:date]}\n#{@image_tags[img[:id]].join(', ')}") %>
+            <%= simple_format("$#{img[:price]}\n#{img[:date]}\n#{@image_tags[img[:id]] ? @image_tags[img[:id]].join(', ') : 'No tags found.'}") %>
           </div>
           <%= image_tag(img.file, class: 'img-fluid', size: ("#{img.file.metadata[:width]}x#{img.file.metadata[:height]}" if img.file.analyzed?)) %>
         <% end %>
