@@ -12,3 +12,48 @@ img#profile-img {
   padding-left: 0.75rem;
   padding-bottom: 0.5rem;
 }
+
+.avatar-container {
+	width: 100px;
+	height: 100px;
+	position: relative;
+}
+
+.avatar-img, .edit-button-container {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.edit-button-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: absolute;
+  z-index: 10;
+  opacity: 0;
+  transition-property: opacity;
+  transition-duration: 0.25s;
+  transition-timing-function: ease-in-out;
+  transition-delay: 0s;
+}
+
+.avatar-container:hover .edit-button-container{
+  opacity: 1;
+}
+
+.edit-button {
+	background-color: Transparent;
+  background-repeat:no-repeat;
+  border: 0;
+  overflow: hidden;
+  outline: none;
+}
+
+.profile-container {
+  display: inflex;
+}
+
+

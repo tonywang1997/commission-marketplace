@@ -69,3 +69,4 @@ gem 'faker', :git => 'https://github.com/faker-ruby/faker.git', :branch => 'mast
 
 gem 'activerecord-import'
 gem "font-awesome-rails"
+gem 'gravatar_image_tag'

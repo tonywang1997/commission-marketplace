@@ -5,6 +5,9 @@ class User < ApplicationRecord
   }
 
   has_many :portfolios
+  
+  # a user has one avatar image
+  has_one_attached :avatar
 
   VALID_USER_NAME_REGEX = /\A[\w+\-]*\Z/i
   validates :user_name, 
@@ -24,6 +27,7 @@ class User < ApplicationRecord
   validates :password,
     presence: true,
     length: { minimum: 6 }
+
 
   # Returns the hash digest of the given string.
   def User.digest(string)

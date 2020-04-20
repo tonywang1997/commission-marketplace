@@ -1,5 +1,6 @@
 <div>
-	<%= render partial: '/users/profile' %>
+	<%= render partial: '/users/profile',
+	    locals: {user: @user} %>
 </div>
 
 <% @portfolios.each do |portfolio| %>

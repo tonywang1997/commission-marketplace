@@ -56,6 +56,20 @@ class UsersController < ApplicationController
     end
   end
 
+  def avatar
+    @user = current_user
+    # set a placeholder for password, otherwise
+    # the record's password validation fails when
+    # hashed as a foreign key in the active storage
+    @user.password = "placeholder"
+    @user.avatar.attach(params[:user][:avatar])
+    if @user.save
+      head 200, content_type: "text/html"
+    else
+      render @user.errors.full_messages, :status => 500
+    end
+  end
+
   private
     def user_params
       # raise an error if :user is not an attribute of params hash
