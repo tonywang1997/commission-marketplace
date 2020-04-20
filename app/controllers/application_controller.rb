@@ -54,7 +54,7 @@ class ApplicationController < ActionController::Base
       # end
 
       plucked_id_matrix = []
-      @images.pluck(:id).each_slice(10).each do |slice|
+      @images.pluck(:id).each_slice(5).each do |slice|
         plucked_id_matrix += Image.where('images.id IN (?)', slice).pluck(:id, :binary_matrix)
       end
       plucked_id_matrix.each do |image_db_id, binary_matrix|
