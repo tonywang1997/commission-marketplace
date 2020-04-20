@@ -5,11 +5,14 @@ class Img
 	def initialize(imginfo, options = {})
 		# if options[:binary] == true, imginfo contains blob string
 		# if options[:rgba] == true, imginfo contains rgba pixel stream
+		# if options[:io] == true, imginfo contains IO object
 		# else, imginfo contains file path
 		if options[:binary]
 			@image = ChunkyPNG::Image.from_blob(imginfo)
 		elsif options[:rgba]
 			@image = ChunkyPNG::Image.from_rgba_stream(options[:width], options[:height], imginfo)
+		elsif options[:io]
+			@image = ChunkyPNG::Image.from_io(imginfo)
 		else
 			@image = ChunkyPNG::Image.from_file(imginfo)
 		end

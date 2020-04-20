@@ -48,6 +48,23 @@ class Image < ApplicationRecord
     tag_hash
   end
 
+  def self.portfolios(*image_ids)
+    portfolio_hash = {}
+    if image_ids.any?
+      HasImage.where('image_id IN (?)', image_ids).
+        pluck(:portfolio_id, :image_id).each do |portfolio_id, image_id|
+          portfolio_hash[image_id] ||= []
+          portfolio_hash[image_id].push(portfolio_id)
+        end
+    else
+      HasImage.pluck(:portfolio_id, :image_id).each do |portfolio_id, image_id|
+        portfolio_hash[image_id] ||= []
+        portfolio_hash[image_id].push(portfolio_id)
+      end
+    end
+    portfolio_hash
+  end
+
   def tags
     Tag.joins(:portfolios => :images).
         where('images.id = ?', self.id).

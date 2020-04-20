@@ -35,9 +35,7 @@ class PortfoliosController < ApplicationController
     @portfolio = Portfolio.new(portfolio_params)
     portfolio_files[:files].each do |blob|
       image = Image.new(file: blob)
-      image.file.open do |file_db|
-        image.binary_matrix = MessagePack.pack(Img.new(file_db.path).to_matrix)
-      end
+      image.binary_matrix = MessagePack.pack(Img.new(blob.to_io, io: true).to_matrix)
       @portfolio.images.push(image)
     end
     @portfolio.user_id = session[:user_id]

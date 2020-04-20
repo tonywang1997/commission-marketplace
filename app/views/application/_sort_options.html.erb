@@ -1,5 +1,5 @@
-<%= form_with(url: root_path, class: 'form-inline d-flex flex-nowrap align-items-stretch w-100', remote: true) do |f| %>
-  <div class="d-none d-md-flex align-items-center">
+<%= form_with(url: root_path, remote: true, class: 'form-inline d-flex flex-nowrap align-items-stretch w-100', html: {multipart: true}) do |f| %>
+  <div class="d-none d-md-flex align-items-center text-light">
     <%= material_icon.sort %>
     <span class="px-1">Sort:</span>
   </div>
@@ -24,7 +24,7 @@
       <%= radio_button_tag('sort', 'price', checked = (@sort == 'price'), id: 'sortByPrice', class: 'submit-form') %>
       Price
     <% end %>
-    <%= f.label :sortBySimilarity, class: "btn btn-secondary #{'active' if @sort == 'sim'}" do %>
+    <%= f.label :sortBySimilarity, data: {toggle: 'tooltip'}, title: 'Sort by image similarity!', class: "btn btn-secondary #{'active' if @sort == 'sim'}" do %>
       <%= radio_button_tag('sort', 'sim', checked = (@sort == 'sim'), id: 'sortBySimilarity', class: 'submit-form') %>
       Sim
     <% end %>
@@ -32,32 +32,29 @@
 
   <div class="d-none d-md-flex px-1 btn-group btn-group-toggle">
     <%= f.label :sortAsc, class: "btn btn-secondary btn-direction px-1 #{'active' if @dir == 'asc'} #{'disabled' if @sort == 'none'}" do %>
-      <%= radio_button_tag('dir', 'asc', checked = (@dir == 'asc'), id: 'sortAsc', class: 'submit-form') %>
+      <%= radio_button_tag('dir', 'asc', checked = (@dir == 'asc'), disabled: ('disabled' if @sort == 'none'), id: 'sortAsc', class: 'submit-form') %>
       <%= material_icon.arrow_drop_up %>
     <% end %>
     <%= f.label :sortDesc, class: "btn btn-secondary btn-direction px-1 #{'active' if @dir == 'desc'} #{'disabled' if @sort == 'none'}" do %>
-      <%= radio_button_tag('dir', 'desc', checked = (@dir == 'desc'), id: 'sortDesc', class: 'submit-form') %>
+      <%= radio_button_tag('dir', 'desc', checked = (@dir == 'desc'), disabled: ('disabled' if @sort == 'none'), id: 'sortDesc', class: 'submit-form') %>
       <%= material_icon.arrow_drop_down %>
     <% end %>
   </div>
 
   <div class="pl-1 d-flex align-items-center w-100">
-    <%= f.text_field :search, class: 'search-input form-control bg-light text-dark mb-0 pr-5 h-100 w-100', value: params[:search], placeholder: "Search (eg, 'full-body sketch $20-30')" %>
+    <%= f.text_field :search, class: 'search-input form-control mb-0 h-100 w-100', value: params[:search], placeholder: "Search (eg, 'full-body sketch $20-30')" %>
     <div class="search-btn">
-      <%= button_tag :submit, class: 'btn form-control text-dark w-auto px-1 mr-1' do %>
+      <%= f.file_field :files, 
+                        multiple: true, 
+                        id: 'addImage', 
+                        class: 'd-block image-upload' %>
+      <%= f.label :addImage, class: 'btn form-control text-light w-auto mb-0 px-1' do %>
+        <%= material_icon.add_a_photo %>
+      <% end %>
+      <%= button_tag :submit, class: 'btn form-control text-light w-auto px-1 mr-1' do %>
           <%= material_icon.search %>
       <% end %>
     </div>
   </div>
 
-  <div>
-    <%= f.file_field :files, 
-                      multiple: true, 
-                      direct_upload: true, 
-                      id: 'addImage', 
-                      class: 'd-block' %>
-    <%= f.label :addImage, class: 'btn form-control text-dark w-auto mb-0 px-1' do %>
-      <%= material_icon.add_a_photo %>
-    <% end %>
-  </div>
 <% end %>

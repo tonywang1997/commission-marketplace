@@ -11,6 +11,7 @@ class ApplicationController < ActionController::Base
     @tags = session[:tags]
     @price_range = session[:price_range]
     @image_tags = Image.tags
+    @image_portfolios = Image.portfolios
 
     # sort by price, date, or none
     if @sort == 'none' or @sort == 'sim'
@@ -33,9 +34,8 @@ class ApplicationController < ActionController::Base
       puts "Calculating attachment image matrices:"
       start = Time.now
       matrices_att = []
-      params[:files].each_with_index do |file_param, idx|
-        blob_att = Image.new(file: file_param).file.download
-        matrix_att = Img.new(blob_att, binary: true).to_matrix
+      params[:files].each_with_index do |file, idx|
+        matrix_att = Img.new(file.to_io, io: true).to_matrix
         puts "\t#{idx}: #{matrix_att.first[0..5]}"
         matrices_att.push(matrix_att)
       end
