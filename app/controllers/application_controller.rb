@@ -53,7 +53,10 @@ class ApplicationController < ActionController::Base
       #   matrices_db[image_db.id] = matrix_db
       # end
 
-      plucked_id_matrix = Image.where('images.id IN (?)', @images.pluck(:id)).pluck(:id, :binary_matrix)
+      plucked_id_matrix = []
+      @images.pluck(:id).each_slice(10).each do |slice|
+        plucked_id_matrix += Image.where('images.id IN (?)', slice).pluck(:id, :binary_matrix)
+      end
       plucked_id_matrix.each do |image_db_id, binary_matrix|
         matrix_db = MessagePack.unpack(binary_matrix)
         puts "\t#{image_db_id}: #{matrix_db.first[0..5]}"
