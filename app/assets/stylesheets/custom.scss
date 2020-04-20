@@ -12,6 +12,11 @@ body {
   background-attachment: fixed;
 }
 
+body.body-dark {
+  background: linear-gradient(#21296b, #121212 50%);
+  background-attachment: fixed;
+}
+
 h1 {
   text-align: center;
   color: lightgray;

@@ -4,6 +4,7 @@ require_relative '../helpers/cv'
 class ApplicationController < ActionController::Base
   include SessionsHelper
   before_action :set_session_params, only: :home
+  layout :resolve_layout
 
   def home
     @sort = (sort_options.include? params[:sort].downcase) ? params[:sort].downcase : 'none'
@@ -90,6 +91,15 @@ class ApplicationController < ActionController::Base
   end
 
   private
+    def resolve_layout
+      case action_name
+      when 'home'
+        'home-layout'
+      else
+        'application'
+      end
+    end
+
     def set_session_params
       params[:sort] ||= (session[:sort] ||= 'none')
       session[:sort] = params[:sort]
