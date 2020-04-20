@@ -64,6 +64,7 @@ gem 'jquery-rails'
 gem "aws-sdk-s3", require: false
 gem 'chunky_png'
 gem 'mini_magick'
+gem 'msgpack'
 
 gem 'faker', :git => 'https://github.com/faker-ruby/faker.git', :branch => 'master'
 

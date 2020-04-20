@@ -51,36 +51,35 @@ puts "Created users and tags."
 
 puts "Creating images..."
 image_paths = Dir.glob('app/assets/images/**/*.png')
-images_c = [:id, :price, :date, :matrix]
-images = []
-puts "\tCreating metadata..."
-image_paths.each_with_index do |path, id|
+images_c = [:id, :price, :date, :binary_matrix]
+image_prices = []
+puts "\tCreating metadata and attaching files..."
+image_paths.each do |path|
     puts "\t\t#{path}"
-    images.push({
-        id: id,
-        price: rand(100000) / 100.0,
+    img = Img.new(path)
+    price = rand(100000) / 100.0
+    image = Image.new({
+        price: price,
         date: Time.at(Time.now.to_f * rand).to_date,
-        matrix: [], #Img.new(path).to_matrix
+        binary_matrix: MessagePack.pack(img.to_matrix),
     })
-end
-puts "\tCreated metadata."
-puts "\tInserting images..."
-Image.import images_c, images, validate: false
-puts "\tInserted images."
-puts "\tAttaching image files..."
-image_paths.each_with_index do |path, id|
-    puts "\t\t#{path}"
-    image = Image.find(id)
     image.file.attach({
         io: File.open(path),
         filename: File.basename(path),
         content_type: 'image/png',
     })
     if not image.file.attached?
-        puts "Failed to attach image #{File.basename(path)}"
+        puts "\t\t\tFailed to attach image #{File.basename(path)}"
+    elsif not image.save
+        puts "\t\t\tFailed to save image #{File.basename(path)}"
+    else
+        image_prices.push({
+            id: image.id,
+            price: price,
+        })
     end
 end
-puts "\tAttached image files."
+puts "\tCreated metadata and attached files."
 puts "Created images."
 
 puts "Creating portfolios..."
@@ -101,7 +100,7 @@ puts "Created portfolios."
 
 puts "Creating HasImage and HasTag relationships..."
 Portfolio.all.each do |portfolio|
-    images_sample = images.sample(rand(10) + 1)
+    images_sample = image_prices.sample(rand(10) + 1)
     minmax = images_sample.minmax do |a, b|
         a[:price] <=> b[:price]
     end
