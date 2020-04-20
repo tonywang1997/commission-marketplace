@@ -87,6 +87,7 @@ class PortfoliosController < ApplicationController
         :description, 
         :price_low,
         :price_high,
+        files: [],
         tags_attributes: [:tag_name])
     end
 
