@@ -1,10 +1,10 @@
 require_relative '../helpers/img'
 require_relative '../helpers/cv'
+require 'set'
 
 class ApplicationController < ActionController::Base
   include SessionsHelper
   before_action :set_session_params, only: :home
-  layout :resolve_layout
 
   def home
     @sort = (sort_options.include? params[:sort].downcase) ? params[:sort].downcase : 'none'
@@ -14,75 +14,88 @@ class ApplicationController < ActionController::Base
     @image_tags = Image.tags
     @image_portfolios = Image.portfolios
 
-    # sort by price, date, or none
-    if @sort == 'none' or @sort == 'sim'
-      if not params[:files]
-        @sort = 'none'
-      end
-      @images = Image.select(:id, :price, :date).
-                      in_price_range(@price_range).
-                      tagged(@tags).with_attached_file.all.shuffle
-    else
-      @images = Image.select(:id, :price, :date).
-                      in_price_range(@price_range).tagged(@tags).
-                      order(params[:sort] => @dir).with_attached_file.all
-    end
-
     # sort by similarity
-    if @sort == 'sim' 
-      # calculate matrices for each attached file
+    if params[:sim_sort] and params[:sim_sort].to_i.to_s == params[:sim_sort]
+      # calculate matrix for comparison image
+      # todo put analyzed attribute in image table
       puts '*****'
-      puts "Calculating attachment image matrices:"
+      sort_start = Time.now
+      @sort = nil
+      @dir = nil
+      @images = Image.in_price_range(@price_range).
+                tagged(@tags).with_attached_file
+      puts 'Retrieving comparison matrix:'
       start = Time.now
-      matrices_att = []
-      params[:files].each_with_index do |file, idx|
-        matrix_att = Img.new(file.to_io, io: true).to_matrix
-        puts "\t#{idx}: #{matrix_att.first[0..5]}"
-        matrices_att.push(matrix_att)
-      end
-      puts "Calculated attachment image matrices in: #{Time.now - start} s."
-
-      # for each image, calculate its sim with each attachment and sum
-      sim_sums = {}
-      puts "Calculating DB image matrices:"
-      start = Time.now
-      matrices_db = {}
-
-      # @images.each do |image_db|
-      #   matrix_db = Img.new(image_db.rgba, rgba: true, width: image_db.width, height: image_db.height).to_matrix
-      #   puts "\t#{image_db.id}: #{matrix_db.first[0..5]}"
-      #   matrices_db[image_db.id] = matrix_db
-      # end
-
-      plucked_id_matrix = []
-      @images.pluck(:id).each_slice(15).each do |slice|
-        plucked_id_matrix += Image.where('images.id IN (?)', slice).pluck(:id, :binary_matrix)
-      end
-      plucked_id_matrix.each do |image_db_id, binary_matrix|
-        matrix_db = MessagePack.unpack(binary_matrix)
-        puts "\t#{image_db_id}: #{matrix_db.first[0..5]}"
-        matrices_db[image_db_id] = matrix_db
-      end
-      puts "Calculated DB image matrices in: #{Time.now - start} s."
-
-      puts "Analyzing images:"
-      matrices_db.keys.each do |image_db_id|
-        sim_sums[image_db_id] = 0
-        matrices_att.each_with_index do |matrix_att, idx|
-          puts "\tDB image #{image_db_id} with attachment #{idx}"
-          matrix_db = matrices_db[image_db_id]
-          sim_sums[image_db_id] += Cv.new(matrix_db, matrix_att).sim
+      id_comp = params[:sim_sort].to_i
+      image_comp = Image.find_by(id: id_comp)
+      matrix_comp = nil
+      if image_comp
+        binary_matrix_comp = image_comp.binary_matrix
+        if binary_matrix_comp
+          matrix_comp = MessagePack.unpack(binary_matrix_comp)
         end
       end
 
-      puts sim_sums
-      puts '*****'
+      if matrix_comp
+        puts "\t#{id_comp}: #{matrix_comp.first[0..5]}"
+        puts "Retrieved comparison matrix in: #{Time.now - start} s."
 
-      # sort by sum of similarity values
-      @images = @images.sort { |a, b| sim_sums[a.id] <=> sim_sums[b.id] }
+        # split up db calls into smaller chunks
+        puts "Retrieving DB image matrices:"
+        start = Time.now
+        id_matrix_array = []
+        @images.pluck(:id).each_slice(15).each do |slice|
+          id_matrix_array += Image.where('images.id IN (?)', slice).pluck(:id, :binary_matrix)
+        end
+        puts "Retrieved DB image matrices in: #{Time.now - start} s."
+
+        # for each image, calculate its sim with comparison image and sum
+        puts "Unpacking DB image matrices:"
+        start = Time.now
+        sim_sums = {}
+        matrices_db = {}
+        discard_ids = []
+        id_matrix_array.each do |image_db_id, binary_matrix|
+          if image_db_id != id_comp and binary_matrix
+            matrix_db = MessagePack.unpack(binary_matrix)
+            puts "\t#{image_db_id}: #{matrix_db.first[0..5]}"
+            matrices_db[image_db_id] = matrix_db
+          elsif not binary_matrix
+            discard_ids.push(image_db_id)
+          end
+        end
+        puts "Unpacked DB image matrices in: #{Time.now - start} s."
+
+        puts "Calculating sim values:"
+        start = Time.now
+        matrices_db.keys.each do |image_db_id|
+          puts "\tAnalyzing #{image_db_id}"
+          matrix_db = matrices_db[image_db_id]
+          sim_sums[image_db_id] = Cv.new(matrix_db, matrix_comp).sim
+          if sim_sums[image_db_id] > 550000000
+            discard_ids.push(image_db_id)
+          end
+        end
+        sim_sums[id_comp] = 0
+        puts "Calculated sim values in: #{Time.now - start} s."
+        puts sim_sums
+
+        # sort by sum of similarity values
+        @images = @images.select(:id, :price, :date).where('images.id NOT IN (?)', discard_ids).sort { |a, b| (sim_sums[a.id] || Float::INFINITY) <=> (sim_sums[b.id] || Float::INFINITY) }
+        puts "Completed similarity sort in #{Time.now - sort_start} s."
+        puts '*****'
+      else
+        puts "Failed to retrieve comparison matrix!"
+      end
+    elsif @sort == 'none'
+      @images = Image.in_price_range(@price_range).
+                      tagged(@tags).with_attached_file.all.shuffle
+    else
+      @images = Image.in_price_range(@price_range).tagged(@tags).
+                      order(params[:sort] => @dir).with_attached_file.all
     end
-    
-    @hidden_images = Image.select(:id, :price, :date).where('images.id NOT IN (?)', @images.pluck(:id))
+
+    @hidden_images = Image.select(:id, :price, :date).where('images.id NOT IN (?)', @images.pluck(:id)).with_attached_file
 
     respond_to do |format|
       format.html
@@ -91,14 +104,6 @@ class ApplicationController < ActionController::Base
   end
 
   private
-    def resolve_layout
-      case action_name
-      when 'home'
-        'home-layout'
-      else
-        'application'
-      end
-    end
 
     def set_session_params
       params[:sort] ||= (session[:sort] ||= 'none')

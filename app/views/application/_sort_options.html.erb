@@ -24,9 +24,12 @@
       <%= radio_button_tag('sort', 'price', checked = (@sort == 'price'), id: 'sortByPrice', class: 'submit-form') %>
       Price
     <% end %>
+    <!-- todo upload image for similarity sort: disabled due to heroku timeout -->
+    <% if false %>
     <%= f.label :sortBySimilarity, data: {toggle: 'tooltip'}, title: 'Sort by image similarity!', class: "btn btn-secondary #{'active' if @sort == 'sim'}" do %>
       <%= radio_button_tag('sort', 'sim', checked = (@sort == 'sim'), id: 'sortBySimilarity', class: 'submit-form') %>
       Sim
+    <% end %>
     <% end %>
   </div>
 
@@ -44,6 +47,8 @@
   <div class="pl-1 d-flex align-items-center w-100">
     <%= f.text_field :search, class: 'search-input form-control mb-0 h-100 w-100', value: params[:search], placeholder: "Search (eg, 'full-body sketch $20-30')" %>
     <div class="search-btn">
+      <!-- todo upload image for similarity sort: disabled due to heroku timeout -->
+      <% if false %>
       <%= f.file_field :files, 
                         multiple: true, 
                         id: 'addImage', 
@@ -51,7 +56,8 @@
       <%= f.label :addImage, class: 'btn form-control text-light w-auto mb-0 px-1' do %>
         <%= material_icon.add_a_photo %>
       <% end %>
-      <%= button_tag :submit, class: 'btn form-control text-light w-auto px-1 mr-1' do %>
+      <% end %>
+      <%= f.button :submit, class: 'btn form-control text-light w-auto px-1 mr-1' do %>
           <%= material_icon.search %>
       <% end %>
     </div>

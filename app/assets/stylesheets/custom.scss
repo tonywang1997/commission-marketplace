@@ -8,11 +8,6 @@
 }
 
 body {
-  /*background: linear-gradient(#21296b, #121212 50%);*/
-  background-attachment: fixed;
-}
-
-body.body-dark {
   background: linear-gradient(#21296b, #121212 50%);
   background-attachment: fixed;
 }
@@ -54,6 +49,13 @@ h2 {
   position: absolute;
   right: 0;
   width: auto;
+
+  .btn:focus {
+    background-color: black;
+    outline: none;
+    box-shadow: none;
+    border: 1px solid transparent;
+  }
 }
 
 .btn-group .btn.focus, .btn.active {
@@ -64,7 +66,7 @@ h2 {
 .col-view.img-wrapper {
   max-height: 500px;
   overflow: hidden;
-  min-height: 100px;
+  min-height: 133px;
   background-color: transparent;
   border: 1px solid #85898e94;
   border-radius: .25rem;
@@ -81,7 +83,6 @@ h2 {
   height: 100%;
   position: absolute;
   margin-left: -.25rem;
-  padding-left: 10px;
   display: flex;
   align-items: flex-end;
   line-height: 1.4em;
@@ -95,9 +96,43 @@ h2 {
     opacity: 1;
   }
 
-  p {
-    white-space: nowrap;
-    margin-bottom: .5rem;
+  div {
+    position: absolute;
+    padding: .5rem;
+    bottom: 0;
+    width: 100%;
+
+    form {
+      right: 10px;
+      margin-top: .75rem;
+
+      button {
+        display: flex;
+        padding-left: .5rem;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        white-space: nowrap;
+        background-color: #2742ccc7;
+        color: lightgray;
+        font-size: 1em;
+
+        &:hover, &:active {
+          background-color: #2742cc;
+          color: white;
+        }
+
+        span {
+          padding-left: .25rem;
+        }
+      }
+    }
+    p {
+      white-space: nowrap;
+      margin-bottom: 0;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
   }
 }
 
