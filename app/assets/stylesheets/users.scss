@@ -53,7 +53,16 @@ img#profile-img {
 }
 
 .profile-container {
-  display: inflex;
+  display: flex;
+}
+
+.profile-info {
+  width: 80%;
+  margin-left: 40px;
+}
+
+.modal {
+  color: black;
 }
 
 

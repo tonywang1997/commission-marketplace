@@ -4,17 +4,33 @@
     <div class="carousel-inner w-100" role="listbox">
       <div class="carousel-item row no-gutters active">
             <div class="col d-flex justify-content-center">
-            	<%= image_tag(@portfolio.files[0], style: 'width:600px; height:500px', class: "img-fluid") %>
+              <% if @portfolio.files.length != 0 %>
+            	  <%= image_tag(@portfolio.files[0], style: 'width:600px; height:500px', class: "img-fluid") %>
+              <% else %>
+                <%= image_tag(@portfolio.seed_files[0], style: 'width:600px; height:500px', class: "img-fluid") %>
+              <% end %>
             </div>
       </div>
-    	<% @portfolio.files[1..-1].each do |file| %>
-    	    <div class="carousel-item row no-gutters">
-            <div class="col d-flex justify-content-center">
-            	<%= image_tag(file, style: 'width:600px; height:500px', 
-            	              class: "img-fluid") %>
+
+      <% if @portfolio.files.length != 0 %>
+      	<% @portfolio.files[1..-1].each do |file| %>
+      	    <div class="carousel-item row no-gutters">
+              <div class="col d-flex justify-content-center">
+              	<%= image_tag(file, style: 'width:600px; height:500px', 
+              	              class: "img-fluid") %>
+              </div>
             </div>
-          </div>
-		  <% end %>
+  		  <% end %>
+      <% else %>
+        <% @portfolio.seed_files[1..-1].each do |file| %>
+            <div class="carousel-item row no-gutters">
+              <div class="col d-flex justify-content-center">
+                <%= image_tag(file, style: 'width:600px; height:500px', 
+                              class: "img-fluid") %>
+              </div>
+            </div>
+        <% end %>
+      <% end %>
         
     </div>
     <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">

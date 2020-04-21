@@ -7,6 +7,7 @@ class ApplicationController < ActionController::Base
   before_action :set_session_params, only: :home
 
   def home
+    action_start = Process.clock_gettime(Process::CLOCK_MONOTONIC)
     @sort = (sort_options.include? params[:sort].downcase) ? params[:sort].downcase : 'none'
     @dir = (dir_options.include? params[:dir].downcase) ? params[:dir].downcase : 'asc'
     @tags = session[:tags]
@@ -44,7 +45,10 @@ class ApplicationController < ActionController::Base
         puts "Retrieving DB image matrices:"
         start = Time.now
         id_matrix_array = []
-        @images.pluck(:id).each_slice(15).each do |slice|
+        @images.pluck(:id).each_slice(50).each do |slice|
+          if (Process.clock_gettime(Process::CLOCK_MONOTONIC) - action_start) > 15
+            break
+          end
           id_matrix_array += Image.where('images.id IN (?)', slice).pluck(:id, :binary_matrix)
         end
         puts "Retrieved DB image matrices in: #{Time.now - start} s."
@@ -54,14 +58,11 @@ class ApplicationController < ActionController::Base
         start = Time.now
         sim_sums = {}
         matrices_db = {}
-        discard_ids = []
         id_matrix_array.each do |image_db_id, binary_matrix|
           if image_db_id != id_comp and binary_matrix
             matrix_db = MessagePack.unpack(binary_matrix)
             puts "\t#{image_db_id}: #{matrix_db.first[0..5]}"
             matrices_db[image_db_id] = matrix_db
-          elsif not binary_matrix
-            discard_ids.push(image_db_id)
           end
         end
         puts "Unpacked DB image matrices in: #{Time.now - start} s."
@@ -72,16 +73,22 @@ class ApplicationController < ActionController::Base
           puts "\tAnalyzing #{image_db_id}"
           matrix_db = matrices_db[image_db_id]
           sim_sums[image_db_id] = Cv.new(matrix_db, matrix_comp).sim
-          if sim_sums[image_db_id] > 550000000
-            discard_ids.push(image_db_id)
-          end
         end
         sim_sums[id_comp] = 0
         puts "Calculated sim values in: #{Time.now - start} s."
         puts sim_sums
 
         # sort by sum of similarity values
-        @images = @images.select(:id, :price, :date).where('images.id NOT IN (?)', discard_ids).sort { |a, b| (sim_sums[a.id] || Float::INFINITY) <=> (sim_sums[b.id] || Float::INFINITY) }
+        image_ids = @images.pluck(:id)
+        filtered_ids = image_ids.filter { |id| sim_sums[id] < 550000000 }
+        if filtered_ids.size < 5
+          filtered_ids = image_ids.min(5) { |a, b| sim_sums[a] <=> sim_sums[b] }
+        end
+        @images = @images.select(:id, :price, :date).
+          where('images.id IN (?)', filtered_ids).
+          sort do |a, b| 
+            (sim_sums[a.id] || Float::INFINITY) <=> (sim_sums[b.id] || Float::INFINITY)
+          end
         puts "Completed similarity sort in #{Time.now - sort_start} s."
         puts '*****'
       else

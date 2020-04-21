@@ -42,6 +42,14 @@ class Img
 		return asdf
 	end
 
+	def sample_self(dim)
+		matrix = to_matrix
+		sampled = matrix.sample(dim).map do |x|
+			x.sample(dim)
+		end
+		sampled
+	end
+
 	def height
 		@image.dimension.height
 	end

@@ -11,11 +11,11 @@ class Portfolio < ApplicationRecord
   # https://guides.rubyonrails.org/form_helpers.html#configuring-the-model
   accepts_nested_attributes_for :tags, allow_destroy: true
 
-  # def files
-  #   attached_files = []
-  #   self.images.select(:id).all.each do |img|
-  #     attached_files.push(img.file)
-  #   end
-  #   attached_files
-  # end
+  def seed_files
+    attached_files = []
+    self.images.select(:id).all.each do |img|
+      attached_files.push(img.file)
+    end
+    attached_files
+  end
 end
