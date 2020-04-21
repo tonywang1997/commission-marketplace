@@ -61,7 +61,7 @@ image_paths.each do |path|
     image = Image.new({
         price: price,
         date: Time.at(Time.now.to_f * rand).to_date,
-        binary_matrix: MessagePack.pack(img.to_matrix),
+        binary_matrix: MessagePack.pack(img.sample_self(128)),
     })
     image.file.attach({
         io: File.open(path),
