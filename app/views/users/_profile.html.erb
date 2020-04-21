@@ -87,7 +87,7 @@
 
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-          <%= f.submit "Submit", class: "btn btn-primary" %>
+          <%= f.submit "Submit", class: "btn btn-primary", id: "avatar-submit" %>
         </div>
       <% end %>
     </div>
@@ -111,4 +111,11 @@
     function(event) {
       changeBioText();
   }, false);
+
+  $('#avatar-submit').on("click", function(event) {
+    // submit form via ajax, then
+
+    //event.preventDefault();
+    $('#avatarModal').modal( 'hide' );
+  });
 </script>
