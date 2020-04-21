@@ -17,6 +17,9 @@ Rails.application.routes.draw do
   patch '/avatar', to: 'users#avatar'
   resources :users, param: :user_name
   resources :portfolios
+
+  resources :posts
+  get '/post', to: 'posts#index'
 end
 
 

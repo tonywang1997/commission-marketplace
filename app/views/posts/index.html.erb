@@ -1,0 +1,9 @@
+<h1> Bounty Board Listings </h1>
+
+<% @posts.each do |post| %>
+    <tr>
+    <h2><%= link_to post.title, post %></h2>
+    <h3><%= post.content %></h3>
+    </tr>
+<% end %>
+<%= link_to "New Post", new_post_path %>

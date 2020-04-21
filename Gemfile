@@ -71,3 +71,7 @@ gem 'faker', :git => 'https://github.com/faker-ruby/faker.git', :branch => 'mast
 gem 'activerecord-import'
 gem "font-awesome-rails"
 gem 'gravatar_image_tag'
+
+gem 'devise', '~> 4.4', '>= 4.4.3'
+gem 'simple_form', '~> 4.0', '>= 4.0.1'
+gem 'haml', '~> 5.0', '>= 5.0.4'
