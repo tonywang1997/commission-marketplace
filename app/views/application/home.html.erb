@@ -30,7 +30,7 @@
             <div>
               <%= simple_format("#{number_to_currency(img[:price])}\n#{img[:date]}\n#{@image_tags[img[:id]] ? @image_tags[img[:id]].join(', ') : 'No tags found.'}") %>
               <%= form_with(url: root_path, local: true) do |f| %>
-                <%= f.hidden_field(:sim_sort, value: img[:id]) %>
+                <%= f.hidden_field(:sim_sort, value: img[:id], id: "sim_sort_#{img[:id]}") %>
                 <%= f.button(:submit, class: 'btn') do %>
                   <i class="material-icons md-18">search</i><span>Find similar images</span>
                 <% end %>
