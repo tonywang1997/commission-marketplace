@@ -22,8 +22,7 @@ class ApplicationController < ActionController::Base
       sort_start = Time.now
       @sort = nil
       @dir = nil
-      @images = Image.select(:id, :price, :date).
-                in_price_range(@price_range).
+      @images = Image.in_price_range(@price_range).
                 tagged(@tags).with_attached_file
       puts 'Retrieving comparison matrix:'
       start = Time.now
@@ -73,7 +72,7 @@ class ApplicationController < ActionController::Base
           puts "\tAnalyzing #{image_db_id}"
           matrix_db = matrices_db[image_db_id]
           sim_sums[image_db_id] = Cv.new(matrix_db, matrix_comp).sim
-          if sim_sums[image_db_id] > 500000000
+          if sim_sums[image_db_id] > 550000000
             discard_ids.push(image_db_id)
           end
         end
@@ -82,19 +81,17 @@ class ApplicationController < ActionController::Base
         puts sim_sums
 
         # sort by sum of similarity values
-        @images = @images.where('images.id NOT IN (?)', discard_ids).sort { |a, b| (sim_sums[a.id] || Float::INFINITY) <=> (sim_sums[b.id] || Float::INFINITY) }
+        @images = @images.select(:id, :price, :date).where('images.id NOT IN (?)', discard_ids).sort { |a, b| (sim_sums[a.id] || Float::INFINITY) <=> (sim_sums[b.id] || Float::INFINITY) }
         puts "Completed similarity sort in #{Time.now - sort_start} s."
         puts '*****'
       else
         puts "Failed to retrieve comparison matrix!"
       end
     elsif @sort == 'none'
-      @images = Image.select(:id, :price, :date).
-                      in_price_range(@price_range).
+      @images = Image.in_price_range(@price_range).
                       tagged(@tags).with_attached_file.all.shuffle
     else
-      @images = Image.select(:id, :price, :date).
-                      in_price_range(@price_range).tagged(@tags).
+      @images = Image.in_price_range(@price_range).tagged(@tags).
                       order(params[:sort] => @dir).with_attached_file.all
     end
 
