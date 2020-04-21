@@ -1,4 +1,4 @@
-<% if @tags.any? || @price_range.any? %>
+<% if @tags.any? || @price_range.any? || params[:sim_sort] %>
   $('.img-wrapper.col-view').hide();
 <% end %>
 
