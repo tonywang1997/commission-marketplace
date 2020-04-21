@@ -1,9 +1,9 @@
 <h1 style="color:gray"> Bounty Board Listings </h1>
 
 <% @posts.each do |post| %>
-    <div style="background-color:gray">
-    <h2 style="color:grey"><%= link_to post.title, post %></h2>
-    <h3 style="color:white"><%= post.content %></h3>
+    <div>
+    <h2 style="color:lightgrey;font-size:40px;text-align:left"><%= link_to post.title, post %></h2>
+    <h3 style="color:lightgrey;font-size:23px;text-align:left"><%= post.content %></h3>
     </div>
 <% end %>
 <%= link_to "New Post", new_post_path %>
