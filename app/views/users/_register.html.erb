@@ -16,7 +16,8 @@
     <%= f.email_field :email_address, class: 'form-control' %>
 
     <%= f.label :password %>
-    <%= f.password_field :password, class: 'form-control' %>
+    <%= f.password_field :password, class: 'form-control',
+        minlength: 6, required: true%>
 
     <%= f.label :password_confirmation, "Confirmation" %>
     <%= f.password_field :password_confirmation, class: 'form-control' %>

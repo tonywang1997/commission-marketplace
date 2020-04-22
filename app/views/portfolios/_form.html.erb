@@ -33,10 +33,11 @@
     
 
     <div class="field">
-      <%= form.label "Upload images" %>
+      <%= form.label "Upload images (png only)" %>
       <%= form.file_field :files, 
                           required: true,
-                          multiple: true %>
+                          multiple: true,
+                          accept: "image/png" %>
     </div>
     
     <div class="field">

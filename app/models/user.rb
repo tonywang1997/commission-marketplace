@@ -25,10 +25,6 @@ class User < ApplicationRecord
     uniqueness: true
 
   has_secure_password
-  validates :password,
-    presence: true,
-    length: { minimum: 6 }
-
 
   # Returns the hash digest of the given string.
   def User.digest(string)

@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   get '/submit', to: 'portfolios#new', as: :user_submit
   get '/storefront/:user_id', to: 'portfolios#index'
   patch '/avatar', to: 'users#avatar'
+  patch '/biography', to: 'users#biography'
   resources :users, param: :user_name
   resources :portfolios
 
