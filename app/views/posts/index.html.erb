@@ -1,9 +1,46 @@
-<h1 style="color:gray"> Bounty Board Listings </h1>
+<h1>Bounty Board</h1>
 
-<% @posts.each do |post| %>
-    <div>
-    <h2 style="color:lightgrey;font-size:40px;text-align:left"><%= link_to post.title, post %></h2>
-    <h3 style="color:lightgrey;font-size:23px;text-align:left"><%= post.content %></h3>
+<div class="bounty-board">
+  <% @posts.each do |post| %>
+    <div class="bounty-board container px-4 py-3 my-3">
+      <div class="bounty-board headline">
+        <button class="bounty-board btn">
+          <%= material_icon.favorite_border %>
+        </button>
+        <h2 class="bounty-board title">
+          <%= link_to post.title, post, class: 'bounty-board' %>
+        </h2>
+        <div class="bounty-board price">
+          <h2 class="bounty-board">
+            <%= number_to_currency(post[:price]) %>
+          </h2>
+        </div>
+      </div>
+      <p class="bounty-board by">posted by <%= link_to post.user.user_name, "storefront/#{post.user.id}", class: 'bounty-board' %> on <%= post.created_at.to_date.to_s %></p>
+      <p class="bounty-board content"><%= post.content %></p>
+      <p class="bounty-board tags">
+        <% tags = post.tags.pluck(:id, :tag_name).sort %>
+        <% tags.each_with_index do |tag_info, idx| %>
+          <% if idx < tags.size - 1 %>
+            <%= link_to "#{tag_info[1]}, ", tag_path(tag_info[0]), class: 'bounty-board' %>
+          <% else %>
+            <%= link_to "#{tag_info[1]}", tag_path(tag_info[0]), class: 'bounty-board' %>
+          <% end %>
+        <% end %>
+      </p>
+      <!-- todo add roles to bounty board posts
+    <div class="bounty-board col-2 col center px-2" id="col-2">
+      <div class="bounty-board icons">
+        <i class="material-icons">palette</i>
+        <i class="material-icons">headset</i>
+        <i class="material-icons">movie</i>
+        <i class="material-icons">mic</i>
+      </div>
     </div>
-<% end %>
+      -->
+    </div>
+  <% end %>
+</div>
 <%= link_to "New Post", new_post_path %>
+
+

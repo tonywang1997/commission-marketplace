@@ -9,6 +9,8 @@
 require 'faker'
 require 'activerecord-import'
 
+Post.destroy_all
+PostTag.destroy_all
 User.destroy_all
 Tag.destroy_all
 Image.destroy_all
@@ -57,7 +59,7 @@ puts "\tCreating metadata and attaching files..."
 image_paths.each do |path|
     puts "\t\t#{path}"
     img = Img.new(path)
-    price = rand(100000) / 100.0
+    price = rand(50000) / 100.0
     image = Image.new({
         price: price,
         date: Time.at(Time.now.to_f * rand).to_date,
@@ -126,6 +128,40 @@ end
 HasImage.import has_images_c, has_images, validate: false
 HasTag.import has_tags_c, has_tags, validate: false
 puts "Created HasImage and HasTag relationships."
+
+puts "Creating bounty board posts..."
+posts = []
+posts_c = [:title, :content, :price, :deadline, :user_id]
+User.all.each do |u|
+    num_posts = rand(5) # 0 to 4 posts per user
+    verbs = ['Draw', 'Sketch', 'Paint']
+    prof = Faker::Company.profession
+    if prof == 'fiherman'
+        prof = 'fisherman'
+    end
+    title = "#{verbs[rand(3)]} #{Faker::JapaneseMedia::DragonBall.character} as #{prof}"
+    content = Faker::Lorem.paragraph(sentence_count: 3, random_sentences_to_add: 10)
+    price = rand(50000) / 100.0
+    deadline = rand(60).days.from_now.to_date
+
+    posts.push({
+        title: title,
+        content: content,
+        price: price,
+        deadline: deadline,
+        user_id: u.id,
+    })
+end
+Post.import posts_c, posts, validate: false
+puts "Created bounty board posts."
+
+puts "Adding tags to posts..."
+posttags = []
+posttags_c = [:post_id, :tag_id]
+Post.all.each do |p|
+    p.tags = Tag.all.sample(rand(8) + 1) # 1 to 8 tags
+end
+puts "Added tags to posts."
 
 puts "Creating test user..."
 u = User.new({
