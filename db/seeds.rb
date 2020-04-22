@@ -38,14 +38,14 @@ has_images_c = [:portfolio_id, :image_id]
 
 puts "Creating users and tags..."
 (0...25).to_a.each do |x|
-    users << {
-        :user_name => "user#{x}", # Faker::Name.unique.name
-        :email_address => "user#{x}@test.com", # Faker::Internet.unique.email 
-        :password_digest => User.digest('123456'), 
-        :profile_thumbnail => '',
-    }
+  users << {
+    :user_name => "user#{x}", # Faker::Name.unique.name
+    :email_address => "user#{x}@test.com", # Faker::Internet.unique.email 
+    :password_digest => User.digest('123456'), 
+    :profile_thumbnail => '',
+  }
 
-    tags << { :tag_name => tags_file_lines[x] }
+  tags << { :tag_name => tags_file_lines[x] }
 end
 User.import users_c, users, validate: false
 Tag.import tags_c, tags, validate: false
@@ -57,73 +57,73 @@ images_c = [:id, :price, :date, :binary_matrix]
 image_prices = []
 puts "\tCreating metadata and attaching files..."
 image_paths.each do |path|
-    puts "\t\t#{path}"
-    img = Img.new(path)
-    price = rand(50000) / 100.0
-    image = Image.new({
-        price: price,
-        date: Time.at(Time.now.to_f * rand).to_date,
-        binary_matrix: MessagePack.pack(img.sample_self(128)),
+  puts "\t\t#{path}"
+  img = Img.new(path)
+  price = rand(50000) / 100.0
+  image = Image.new({
+    price: price,
+    date: Time.at(Time.now.to_f * rand).to_date,
+    binary_matrix: MessagePack.pack(img.sample_self(128)),
+  })
+  image.file.attach({
+    io: File.open(path),
+    filename: File.basename(path),
+    content_type: 'image/png',
+  })
+  if not image.file.attached?
+    puts "\t\t\tFailed to attach image #{File.basename(path)}"
+  elsif not image.save
+    puts "\t\t\tFailed to save image #{File.basename(path)}"
+  else
+    image_prices.push({
+      id: image.id,
+      price: price,
     })
-    image.file.attach({
-        io: File.open(path),
-        filename: File.basename(path),
-        content_type: 'image/png',
-    })
-    if not image.file.attached?
-        puts "\t\t\tFailed to attach image #{File.basename(path)}"
-    elsif not image.save
-        puts "\t\t\tFailed to save image #{File.basename(path)}"
-    else
-        image_prices.push({
-            id: image.id,
-            price: price,
-        })
-    end
+  end
 end
 puts "\tCreated metadata and attached files."
 puts "Created images."
 
 puts "Creating portfolios..."
 User.all.each do |user|
-    num_ports = rand(5)
-    num_ports.times do
-        portfolios << {
-            :user_id => user.id, 
-            :description => Faker::ChuckNorris.fact, 
-            :price_low => 0,
-            :price_high => 0,
-            :date_created => Time.at(Time.now.to_f * rand).to_date,
-        }
-    end
+  num_ports = rand(5)
+  num_ports.times do
+    portfolios << {
+      :user_id => user.id, 
+      :description => Faker::ChuckNorris.fact, 
+      :price_low => 0,
+      :price_high => 0,
+      :date_created => Time.at(Time.now.to_f * rand).to_date,
+    }
+  end
 end
 Portfolio.import portfolios_c, portfolios, validate: false
 puts "Created portfolios."
 
 puts "Creating HasImage and HasTag relationships..."
 Portfolio.all.each do |portfolio|
-    images_sample = image_prices.sample(rand(10) + 1)
-    minmax = images_sample.minmax do |a, b|
-        a[:price] <=> b[:price]
-    end
-    portfolio.price_low = minmax[0][:price]
-    portfolio.price_high = minmax[1][:price]
-    portfolio.save
+  images_sample = image_prices.sample(rand(10) + 1)
+  minmax = images_sample.minmax do |a, b|
+    a[:price] <=> b[:price]
+  end
+  portfolio.price_low = minmax[0][:price]
+  portfolio.price_high = minmax[1][:price]
+  portfolio.save
 
-    images_sample.each do |image|
-        has_images << {
-            :portfolio_id => portfolio.id,
-            :image_id => image[:id],
-        }
-    end
+  images_sample.each do |image|
+    has_images << {
+      :portfolio_id => portfolio.id,
+      :image_id => image[:id],
+    }
+  end
 
-    tags = Tag.all.sample(rand(10) + 1)
-    tags.each do |tag|
-        has_tags << {
-            :portfolio_id => portfolio.id,
-            :tag_id => tag.id,
-        }
-    end
+  tags = Tag.all.sample(rand(10) + 1)
+  tags.each do |tag|
+    has_tags << {
+      :portfolio_id => portfolio.id,
+      :tag_id => tag.id,
+    }
+  end
 end
 HasImage.import has_images_c, has_images, validate: false
 HasTag.import has_tags_c, has_tags, validate: false
@@ -133,11 +133,11 @@ puts "Creating bounty board posts..."
 posts = []
 posts_c = [:title, :content, :price, :deadline, :user_id]
 User.all.each do |u|
-    num_posts = rand(5) # 0 to 4 posts per user
+  rand(5).times do # 0 to 4 posts per user
     verbs = ['Draw', 'Sketch', 'Paint']
     prof = Faker::Company.profession
     if prof == 'fiherman'
-        prof = 'fisherman'
+      prof = 'fisherman'
     end
     title = "#{verbs[rand(3)]} #{Faker::JapaneseMedia::DragonBall.character} as #{prof}"
     content = Faker::Lorem.paragraph(sentence_count: 3, random_sentences_to_add: 10)
@@ -145,12 +145,13 @@ User.all.each do |u|
     deadline = rand(60).days.from_now.to_date
 
     posts.push({
-        title: title,
-        content: content,
-        price: price,
-        deadline: deadline,
-        user_id: u.id,
+      title: title,
+      content: content,
+      price: price,
+      deadline: deadline,
+      user_id: u.id,
     })
+  end
 end
 Post.import posts_c, posts, validate: false
 puts "Created bounty board posts."
@@ -159,19 +160,19 @@ puts "Adding tags to posts..."
 posttags = []
 posttags_c = [:post_id, :tag_id]
 Post.all.each do |p|
-    p.tags = Tag.all.sample(rand(8) + 1) # 1 to 8 tags
+  p.tags = Tag.all.sample(rand(8) + 1) # 1 to 8 tags
 end
 puts "Added tags to posts."
 
 puts "Creating test user..."
 u = User.new({
-    user_name: 'testuser',
-    email_address: 'testuser@test.com',
-    password: '123456',
-    password_confirmation: '123456',
+  user_name: 'testuser',
+  email_address: 'testuser@test.com',
+  password: '123456',
+  password_confirmation: '123456',
 })
 if u.save
-    puts "Created test user."
+  puts "Created test user."
 else
-    puts "Error(s) creating test user: ", u.errors.messages
+  puts "Error(s) creating test user: ", u.errors.messages
 end
