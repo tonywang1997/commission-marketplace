@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   include ApplicationHelper
-  before_action :logged_in_user
+  before_action :logged_in_user, only: [:edit, :update, :dashboard]
   before_action :correct_user, only: [:edit, :update]
 
   def show
@@ -75,14 +75,6 @@ class UsersController < ApplicationController
       # raise an error if :user is not an attribute of params hash
       # return hash with attributes :user_name, :email_address, :password, :password_confirmation
       params.require(:user).permit(:user_name, :email_address, :password, :password_confirmation)
-    end
-
-    def logged_in_user
-      if logged_in_actions[:users].include? params[:action].to_sym
-        unless logged_in?
-          redirect_to login_url
-        end
-      end
     end
 
     def correct_user

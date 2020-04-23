@@ -17,8 +17,40 @@ body {
 
 h1 {
   text-align: center;
-  color: lightgray;
+}
+
+h2 {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+h3 {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+h4 {
+  font-size: 1rem;
+  font-weight: bold; 
+  display: inline-block;
+}
+
+h1, h2, h3, h4, p, span, a {
   font-family: lato;
+}
+
+hr {
+  background-color: #85898e94;
+}
+
+a {
+  color: #3695e8;
+
+  &:hover, &:active, &:focus {
+    color: #3ca4ff;
+    text-decoration: none;
+  }
 }
 
 .nav-link a {

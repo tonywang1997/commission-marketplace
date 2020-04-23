@@ -3,7 +3,7 @@ require_relative '../helpers/img'
 class PortfoliosController < ApplicationController
   include ApplicationHelper
   include SessionsHelper
-  before_action :logged_in_user
+  before_action :logged_in_user, only: [:new, :edit, :create]
   before_action :set_portfolio, only: [:show, :edit, :update, :destroy]
 
   # /storefront/:user_id
@@ -93,13 +93,5 @@ class PortfoliosController < ApplicationController
 
     def portfolio_files
       params.require(:portfolio).permit(files: [])
-    end
-
-    def logged_in_user
-      if logged_in_actions[:portfolios].include? params[:action].to_sym
-        unless logged_in?
-          redirect_to login_url
-        end
-      end
     end
 end
