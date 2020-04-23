@@ -1,7 +1,7 @@
 class PostsController < ApplicationController
   include RolesHelper
 
-  before_action :logged_in_user, only: [:new, :edit, :create]
+  before_action :logged_in_user
   before_action :find_post, only: [:show, :edit, :update, :destroy]
 
   def index
