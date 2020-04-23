@@ -1,4 +1,6 @@
-<%= link_to '<< Bounty Board', posts_path, class: 'bounty-board mb-3 mt-n3 d-block' %>
+<div class="bounty-board back mb-3 mt-n3 d-block">
+  <%= link_to '<< Bounty Board', "#{posts_path}#post-#{@post.id}" %>
+</div>
 
 <h2 class="bounty-board show show-title"><%= @post.title %></h2>
 <p class="bounty-board show by">posted by <%= link_to @post.user.user_name, "storefront/#{@post.user.id}", class: 'bounty-board' %> on <%= @post.created_at.to_date.to_s %></p>
@@ -45,8 +47,8 @@
   </div>
 <% end %>
 
-<div class="bounty-board footer">
-  <%= link_to "<< Bounty Board", posts_path %>
+<div class="bounty-board footer mb-3">
+  <%= link_to "<< Bounty Board", "#{posts_path}#post-#{@post.id}" %>
   <% if logged_in? and current_user.id == @post.user.id %>
     |<%= link_to " Edit ", edit_post_path(@post) %>
     |<%= link_to " Delete", post_path(@post), method: :delete, data: { confirm: "Are you sure you want to do this ?" } %>

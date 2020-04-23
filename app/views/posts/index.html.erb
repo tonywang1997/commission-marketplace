@@ -1,9 +1,10 @@
-<h1>Bounty Board</h1>
+<h1 class="mb-4">Bounty Board</h1>
 
 <div class="bounty-board">
   <% @posts.each do |post| %>
+    <div class="bounty-board navbar-padding" id="post-<%= post.id %>"></div>
     <div class="bounty-board bg-image">
-      <div class="bounty-board container yellow px-4 px-md-5 py-4 my-3">
+      <div class="bounty-board container yellow px-4 px-md-5 py-3 my-4">
         <div class="bounty-board headline">
           <button class="bounty-board btn">
             <%= material_icon.favorite_border %>
