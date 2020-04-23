@@ -19,16 +19,16 @@
           </div>
         </div>
         <p class="bounty-board by">posted by <%= link_to post.user.user_name, "storefront/#{post.user.id}", class: 'bounty-board' %> on <%= post.created_at.to_date.to_s %></p>
-        <p class="bounty-board content truncate"><%= post.content %></p>
+        <p class="bounty-board content truncate mb-2"><%= post.content %></p>
         <!-- roles -->
         <% roles = roles_to_hash(post.roles) %>
-        <div class="d-flex flex-row flex-wrap ml-n2">
+        <div class="d-flex flex-row flex-wrap mx-n2">
           <% roles.keys.sort.each do |category| %>
             <div class="bounty-board role">
-              <div class="mx-2 mt-1 d-inline-block">
+              <div class="mx-1 mt-1 d-inline-block">
                 <%= get_icon category %>
               </div>
-              <p class="my-0 mb-1 mt-0 mr-2">
+              <p class="my-0 mb-1 mt-0 mx-1">
                 <%= link_to(pluralize(roles[category].count, category), "#{post_path(post)}##{category}", class: 'bounty-board') %>
               </p>
             </div>
