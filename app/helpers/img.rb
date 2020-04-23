@@ -1,21 +1,10 @@
+require 'chunky_png'
 
 class Img
 
 	@image
-	def initialize(imginfo, options = {})
-		# if options[:binary] == true, imginfo contains blob string
-		# if options[:rgba] == true, imginfo contains rgba pixel stream
-		# if options[:io] == true, imginfo contains IO object
-		# else, imginfo contains file path
-		if options[:binary]
-			@image = ChunkyPNG::Image.from_blob(imginfo)
-		elsif options[:rgba]
-			@image = ChunkyPNG::Image.from_rgba_stream(options[:width], options[:height], imginfo)
-		elsif options[:io]
-			@image = ChunkyPNG::Image.from_io(imginfo)
-		else
-			@image = ChunkyPNG::Image.from_file(imginfo)
-		end
+	def initialize(imgpath)
+		@image = ChunkyPNG::Image.from_file(imgpath)
 	end
 
 	def to_rbg(input)
@@ -29,11 +18,27 @@ class Img
 		return @image
 	end
 	def to_matrix
+		redHist=Array.new(6,0)
+		blueHist=Array.new(6,0)
+		greenHist=Array.new(6,0)
 		x=[]
+		variance=[]
 		for i in 0..@image.height-1
-			x << Array(@image.row(i))
+			row=Array(@image.row(i))
+			if i != 0
+				row2=Array(@image.row(i-1))
+				diff=row2.zip(row).map{|a,b| ChunkyPNG::Color.euclidean_distance_rgba(b,a)}.sort
+				variance << median(diff)
+			end	
+			x << row
+			row.each{|curr| 
+				currRBG=to_rbg(curr)
+				redHist[currRBG[0]/50]+=1	
+				blueHist[currRBG[1]/50]+=1
+				greenHist[currRBG[2]/50]+=1
+			}
 		end
-		return x
+		return {matrix: x, rHist: redHist, bHist: blueHist,gHist: greenHist, colorVar: variance}
 	end
 	def sample(matrix)
 		sMatrix=matrix.sample(128)
@@ -41,42 +46,11 @@ class Img
 		sMatrix.each {|x| asdf << x.sample(128)}
 		return asdf
 	end
-
-	def sample_self(dim)
-		matrix = to_matrix
-		sampled = matrix.sample(dim).map do |x|
-			x.sample(dim)
+	def median(arr)
+		if arr.length%2 != 0
+			return arr[arr.length/2]
+		else
+			return (arr[arr.length/2]+arr[arr.length/2-1])/2.0
 		end
-		sampled
-	end
-
-	def height
-		@image.dimension.height
-	end
-
-	def width
-		@image.dimension.width
-	end
-
-	def to_rgba_stream
-		@image.to_rgba_stream
 	end
 end	
-	
-
-
-
-
-# x=Img.new('chunk.png')
-# y=x.getMatrix
-# puts y.column(0).class
-# z=Array(y.column(0))
-# puts z.class
-# asdf=x.to_matrix
-# asdf2=x.sample(asdf)
-# puts asdf2.length
-# puts asdf2[2].length
-
-
-
-
