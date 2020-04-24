@@ -17,4 +17,21 @@ module SessionsHelper
   def logged_in?
     !current_user.nil?
   end
+
+  def logged_in_user
+    if logged_in_actions[params[:controller].to_sym] and 
+      logged_in_actions[params[:controller].to_sym].include? params[:action].to_sym
+      unless logged_in?
+        redirect_to login_url
+      end
+    end
+  end
+
+  def logged_in_actions
+    return {
+      posts: [:new, :edit, :create],
+      users: [:edit, :update, :dashboard],
+      portfolios: [:new, :edit, :create],
+    }
+  end
 end

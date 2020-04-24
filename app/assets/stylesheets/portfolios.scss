@@ -242,3 +242,31 @@ a.portfolio-image:hover .info{
 .edit_bio {
   margin-left: 10px;
 }
+
+.inputfiles {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+
+.inputfiles + label {
+  font-size: 1.25em;
+  font-weight: 700;
+  color: white;
+  display: inline-block;
+}
+
+.inputfiles:focus + label,
+.inputfiles + label:hover {
+  background: #34404f;;
+}
+
+.preview-field {
+  margin-bottom: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}

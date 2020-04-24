@@ -14,30 +14,29 @@
   <div class="portfolio_form">
 
     <div class="field">
+      <%= form.label "Title" %>
+      <%= form.text_field :title, placeholder: 'Untitled' %>
+    </div>
+
+    <div class="field">
       <%= form.label "Description" %>
       <%= form.text_area :description, placeholder: 'Introduce your work to the community' %>
-    </div>
+    </div>    
 
-    <div class="field">
-      <%= form.label "Price Range" %>
-      <div class="price_range">
-        <div class="price_low">
-        <%= form.text_field :price_low, placeholder: '0', required: true %>
-        </div>
-        <hr class="range_sign">
-        <div class="price_high">
-          <%= form.text_field :price_high, placeholder: '1000', required: true %>
+    <div class="field" id="image-upload">
+      <div style="display: flex;">
+        <%= form.label "Upload images (png only)" %>
+        <div style="margin-left: 10px">
+          <%= form.file_field :files, 
+                            required: true,
+                            multiple: true,
+                            accept: "image/png",
+                            id: "img-input",
+                            class: "inputfiles" %>
+          <label for="img-input"><%= material_icon.add_a_photo %></label>
         </div>
       </div>
-    </div>
-    
-
-    <div class="field">
-      <%= form.label "Upload images (png only)" %>
-      <%= form.file_field :files, 
-                          required: true,
-                          multiple: true,
-                          accept: "image/png" %>
+      
     </div>
     
     <div class="field">
@@ -57,3 +56,5 @@
 
   </div>
 <% end %>
+
+

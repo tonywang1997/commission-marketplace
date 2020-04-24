@@ -10,7 +10,6 @@ class PortfoliosController < ApplicationController
   def index
     @user ||= User.find_by(id: session[:user_id])
     @user_portfolios = @user.portfolios
-    
   end
 
   # GET /portfolios/1
@@ -93,13 +92,5 @@ class PortfoliosController < ApplicationController
 
     def portfolio_files
       params.require(:portfolio).permit(files: [])
-    end
-
-    def logged_in_user
-      if logged_in_actions[:portfolios].include? params[:action].to_sym
-        unless logged_in?
-          redirect_to login_url
-        end
-      end
     end
 end

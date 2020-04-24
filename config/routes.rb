@@ -9,18 +9,18 @@ Rails.application.routes.draw do
   post '/login', to: 'sessions#create'
   delete '/logout', to: 'sessions#destroy'
 
+  resources :users, param: :user_name
   get '/register', to: 'users#new'
   post '/register', to: 'users#create'
   get '/dashboard', to: 'users#dashboard'
-  get '/submit', to: 'portfolios#new', as: :user_submit
-  get '/storefront/:user_id', to: 'portfolios#index'
   patch '/avatar', to: 'users#avatar'
   patch '/biography', to: 'users#biography'
-  resources :users, param: :user_name
+
   resources :portfolios
+  get '/submit', to: 'portfolios#new', as: :user_submit
+  get '/storefront/:user_id', to: 'portfolios#index'
 
   resources :posts
-  get '/post', to: 'posts#index'
 end
 
 

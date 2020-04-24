@@ -74,5 +74,20 @@ img#profile-img {
   width: 15%;
 }
 
+.storefront-button {
+  border-radius: 22px;
+  margin-left: 10px;
+  background: #232b36;
+  cursor: pointer;
+  border: none;
+  padding: 10px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.storefront-button:hover{
+  background: #34404f;
+}
+
 
 

@@ -84,14 +84,6 @@ class UsersController < ApplicationController
       params.require(:user).permit(:user_name, :email_address, :password, :password_confirmation)
     end
 
-    def logged_in_user
-      if logged_in_actions[:users].include? params[:action].to_sym
-        unless logged_in?
-          redirect_to login_url
-        end
-      end
-    end
-
     def correct_user
       @user = User.find_by(user_name: params[:user_name])
       if @user != current_user

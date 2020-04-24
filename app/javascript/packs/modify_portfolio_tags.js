@@ -3,7 +3,69 @@ var tags = ["3D", "Adoptables", "Animation", "Anime and Manga", "Artisan Crafts"
         "Emoji and Emotion", "Fan Art", "Fan Fiction", "Fantasy", "Fractal", "Game Art",
         "Horror", "Kinky", "Literature", "Nude Art", "Photo Manipulation", "Photography",
         "Pixel Art", "Poetry", "Resources", "Science Fiction", "Sculpture", "Street Art",
-        "Streey Photography", "Traditional Art", "Tutorials", "Wallpaper"];
+        "Street Photography", "Traditional Art", "Tutorials", "Wallpaper"];
+
+$(document).on("change", "#img-input", function(event) {
+    // clear previous uploaded images
+    var previews = document.getElementsByClassName("preview-div")
+    var img_upload = document.getElementById("image-upload")
+    if (previews.length != 0) {
+      for (i=0; i<previews.length; i++) {
+        img_upload.removeChild(previews[i])
+      }
+    }
+    
+    // image file input
+    var img_input = document.getElementById("image-upload")
+    
+    // images uploaded
+    var img_files = event.target.files
+    for (i = 0; i < img_files.length; i++) {
+      // image preview div
+      var img_div = document.createElement('div'); 
+      img_div.setAttribute("class", "preview-field");
+
+      // preview img
+      var preview = document.createElement('img'); 
+      preview.src = URL.createObjectURL(img_files[i]);
+      preview.setAttribute("style", "margin-bottom: 10px;")
+
+      // price range label
+      var label = document.createElement('label');
+      label.innerHTML = "Price range"
+    
+      // price_range div
+      var price_range = document.createElement('div');
+      price_range.setAttribute("class", "price_range")
+
+      // price_low div
+      var price_low = document.createElement('div')
+      price_low.setAttribute("class", "price_low")
+      var price_low_input = document.createElement('input');
+      price_low_input.setAttribute("name", "img-"+i+"-price_low");
+      price_low.appendChild(price_low_input);
+
+      // price_high div
+      var price_high = document.createElement('div')
+      price_high.setAttribute("class", "price_high")
+      var price_high_input = document.createElement('input');
+      price_high_input.setAttribute("name", "img-"+i+"-price_high");
+      price_high.appendChild(price_high_input);
+
+      var hr = document.createElement('hr');
+      hr.setAttribute("class", "range_sign");
+
+      price_range.appendChild(price_low);
+      price_range.appendChild(hr);
+      price_range.appendChild(price_high);
+
+      img_div.appendChild(preview);
+      img_div.appendChild(label);
+      img_div.appendChild(price_range);
+
+      img_input.after(img_div);
+    }
+});
 
 $(document).on('click', '.remove_tag', function(event) {
   event.preventDefault();
@@ -132,6 +194,5 @@ $(document).ready(function(){
   for (i = 0; i < tag_inputs.length; i++) {
     autocomplete(tag_inputs[i], tags);
   }
-  console.log("pause the carousal");
   $('.carousel').carousel('pause');
 });

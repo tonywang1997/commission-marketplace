@@ -1,6 +1,7 @@
 .navbar {
   border-bottom: 1px solid #85898e94;
-  background-color: #080c2be6;
+  /*background-color: #080c2be6;*/
+  background-color: #151619fa;
 }
 
 .below-navbar {
@@ -8,19 +9,48 @@
 }
 
 body {
-  background: linear-gradient(#21296b, #121212 50%);
+  /*background: linear-gradient(#21296b, #121212 50%);*/
+  background-color: #232527;
   background-attachment: fixed;
-  color: lightgray !important;
+  color: lightgray;
 }
 
 h1 {
   text-align: center;
-  color: lightgray;
-  font-family: lato;
 }
 
 h2 {
-  text-align: center;
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+h3 {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+h4 {
+  font-size: 1rem;
+  font-weight: bold; 
+  display: inline-block;
+}
+
+h1, h2, h3, h4, p, span, a {
+  font-family: lato;
+}
+
+hr {
+  background-color: #85898e94;
+}
+
+a {
+  color: #3695e8;
+
+  &:hover, &:active, &:focus {
+    color: #3ca4ff;
+    text-decoration: none;
+  }
 }
 
 .nav-link a {
@@ -161,8 +191,9 @@ h2 {
 #sortOptions {
   position: -webkit-sticky;
   position: sticky;
-  top: 55px;
-  background-color: #181d4ced;
+  top: 50px;
+  /*background-color: #181d4ced;*/
+  background-color: #232527ed;
   padding: 1rem 0 .9rem 0;
   border-bottom: 1px solid #85898e94;
   border-radius: .25rem;
