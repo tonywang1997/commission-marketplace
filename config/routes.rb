@@ -22,6 +22,9 @@ Rails.application.routes.draw do
 
   resources :posts
   get '/post', to: 'posts#index'
+
+  resources :favorites
+  get '/favorite', to: 'favorite#index'
 end
 
 
