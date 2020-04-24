@@ -2,15 +2,24 @@
   <div id="myCarousel" class="carousel slide w-100">
     <div class="carousel-inner w-100" role="listbox">
       <div class="carousel-item row no-gutters active">
-            <div class="col d-flex justify-content-center">
-            	<%= image_tag(@portfolio.files[0], 
-                style: 'width:600px; height:500px', class: "img-fluid") %>
+        <div class="col d-flex justify-content-center">
+          <div class="show-image-container">
+            <%= image_tag(@portfolio.images[0].file, 
+             class: "show-image") %>
+            <div class="show-overlay">
+              <div class="show-info">
+                <%= simple_format("Price: #{number_to_currency(
+                 @portfolio.images[0].price)}\n
+                 Published: #{@portfolio.images[0].date}\n") %>
+              </div>  
             </div>
+          </div>
+        </div>
       </div>
-      <% @portfolio.files[1..-1].each do |file| %>
+      <% @portfolio.images[1..-1].each do |img| %>
     	    <div class="carousel-item row no-gutters">
             <div class="col d-flex justify-content-center">
-            	<%= image_tag(file, style: 'width:600px; height:500px', 
+            	<%= image_tag(img.file, style: 'width:auto; height:500px', 
             	              class: "img-fluid") %>
             </div>
           </div>
@@ -51,9 +60,6 @@
             	<span>By</span>
             	<a href=<%="/storefront/#{@portfolio.user.id}"%> 
             		 class='user_link_show'><%= @portfolio.user.user_name %></a>
-            </div>
-            <div>
-              <span>Published: <%=@portfolio.created_at %></span>
             </div>
           </div>
           <div class="description_container">

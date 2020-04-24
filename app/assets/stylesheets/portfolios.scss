@@ -122,7 +122,7 @@ input[type=submit] {
 }
 
 
-.info {
+.info-overlay {
   margin: 15px;
   color: #fff;
   position: absolute;
@@ -134,8 +134,41 @@ input[type=submit] {
   transition-delay: 0s;
 }
 
-a.portfolio-image:hover .info{
-  opacity: 1
+a.portfolio-image:hover .info-overlay{
+  opacity: 1;
+  background-color: #00000099;
+}
+
+.show-image-container {
+  position: relative;
+}
+
+.show-image {
+  display: block;
+  width: auto;
+  height: 500px;
+}
+
+.show-overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  opacity: 0;
+  transition: .5s ease;
+  display: flex;
+  align-items: flex-end;
+}
+
+.show-info {
+  bottom: 0;
+  margin-left: 15px;
+}
+
+.show-image-container:hover .show-overlay {
+  opacity: 1;
+  background-color: #00000099;
 }
 
 .profile {

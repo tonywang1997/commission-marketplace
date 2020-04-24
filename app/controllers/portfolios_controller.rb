@@ -9,7 +9,6 @@ class PortfoliosController < ApplicationController
   # /storefront/:user_id
   def index
     @user ||= User.find_by(id: session[:user_id])
-    @user_portfolios = @user.portfolios
   end
 
   # GET /portfolios/1
@@ -35,7 +34,7 @@ class PortfoliosController < ApplicationController
     image_ids = []
     portfolio_files[:files].each_with_index do |blob, idx|
       image = Image.new(file: blob)
-      price = params[:portfolio]["img-#{idx}-price".to_sym]
+      price = params["img-#{idx}-price".to_sym]
       image.price = price
       image.date = Time.now
       @portfolio.images.push(image)

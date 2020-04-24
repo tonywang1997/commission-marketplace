@@ -1,8 +1,8 @@
 <p id="notice"><%= notice %></p>
 
 <div class="profile-container">
-  	<div class="avatar-container">
-  		<% if @user.avatar.attached? %>
+    <div class="avatar-container">
+      <% if @user.avatar.attached? %>
         <%= image_tag @user.avatar.variant(resize: "100x100!"), class: "rounded-circle avatar-img"%>
       <% else %>
         <img class="rounded-circle avatar-img"
@@ -13,7 +13,7 @@
 
     <div class="profile-info">
         <div class="username">
-        	<%= @user.user_name %>
+          <%= @user.user_name %>
         </div>
         <div class="email">
           <%= @user.email_address %>         
@@ -26,46 +26,29 @@
 
 <hr>
 
-<main>
-	<% @user_portfolios.each do |portfolio|%>
-	  <% portfolio.files.each do |file| %>
-		  <figure>
-				<div class="portfolio">
-			    <a class="portfolio-image" href=<%="/portfolios/#{portfolio.id}"%>>
-			        <div class="overlay">
-			            <div class="info">
-			            	<div class="name"><%= portfolio.user.user_name %></div>
-			              <div class="title"><%= portfolio.description %></div>         
-			            </div>
-			        </div>
-			        <%= image_tag(file, style: 'width:300px; height:300px') %>
-			    </a>
-			  </div>		  	
-		  </figure>
-		<% end %>
-	<% end %>
-</main>
-
 <div class="container">
-	<div class="row">
-		<% @user_portfolios.each do |portfolio|%>
-		  <% portfolio.files.each do |file| %>
-			  <div class="col">
-					<div class="portfolio">
-				    <a class="portfolio-image" href=<%="/portfolios/#{portfolio.id}"%>>
-				        <div class="overlay">
-				            <div class="info">
-				            	<div class="name"><%= portfolio.user.user_name %></div>
-				              <div class="title"><%= portfolio.description %></div>         
-				            </div>
-				        </div>
-				        <%= image_tag(file, style: 'width:300px; height:300px') %>
-				    </a>
-				  </div>		  	
-			  </div>
-			<% end %>
-		<% end %>
-	</div>
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 mx-n2 mt-1">
+    <% @user.portfolios.each do |portfolio|%>
+      <% portfolio.images.each do |img| %>
+        <div class="show-image-container">
+          <a class="portfolio-image col-view 
+          img-wrapper my-3 btn-block position-relative" 
+          href=<%="/portfolios/#{portfolio.id}"%>>
+          <%= image_tag(img.file, 
+           style: 'width:300px; height:300px',
+           class: "show-image") %>
+          <div class="show-overlay">
+            <div class="show-info">
+              <%= simple_format(
+                "Price: #{number_to_currency(img.price)}\n
+                 Published: #{img.date}\n
+                 #{portfolio.description}") %>
+            </div>  
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
 </div>
 
 <br>
