@@ -12,123 +12,132 @@ require 'activerecord-import'
 Post.destroy_all
 PostTag.destroy_all
 Role.destroy_all
-# User.destroy_all
-# Tag.destroy_all
-# Image.destroy_all
-# Portfolio.destroy_all
-# HasImage.destroy_all
-# HasTag.destroy_all
-# Faker::UniqueGenerator.clear
+User.destroy_all
+Tag.destroy_all
+Image.destroy_all
+ActiveStorage::Attachment.all.each do |file|
+  file.purge
+end
+Portfolio.destroy_all
+HasImage.destroy_all
+HasTag.destroy_all
+Faker::UniqueGenerator.clear
 
-# tags_file_lines = File.open('db/seed_tags.txt').readlines.map(&:chomp)
+tags_file_lines = File.open('db/seed_tags.txt').readlines.map(&:chomp)
 
-# users = []
-# users_c = [:user_name, :email_address, :password_digest, :profile_thumbnail]
+users = []
+users_c = [:user_name, :email_address, :password_digest, :profile_thumbnail]
 
-# portfolios = []
-# portfolios_c = [:user_id, :description, :price_low, :price_high , :date_created]
+portfolios = []
+portfolios_c = [:user_id, :description, :price_low, :price_high , :date_created]
 
-# tags = []
-# tags_c = [:tag_name]
+tags = []
+tags_c = [:tag_name]
 
-# has_tags = []
-# has_tags_c = [:portfolio_id, :tag_id]
+has_tags = []
+has_tags_c = [:portfolio_id, :tag_id]
 
-# has_images = []
-# has_images_c = [:portfolio_id, :image_id]
+has_images = []
+has_images_c = [:portfolio_id, :image_id]
 
-# puts "Creating users and tags..."
-# (0...25).to_a.each do |x|
-#   users << {
-#     :user_name => "user#{x}", # Faker::Name.unique.name
-#     :email_address => "user#{x}@test.com", # Faker::Internet.unique.email 
-#     :password_digest => User.digest('123456'), 
-#     :profile_thumbnail => '',
-#   }
+puts "Creating users and tags..."
+(0...25).to_a.each do |x|
+  users << {
+    :user_name => "user#{x}", # Faker::Name.unique.name
+    :email_address => "user#{x}@test.com", # Faker::Internet.unique.email 
+    :password_digest => User.digest('123456'), 
+    :profile_thumbnail => '',
+  }
 
-#   tags << { :tag_name => tags_file_lines[x] }
-# end
-# User.import users_c, users, validate: false
-# Tag.import tags_c, tags, validate: false
-# puts "Created users and tags."
+  tags << { :tag_name => tags_file_lines[x] }
+end
+User.import users_c, users, validate: false
+Tag.import tags_c, tags, validate: false
+puts "Created users and tags."
 
-# puts "Creating images..."
-# image_paths = Dir.glob('app/assets/images/**/*.png')
-# images_c = [:id, :price, :date, :binary_matrix]
-# image_prices = []
-# puts "\tCreating metadata and attaching files..."
-# image_paths.each do |path|
-#   puts "\t\t#{path}"
-#   img = Img.new(path)
-#   price = rand(50000) / 100.0
-#   image = Image.new({
-#     price: price,
-#     date: Time.at(Time.now.to_f * rand).to_date,
-#     binary_matrix: MessagePack.pack(img.sample_self(128)),
-#   })
-#   image.file.attach({
-#     io: File.open(path),
-#     filename: File.basename(path),
-#     content_type: 'image/png',
-#   })
-#   if not image.file.attached?
-#     puts "\t\t\tFailed to attach image #{File.basename(path)}"
-#   elsif not image.save
-#     puts "\t\t\tFailed to save image #{File.basename(path)}"
-#   else
-#     image_prices.push({
-#       id: image.id,
-#       price: price,
-#     })
-#   end
-# end
-# puts "\tCreated metadata and attached files."
-# puts "Created images."
+puts "Creating images..."
+image_paths = Dir.glob('app/assets/images/**/*.png')
+images_c = [:id, :price, :date, :binary_matrix]
+image_prices = []
+puts "\tCreating metadata and attaching files..."
+image_paths.each do |path|
+  puts "\t\t#{path}"
+  image_info = Img.new(path).to_matrix
+  price = rand(50000) / 100.0
+  image = Image.new({
+    price: price,
+    date: Time.at(Time.now.to_f * rand).to_date,
+    binary_matrix: MessagePack.pack(Img.sample(image_info[:matrix], 128)),
+    r_hist: MessagePack.pack(image_info[:rHist]),
+    b_hist: MessagePack.pack(image_info[:bHist]),
+    g_hist: MessagePack.pack(image_info[:gHist]),
+    color_var: MessagePack.pack(image_info[:colarVar]),
+    analyzed: true,
+  })
+  image.file.attach({
+    io: File.open(path),
+    filename: File.basename(path),
+    content_type: 'image/png',
+  })
+  if not image.file.attached?
+    puts "\t\t\tFailed to attach image #{File.basename(path)}"
+  elsif not image.save
+    puts "\t\t\tFailed to save image #{File.basename(path)}"
+    image.file.purge
+  else
+    image_prices.push({
+      id: image.id,
+      price: price,
+    })
+  end
+end
+puts "\tCreated metadata and attached files."
+puts "Created images."
 
-# puts "Creating portfolios..."
-# User.all.each do |user|
-#   num_ports = rand(5)
-#   num_ports.times do
-#     portfolios << {
-#       :user_id => user.id, 
-#       :description => Faker::ChuckNorris.fact, 
-#       :price_low => 0,
-#       :price_high => 0,
-#       :date_created => Time.at(Time.now.to_f * rand).to_date,
-#     }
-#   end
-# end
-# Portfolio.import portfolios_c, portfolios, validate: false
-# puts "Created portfolios."
+puts "Creating portfolios..."
+User.all.each do |user|
+  num_ports = rand(5)
+  num_ports.times do
+    portfolios << {
+      :user_id => user.id, 
+      :description => Faker::ChuckNorris.fact, 
+      :price_low => 0,
+      :price_high => 0,
+      :date_created => Time.at(Time.now.to_f * rand).to_date,
+    }
+  end
+end
+Portfolio.import portfolios_c, portfolios, validate: false
+puts "Created portfolios."
 
-# puts "Creating HasImage and HasTag relationships..."
-# Portfolio.all.each do |portfolio|
-#   images_sample = image_prices.sample(rand(10) + 1)
-#   minmax = images_sample.minmax do |a, b|
-#     a[:price] <=> b[:price]
-#   end
-#   portfolio.price_low = minmax[0][:price]
-#   portfolio.price_high = minmax[1][:price]
-#   portfolio.save
+puts "Creating HasImage and HasTag relationships..."
+Portfolio.all.each do |portfolio|
+  images_sample = image_prices.sample(rand(10) + 1)
+  minmax = images_sample.minmax do |a, b|
+    a[:price] <=> b[:price]
+  end
+  portfolio.price_low = minmax[0][:price]
+  portfolio.price_high = minmax[1][:price]
+  portfolio.save
 
-#   images_sample.each do |image|
-#     has_images << {
-#       :portfolio_id => portfolio.id,
-#       :image_id => image[:id],
-#     }
-#   end
+  images_sample.each do |image|
+    has_images << {
+      :portfolio_id => portfolio.id,
+      :image_id => image[:id],
+    }
+  end
 
-#   tags = Tag.all.sample(rand(10) + 1)
-#   tags.each do |tag|
-#     has_tags << {
-#       :portfolio_id => portfolio.id,
-#       :tag_id => tag.id,
-#     }
-#   end
-# end
-# HasImage.import has_images_c, has_images, validate: false
-# HasTag.import has_tags_c, has_tags, validate: false
-# puts "Created HasImage and HasTag relationships."
+  tags = Tag.all.sample(rand(10) + 1)
+  tags.each do |tag|
+    has_tags << {
+      :portfolio_id => portfolio.id,
+      :tag_id => tag.id,
+    }
+  end
+end
+HasImage.import has_images_c, has_images, validate: false
+HasTag.import has_tags_c, has_tags, validate: false
+puts "Created HasImage and HasTag relationships."
 
 puts "Creating bounty board posts..."
 posts = []
@@ -182,15 +191,15 @@ Post.all.each do |p|
 end
 puts "Added tags and roles to posts."
 
-# puts "Creating test user..."
-# u = User.new({
-#   user_name: 'testuser',
-#   email_address: 'testuser@test.com',
-#   password: '123456',
-#   password_confirmation: '123456',
-# })
-# if u.save
-#   puts "Created test user."
-# else
-#   puts "Error(s) creating test user: ", u.errors.messages
-# end
+puts "Creating test user..."
+u = User.new({
+  user_name: 'testuser',
+  email_address: 'testuser@test.com',
+  password: '123456',
+  password_confirmation: '123456',
+})
+if u.save
+  puts "Created test user."
+else
+  puts "Error(s) creating test user: ", u.errors.messages
+end

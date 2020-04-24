@@ -33,15 +33,16 @@ class PortfoliosController < ApplicationController
   # POST /portfolios.json
   def create
     @portfolio = Portfolio.new(portfolio_params)
+    image_ids = []
     portfolio_files[:files].each do |blob|
       image = Image.new(file: blob)
-      image.binary_matrix = MessagePack.pack(Img.new(blob.to_io, io: true).sample_self(128))
       @portfolio.images.push(image)
     end
     @portfolio.user_id = session[:user_id]
 
     respond_to do |format|
       if @portfolio.save
+        AnalyzeImagesJob.perform_later @portfolio.images.pluck(:id)
         format.html { redirect_to @portfolio, notice: 'Portfolio was successfully created.' }
         format.json { render :show, status: :created, location: @portfolio }
       else
