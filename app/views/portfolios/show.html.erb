@@ -1,36 +1,20 @@
-<p id="notice"><%= notice %></p>
 <div class="portfolio_carousal">
   <div id="myCarousel" class="carousel slide w-100">
     <div class="carousel-inner w-100" role="listbox">
       <div class="carousel-item row no-gutters active">
             <div class="col d-flex justify-content-center">
-              <% if @portfolio.files.length != 0 %>
-            	  <%= image_tag(@portfolio.files[0], style: 'width:600px; height:500px', class: "img-fluid") %>
-              <% else %>
-                <%= image_tag(@portfolio.seed_files[0], style: 'width:600px; height:500px', class: "img-fluid") %>
-              <% end %>
+            	<%= image_tag(@portfolio.files[0], 
+                style: 'width:600px; height:500px', class: "img-fluid") %>
             </div>
       </div>
-
-      <% if @portfolio.files.length != 0 %>
-      	<% @portfolio.files[1..-1].each do |file| %>
-      	    <div class="carousel-item row no-gutters">
-              <div class="col d-flex justify-content-center">
-              	<%= image_tag(file, style: 'width:600px; height:500px', 
-              	              class: "img-fluid") %>
-              </div>
+      <% @portfolio.files[1..-1].each do |file| %>
+    	    <div class="carousel-item row no-gutters">
+            <div class="col d-flex justify-content-center">
+            	<%= image_tag(file, style: 'width:600px; height:500px', 
+            	              class: "img-fluid") %>
             </div>
-  		  <% end %>
-      <% else %>
-        <% @portfolio.seed_files[1..-1].each do |file| %>
-            <div class="carousel-item row no-gutters">
-              <div class="col d-flex justify-content-center">
-                <%= image_tag(file, style: 'width:600px; height:500px', 
-                              class: "img-fluid") %>
-              </div>
-            </div>
-        <% end %>
-      <% end %>
+          </div>
+		  <% end %>
         
     </div>
     <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
@@ -44,29 +28,45 @@
 
 <div class="details_container">
     <div class="profile_container">
-    	<span class="avatar_show"><img src="https://assets.currencycloud.com/wp-content/uploads/2018/01/profile-placeholder.gif" loading="lazy" width="50" height="50"></a></span>
+      <% if @portfolio.user.avatar.attached? %>
+        <span class="avatar_show">
+          <%= image_tag @portfolio.user.avatar.variant(resize: "50x50!"), class: "rounded-circle avatar-img"%>
+        </span>
+      <% else %>
+        <span class="avatar_show">
+          <img class="rounded-circle avatar-img"
+              src="https://assets.currencycloud.com/wp-content/uploads/2018/01/profile-placeholder.gif" 
+              width="50" height="50" class="rounded-circle">
+        </span>  
+      <% end %>
+
       <div class="info_container">
           <div class="title_container">
-              <h1 data-hook="deviation_title" class="title_show">untitled</h1>
-              <p>from <%= @portfolio.price_low%> to <%=@portfolio.price_high%></p>
+            <h1 data-hook="deviation_title" class="title_show">
+              <%= @portfolio.title == nil ? "untitled" : @portfolio.title %>
+            </h1>
           </div>
-          <div class="author_container">
-              <div>
-              	<span>By</span>
-              	<a href=<%="/storefront/#{@portfolio.user.id}"%> 
-              		 class='user_link_show'><%= @portfolio.user.user_name %></a>
-              </div>
-              <div class="_1TgrW"><span>Published: <%=@portfolio.created_at %></span></div>
+          <div class="author_container" style="margin-bottom: 10px">
+            <div>
+            	<span>By</span>
+            	<a href=<%="/storefront/#{@portfolio.user.id}"%> 
+            		 class='user_link_show'><%= @portfolio.user.user_name %></a>
+            </div>
+            <div>
+              <span>Published: <%=@portfolio.created_at %></span>
+            </div>
+          </div>
+          <div class="description_container">
+            <span><%= @portfolio.description %></span>
           </div>
       </div>
     </div>
-    <div class="_2Vvqa">
-        <div class="_2ogLQ">
-          <% @portfolio.tags.each do |tag|%>
-            <a href="https://www.deviantart.com/tag/america" class="j9kGS"><span class="_3uQxz"><%=tag.tag_name%></span></a>
-    	    <% end %>
+    <div class="tags_container" style="margin-top: 20px">
+        <div>
+          <% @portfolio.tags.each do |tag| %>
+            <h5 style="float: left; margin-right: 10px;"><span class="badge badge-secondary"><%= tag.tag_name%></span></h5>
+          <% end %>
         </div>
     </div>
 </div>
-<%= link_to 'Edit', edit_portfolio_path(@portfolio) %> |
-<%= link_to 'Back', portfolios_path %>
+

@@ -30,11 +30,8 @@ class ApplicationController < ActionController::Base
       id_comp = params[:sim_sort].to_i
       image_comp = Image.find_by(id: id_comp)
       matrix_comp = nil
-      if image_comp
-        binary_matrix_comp = image_comp.binary_matrix
-        if binary_matrix_comp
-          matrix_comp = MessagePack.unpack(binary_matrix_comp)
-        end
+      if image_comp and image_comp.analyzed
+        matrix_comp = MessagePack.unpack(image_comp.binary_matrix)
       end
 
       if matrix_comp
@@ -79,10 +76,9 @@ class ApplicationController < ActionController::Base
         puts sim_sums
 
         # sort by sum of similarity values
-        image_ids = @images.pluck(:id)
-        filtered_ids = image_ids.filter { |id| sim_sums[id] < 550000000 }
+        filtered_ids = sim_sums.keys.filter { |id| sim_sums[id] < 550000000 }
         if filtered_ids.size < 5
-          filtered_ids = image_ids.min(5) { |a, b| sim_sums[a] <=> sim_sums[b] }
+          filtered_ids = sim_sums.keys.min(5) { |a, b| sim_sums[a] <=> sim_sums[b] }
         end
         @images = @images.select(:id, :price, :date).
           where('images.id IN (?)', filtered_ids).

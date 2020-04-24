@@ -7,20 +7,19 @@ var tags = ["3D", "Adoptables", "Animation", "Anime and Manga", "Artisan Crafts"
 
 $(document).on("change", "#img-input", function(event) {
     // clear previous uploaded images
-    var previews = document.getElementsByClassName("preview-div")
-    var img_upload = document.getElementById("image-upload")
-    if (previews.length != 0) {
-      for (i=0; i<previews.length; i++) {
-        img_upload.removeChild(previews[i])
-      }
+    var previews = document.getElementsByClassName("preview-field");
+    var portfolio_div = document.getElementById("portfolio_div");
+    // previews is a live list
+    while(previews[0]) {
+      previews[0].parentNode.removeChild(previews[0]);
     }
-    
+
     // image file input
-    var img_input = document.getElementById("image-upload")
+    var img_input = document.getElementById("image-upload");
     
     // images uploaded
     var img_files = event.target.files
-    for (i = 0; i < img_files.length; i++) {
+    for (var i = 0; i < img_files.length; i++) {
       // image preview div
       var img_div = document.createElement('div'); 
       img_div.setAttribute("class", "preview-field");
@@ -28,40 +27,28 @@ $(document).on("change", "#img-input", function(event) {
       // preview img
       var preview = document.createElement('img'); 
       preview.src = URL.createObjectURL(img_files[i]);
-      preview.setAttribute("style", "margin-bottom: 10px;")
+      preview.setAttribute("style", 
+        "margin-bottom: 10px; \
+         max-width: 100%; \
+         display: block; \
+         object-fit: contain;")
 
       // price range label
       var label = document.createElement('label');
-      label.innerHTML = "Price range"
-    
-      // price_range div
-      var price_range = document.createElement('div');
-      price_range.setAttribute("class", "price_range")
+      label.innerHTML = "Price"
 
-      // price_low div
-      var price_low = document.createElement('div')
-      price_low.setAttribute("class", "price_low")
-      var price_low_input = document.createElement('input');
-      price_low_input.setAttribute("name", "img-"+i+"-price_low");
-      price_low.appendChild(price_low_input);
+      // price div
+      var price_div = document.createElement('div')
+      price_div.setAttribute("class", "price_low")
+      var price_input = document.createElement('input');
+      price_input.setAttribute("name", "img-"+i+"-price");
+      price_input.setAttribute("placeholder", "100.00");
+      price_div.appendChild(price_input);
 
-      // price_high div
-      var price_high = document.createElement('div')
-      price_high.setAttribute("class", "price_high")
-      var price_high_input = document.createElement('input');
-      price_high_input.setAttribute("name", "img-"+i+"-price_high");
-      price_high.appendChild(price_high_input);
-
-      var hr = document.createElement('hr');
-      hr.setAttribute("class", "range_sign");
-
-      price_range.appendChild(price_low);
-      price_range.appendChild(hr);
-      price_range.appendChild(price_high);
 
       img_div.appendChild(preview);
       img_div.appendChild(label);
-      img_div.appendChild(price_range);
+      img_div.appendChild(price_div);
 
       img_input.after(img_div);
     }

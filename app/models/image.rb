@@ -1,7 +1,7 @@
 class Image < ApplicationRecord
   has_many :has_images
   has_many :portfolios, through: :has_images
-  has_one_attached :file
+  has_one_attached :file, dependent: :purge
 
   def self.tagged(tags)
     if tags.empty?

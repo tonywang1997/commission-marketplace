@@ -32,15 +32,19 @@ class PortfoliosController < ApplicationController
   # POST /portfolios.json
   def create
     @portfolio = Portfolio.new(portfolio_params)
-    portfolio_files[:files].each do |blob|
+    image_ids = []
+    portfolio_files[:files].each_with_index do |blob, idx|
       image = Image.new(file: blob)
-      image.binary_matrix = MessagePack.pack(Img.new(blob.to_io, io: true).sample_self(128))
+      price = params[:portfolio]["img-#{idx}-price".to_sym]
+      image.price = price
+      image.date = Time.now
       @portfolio.images.push(image)
     end
     @portfolio.user_id = session[:user_id]
 
     respond_to do |format|
       if @portfolio.save
+        AnalyzeImagesJob.perform_later @portfolio.images.pluck(:id)
         format.html { redirect_to @portfolio, notice: 'Portfolio was successfully created.' }
         format.json { render :show, status: :created, location: @portfolio }
       else
@@ -83,10 +87,10 @@ class PortfoliosController < ApplicationController
     # Only allow a list of trusted parameters through.
     def portfolio_params
       params.require(:portfolio).permit(
+        :title,
         :description, 
         :price_low,
         :price_high,
-        files: [],
         tags_attributes: [:tag_name])
     end
 
