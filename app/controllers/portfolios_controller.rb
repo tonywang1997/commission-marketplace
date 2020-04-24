@@ -8,12 +8,13 @@ class PortfoliosController < ApplicationController
 
   # /storefront/:user_id
   def index
-    @user ||= User.find_by(id: session[:user_id])
+    @user ||= User.find(params[:user_id])
   end
 
   # GET /portfolios/1
   # GET /portfolios/1.json
   def show
+    @portfolio = Portfolio.find(params[:id])
   end
 
   # GET /submit

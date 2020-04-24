@@ -34,17 +34,18 @@
           <a class="portfolio-image col-view 
           img-wrapper my-3 btn-block position-relative" 
           href=<%="/portfolios/#{portfolio.id}"%>>
-          <%= image_tag(img.file, 
-           style: 'width:300px; height:300px',
-           class: "show-image") %>
-          <div class="show-overlay">
-            <div class="show-info">
-              <%= simple_format(
-                "Price: #{number_to_currency(img.price)}\n
-                 Published: #{img.date}\n
-                 #{portfolio.description}") %>
-            </div>  
-          </div>
+            <%= image_tag(img.file, 
+             style: 'width:300px; height:300px',
+             class: "show-image") %>
+            <div class="show-overlay">
+              <div class="show-info">
+                <%= simple_format(
+                  "Price: #{number_to_currency(img.price)}\n
+                   Published: #{img.date}\n
+                   #{portfolio.description}") %>
+              </div>  
+            </div>
+          </a>
         </div>
       <% end %>
     <% end %>
