@@ -157,11 +157,13 @@
   &.role {
     background-color: #ffffff0a;
     box-shadow: 2px 2px 5px #00000054;
-    padding: .5rem;
+    padding: .3rem .5rem .3rem .3rem;
     margin: .5rem;
-    border-radius: 1.5rem;
+    border-radius: .5rem;
+    min-width: 145px;
     display: flex;
     align-items: center;
+    justify-content: center;
   }
 
   &.navbar-padding {

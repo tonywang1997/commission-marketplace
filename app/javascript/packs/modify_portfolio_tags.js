@@ -3,7 +3,56 @@ var tags = ["3D", "Adoptables", "Animation", "Anime and Manga", "Artisan Crafts"
         "Emoji and Emotion", "Fan Art", "Fan Fiction", "Fantasy", "Fractal", "Game Art",
         "Horror", "Kinky", "Literature", "Nude Art", "Photo Manipulation", "Photography",
         "Pixel Art", "Poetry", "Resources", "Science Fiction", "Sculpture", "Street Art",
-        "Streey Photography", "Traditional Art", "Tutorials", "Wallpaper"];
+        "Street Photography", "Traditional Art", "Tutorials", "Wallpaper"];
+
+$(document).on("change", "#img-input", function(event) {
+    // clear previous uploaded images
+    var previews = document.getElementsByClassName("preview-field");
+    var portfolio_div = document.getElementById("portfolio_div");
+    // previews is a live list
+    while(previews[0]) {
+      previews[0].parentNode.removeChild(previews[0]);
+    }
+
+    // image file input
+    var img_input = document.getElementById("image-upload");
+    
+    // images uploaded
+    var img_files = event.target.files
+    for (var i = 0; i < img_files.length; i++) {
+      // image preview div
+      var img_div = document.createElement('div'); 
+      img_div.setAttribute("class", "preview-field");
+
+      // preview img
+      var preview = document.createElement('img'); 
+      preview.src = URL.createObjectURL(img_files[i]);
+      preview.setAttribute("style", 
+        "margin-bottom: 10px; \
+         max-width: 100%; \
+         display: block; \
+         object-fit: contain;")
+
+      // price range label
+      var label = document.createElement('label');
+      label.innerHTML = "Price"
+
+      // price div
+      var price_div = document.createElement('div')
+      price_div.setAttribute("class", "price_low")
+      var price_input = document.createElement('input');
+      price_input.setAttribute("name", "img-"+i+"-price");
+      price_input.setAttribute("placeholder", "100.00");
+      price_div.appendChild(price_input);
+
+
+      img_div.appendChild(preview);
+      img_div.appendChild(label);
+      img_div.appendChild(price_div);
+
+      img_input.after(img_div);
+    }
+});
 
 $(document).on('click', '.remove_tag', function(event) {
   event.preventDefault();
@@ -132,6 +181,5 @@ $(document).ready(function(){
   for (i = 0; i < tag_inputs.length; i++) {
     autocomplete(tag_inputs[i], tags);
   }
-  console.log("pause the carousal");
   $('.carousel').carousel('pause');
 });

@@ -14,7 +14,8 @@ Rails.application.routes.draw do
   post '/register', to: 'users#create'
   get '/dashboard', to: 'users#dashboard'
   patch '/avatar', to: 'users#avatar'
-  
+  patch '/biography', to: 'users#biography'
+
   resources :portfolios
   get '/submit', to: 'portfolios#new', as: :user_submit
   get '/storefront/:user_id', to: 'portfolios#index'

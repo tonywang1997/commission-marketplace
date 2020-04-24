@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_23_065714) do
+ActiveRecord::Schema.define(version: 2020_04_24_034721) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -65,6 +65,11 @@ ActiveRecord::Schema.define(version: 2020_04_23_065714) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.binary "binary_matrix"
+    t.binary "r_hist"
+    t.binary "b_hist"
+    t.binary "g_hist"
+    t.binary "color_var"
+    t.boolean "analyzed", default: false, null: false
   end
 
   create_table "portfolios", force: :cascade do |t|
@@ -75,6 +80,7 @@ ActiveRecord::Schema.define(version: 2020_04_23_065714) do
     t.date "date_created"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.text "title"
   end
 
   create_table "post_tags", force: :cascade do |t|
@@ -116,6 +122,7 @@ ActiveRecord::Schema.define(version: 2020_04_23_065714) do
     t.string "profile_thumbnail"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.text "biography"
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
     t.index ["user_name"], name: "index_users_on_user_name", unique: true
   end
