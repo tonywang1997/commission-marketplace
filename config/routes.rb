@@ -21,6 +21,10 @@ Rails.application.routes.draw do
   get '/storefront/:user_id', to: 'portfolios#index'
 
   resources :posts
+  get '/post', to: 'posts#index'
+
+  resources :favorites
+  get '/favorite', to: 'favorite#index'
 end
 
 
