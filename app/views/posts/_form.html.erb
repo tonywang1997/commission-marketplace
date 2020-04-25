@@ -1,5 +1,69 @@
-<%= simple_form_for @post do |sub| %>
-  <%= sub.input :title %>
-  <%= sub.input :content %>
-  <%= sub.submit %>
+<%= form_with(model: @post, local: true) do |f| %>
+  <div class="form-group">
+    <h2 class="bounty-board headline mb-2"><%= f.label(:title, class: 'm-0') %></h2>
+    <%= f.text_field(:title, class: 'dark-text-input form-control m-0') %> 
+  </div>
+
+  <div class="bounty-board container red px-4 px-md-5 py-3 my-4">
+    <h3 class="bounty-board headline">Summary</h3>
+
+    <div class="form-group">
+      <h4 class="bounty-board mb-2"><%= f.label(:deadline, "Deadline", class: 'm-0') %></h4>
+      <div class="input-group date" id="bounty-board-deadline" data-target-input="nearest">
+        <input type="text" class="dark-text-input form-control datetimepicker-input" data-target="#bounty-board-deadline" data-toggle="datetimepicker" id="post_deadline" name="post[deadline]" />
+        <div class="input-group-append" data-target="#bounty-board-deadline" data-toggle="datetimepicker">
+            <div class="bounty-board dark-input-group-text input-group-text"><i class="fa fa-calendar"></i></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <h4 class="bounty-board mb-2"><%= f.label(:price, "Price", class: 'm-0') %></h4>
+      <div class="input-group">
+        <div class="input-group-prepend" data-target="#post_price">
+          <div class="dark-input-group-text input-group-text px-2" style="cursor:pointer;">
+            <%= material_icon.monetization_on %>
+          </div>
+        </div>
+        <%= f.number_field(:price, in: 0..Float::INFINITY, step: 0.5, class: 'dark-text-input form-control mb-0', id: 'post_price') %>
+      </div>
+    </div>
+  </div>
+  
+  <div class="bounty-board container yellow px-4 px-md-5 py-3 my-4">
+    <div class="form-group">
+      <h3 class="headline bounty-board mb-2"><%= f.label(:content, "Details", class: 'mb-0') %></h3>
+      <%= f.text_area(:content, class: 'textarea-autoresize dark-text-input form-control') %>
+    </div>
+  </div>
+
+  <h2 class="headline bounty-board mb-n3">Roles</h2>
+  <div class="bounty-board container green role-container d-none px-4 px-md-5 py-3 my-4" id="role-template">
+    <div class="form-group">
+      <h4 class="bounty-board mb-2"><%= label_tag(:name, "Name", class: 'mb-0') %></h4>
+      <%= text_field_tag(:name, '', class: 'dark-text-input form-control') %>
+    </div>
+
+    <div class="form-group">
+      <h4 class="bounty-board mb-2"><%= label_tag(:category, "Category", class: 'mb-0') %></h4>
+      <select name='sort' class='dark-text-input form-control m-0' id='category'>
+        <%= options_for_select((role_categories.map {|cat| cat.capitalize}).zip(role_categories)) %>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <h4 class="bounty-board mb-2"><%= label_tag(:description, "Description", class: 'mb-0') %></h4>
+      <%= text_area_tag(:description, '', class: 'textarea-autoresize dark-text-input form-control') %>
+    </div>
+
+    <button type="button" class="btn btn-danger w-auto px-5 my-2 removeRole">
+      Remove role
+    </button>
+  </div>
+
+  <button type="button" class="btn dark-btn w-auto px-5 my-4" id="addRole" data-target="#role-template">
+    Add a role
+  </button>
+
+  <%= f.submit %>
 <% end %>

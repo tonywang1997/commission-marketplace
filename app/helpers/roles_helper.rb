@@ -21,4 +21,8 @@ module RolesHelper
     end
     roles_hash
   end
+
+  def role_categories
+    [ :animator, :artist, :mixer, :vocalist ]
+  end
 end

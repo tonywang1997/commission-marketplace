@@ -1,4 +1,6 @@
 class Role < ApplicationRecord
-  enum category: [ :animator, :artist, :mixer, :vocalist ]
+  include RolesHelper
+
+  enum category: role_categories
   belongs_to :post
 end

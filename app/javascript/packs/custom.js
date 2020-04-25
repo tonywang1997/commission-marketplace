@@ -4,6 +4,43 @@ document.addEventListener("turbolinks:load", function() {
   $('[data-toggle="tooltip"]').tooltip();
   $('[data-toggle="popover"]').popover();
   $('#mycarousel').carousel();
+
+  // Bounty board
+  $('#bounty-board-deadline').datetimepicker({
+    format: 'L'
+  });
+
+  $('.textarea-autoresize').on('input', function() {
+    $(this).css({
+      'height': 'auto',
+      'overflow-y': 'hidden',
+    }).height(this.scrollHeight - 
+      (parseInt($(this).css('paddingTop')) + 
+      parseInt($(this).css('paddingBottom'))));
+  });
+
+  $('[data-target="#post_price"').on('click', function() {
+    $('#post_price').focus();
+  });
+
+  function removeRole() {
+    $(this).closest('.role-container').remove();
+    console.log('remove');
+  }
+
+  $('#addRole').on('click', function() {
+    let newRole = $($(this).data('target')).clone()
+    $(this).before(newRole.removeClass('d-none').removeAttr('id'));
+    $(newRole).find('.removeRole').on('click', removeRole);
+  });
+
+  $('#addRole').click()
+  //todo put addrole button within a role-container
+  //keep count of # of roles at any one time inside data-number-of-roles/some data attribute OR
+  //just add to the data attribute (keep inside addRole button) - use this to define new ID/for
+  //for created form elements
+  //make form submissions work
+  //make form submission through ajax
 });
 
 window.addEventListener("turbolinks:load", function() {
