@@ -1,0 +1,23 @@
+<div class="chatboxhead">
+  <div class="chatboxtitle">
+    <i class="fa fa-comments"></i>
+
+    <h1><%= current_user.user_name %> </h1>
+  </div>
+  <div class="chatboxoptions">
+    <%= link_to "<i class='fa  fa-minus'></i> ".html_safe, "#", 
+        class: "toggleChatBox", "data-cid" => 0 %>
+    &nbsp;&nbsp;
+    <%= link_to "<i class='fa  fa-times'></i> ".html_safe, "#", 
+        class: "closeChat", "data-cid" => 0 %>
+  </div>
+</div>
+
+<div class="chatboxcontent" id="messages-table">
+</div>
+<div class="chatboxinput">
+  <%= form_for(@message, :remote => true) do |f| %>
+      <%= f.text_area :content, class: "chatboxtextarea"%>
+      <%= f.submit "Send", id: "send-button"%>
+  <% end %>
+</div>

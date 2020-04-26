@@ -20,11 +20,17 @@
         <div class="username">
         	<%= @user.user_name %>
         </div>
+        <%= link_to "Inbox", "#", 
+            class: "btn btn-success btn-xs start-conversation",
+            data: {
+              sid: current_user.id,
+              rip: @user.id,
+              sname: current_user.user_name } %>
         <div class="email">
           <%= @user.email_address %>
           <button class="storefront-button">
             <img src="/store-solid.svg">
-            <a href=<%= "/storefront/#{@user.id}"%> 
+            <a href=<%= "/storefront?user_id=#{@user.id}"%> 
               style="margin-left:10px;">see my storefront</a> 
           </button>
           

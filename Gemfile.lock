@@ -226,6 +226,7 @@ GEM
     rb-fsevent (0.10.3)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
+    redis (3.3.1)
     regexp_parser (1.7.0)
     responders (3.0.0)
       actionpack (>= 5.0)
@@ -331,6 +332,7 @@ DEPENDENCIES
   rack-mini-profiler
   rails (~> 6.0.2, >= 6.0.2.1)
   rails-controller-testing
+  redis (= 3.3.1)
   sass-rails (>= 6)
   selenium-webdriver
   simple_form (~> 4.0, >= 4.0.1)

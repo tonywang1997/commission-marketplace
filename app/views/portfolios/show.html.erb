@@ -58,7 +58,7 @@
           <div class="author_container" style="margin-bottom: 10px">
             <div>
             	<span>By</span>
-            	<a href=<%="/storefront/#{@portfolio.user.id}"%> 
+            	<a href=<%="/storefront?user_id=#{@portfolio.user.id}"%> 
             		 class='user_link_show'><%= @portfolio.user.user_name %></a>
             </div>
           </div>

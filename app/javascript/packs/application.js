@@ -13,6 +13,8 @@ global.$ = jQuery;
 import "bootstrap"
 require("./custom")
 require("./modify_portfolio_tags")
+require("./chatbox")
+require("./message")
 
 
 // Uncomment to copy all static images under ../images to the output folder and reference
@@ -21,3 +23,6 @@ require("./modify_portfolio_tags")
 //
 // const images = require.context('../images', true)
 // const imagePath = (name) => images(name, true)
+$(document).on('turbolinks:load', function () {
+	console.log("document ready");
+})

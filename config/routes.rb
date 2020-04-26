@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'messages/index'
+  get 'messages/create'
   resources :tags
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   root 'application#home'
@@ -18,13 +20,18 @@ Rails.application.routes.draw do
 
   resources :portfolios
   get '/submit', to: 'portfolios#new', as: :user_submit
-  get '/storefront/:user_id', to: 'portfolios#index'
+  get '/storefront', to: 'portfolios#index'
 
   resources :posts
   get '/post', to: 'posts#index'
 
   resources :favorites
   get '/favorite', to: 'favorite#index'
+
+  resources :messages, only: [:index, :new, :create]
+  get '/conversation', to: 'messages#index'
+
+  mount ActionCable.server, at: '/cable'
 end
 
 

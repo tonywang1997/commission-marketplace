@@ -74,3 +74,4 @@ gem 'gravatar_image_tag'
 
 gem 'devise', '~> 4.4', '>= 4.4.3'
 gem 'simple_form', '~> 4.0', '>= 4.0.1'
+gem 'redis', '3.3.1'
