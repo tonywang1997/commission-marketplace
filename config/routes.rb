@@ -26,6 +26,10 @@ Rails.application.routes.draw do
 
   resources :favorites
   get '/favorite', to: 'favorite#index'
+
+  resources :images do
+    put :favorite, on: :member
+  end
 end
 
 
