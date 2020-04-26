@@ -65,12 +65,14 @@ gem "aws-sdk-s3", require: false
 gem 'chunky_png'
 gem 'mini_magick'
 gem 'msgpack'
+gem 'momentjs-rails'
 
 gem 'faker', :git => 'https://github.com/faker-ruby/faker.git', :branch => 'master'
 
 gem 'activerecord-import'
 gem "font-awesome-rails"
 gem 'gravatar_image_tag'
+gem 'bootstrap4-datetime-picker-rails'
 
 gem 'devise', '~> 4.4', '>= 4.4.3'
 gem 'simple_form', '~> 4.0', '>= 4.0.1'
