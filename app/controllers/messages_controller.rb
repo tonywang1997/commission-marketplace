@@ -15,7 +15,6 @@ class MessagesController < ApplicationController
   		                             content: @message.content,
   		                             sender_id: @message.sender_id,
   		                             receiver_id: @message.receiver_id
-
   	end
   end
 
