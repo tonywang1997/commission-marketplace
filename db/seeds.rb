@@ -64,6 +64,7 @@ image_paths.each do |path|
   puts "\t\t#{path}"
   image_info = Img.new(path).to_matrix
   price = rand(50000) / 100.0
+  price = 5.0 if File.basename(path) == 'anime_and_manga_15.png'
   image = Image.new({
     price: price,
     date: Time.at(Time.now.to_f * rand).to_date,

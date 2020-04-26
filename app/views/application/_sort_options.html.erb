@@ -34,11 +34,11 @@
   </div>
 
   <div class="d-none d-md-flex px-1 btn-group btn-group-toggle">
-    <%= f.label :sortAsc, class: "btn btn-secondary btn-direction px-1 #{'active' if @dir == 'asc'} #{'disabled' if @sort == 'none'}" do %>
+    <%= f.label :sortAsc, class: "btn btn-secondary btn-direction px-1 #{'active' if @dir == 'asc'} #{'disabled' if @sort == 'none' or params[:sim_sort]}" do %>
       <%= radio_button_tag('dir', 'asc', checked = (@dir == 'asc'), disabled: ('disabled' if @sort == 'none'), id: 'sortAsc', class: 'submit-form') %>
       <%= material_icon.arrow_drop_up %>
     <% end %>
-    <%= f.label :sortDesc, class: "btn btn-secondary btn-direction px-1 #{'active' if @dir == 'desc'} #{'disabled' if @sort == 'none'}" do %>
+    <%= f.label :sortDesc, class: "btn btn-secondary btn-direction px-1 #{'active' if @dir == 'desc'} #{'disabled' if @sort == 'none' or params[:sim_sort]}" do %>
       <%= radio_button_tag('dir', 'desc', checked = (@dir == 'desc'), disabled: ('disabled' if @sort == 'none'), id: 'sortDesc', class: 'submit-form') %>
       <%= material_icon.arrow_drop_down %>
     <% end %>

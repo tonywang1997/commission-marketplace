@@ -41,6 +41,6 @@ class User < ApplicationRecord
   end
 
   def password_validation_required?
-    self.password_digest.blank? or !self.password.empty?
+    self.password_digest.blank? or !(self.password.nil? or self.password.empty?)
   end
 end

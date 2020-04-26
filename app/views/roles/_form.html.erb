@@ -1,14 +1,17 @@
 <div class="bounty-board container green role-container px-4 px-md-5 py-3 my-4 <%= 'd-none' if !display %>" id="role-<%= role_num %>">
-  <div class="form-group <%= 'field_with_errors' if (show_errors && (role_name.nil? or role_name.empty?)) %>">
-    <h4 class="bounty-board mb-2"><%= label_tag(:name, "Name", class: 'mb-0 role-name-label', for: "name-#{role_num}" ) %></h4>
-    <%= text_field_tag(:name, role_name, class: 'dark-text-input form-control role-name', id: "name-#{role_num}", name: "roles[#{role_num}][name]" ) %>
-  </div>
-
   <div class="form-group <%= 'field_with_errors' if (show_errors && (role_category.nil? or role_category.empty?)) %>">
     <h4 class="bounty-board mb-2"><%= label_tag(:category, "Category", class: 'mb-0 role-category-label', for: "category-#{role_num}" ) %></h4>
     <select name='roles[<%= role_num %>][category]' class='dark-text-input form-control m-0 role-category' id='category-<%= role_num %>'>
-      <%= options_for_select((Role.role_categories.map {|cat| cat.capitalize}).zip(Role.role_categories), role_category) %>
+      <%= options_for_select(
+        [['-- select a category --', '']].union((
+          Role.role_categories.map {|cat| cat.capitalize}).zip(Role.role_categories)),
+        selected: role_category) %>
     </select>
+  </div>
+
+  <div class="form-group <%= 'field_with_errors' if (show_errors && (role_name.nil? or role_name.empty?)) %>">
+    <h4 class="bounty-board mb-2"><%= label_tag(:name, "Name", class: 'mb-0 role-name-label', for: "name-#{role_num}" ) %></h4>
+    <%= text_field_tag(:name, role_name, class: 'dark-text-input form-control role-name', id: "name-#{role_num}", name: "roles[#{role_num}][name]" ) %>
   </div>
 
   <div class="form-group <%= 'field_with_errors' if (show_errors && (role_description.nil? or role_description.empty?)) %>">
