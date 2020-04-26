@@ -13,8 +13,6 @@ class SessionsController < ApplicationController
 
   def create
     @user_name = params[:session][:user_name]
-    puts "the password is"
-    puts params[:session][:password]
     user = User.find_by(user_name: params[:session][:user_name].downcase)
     if user && user.authenticate(params[:session][:password])
       # successful login

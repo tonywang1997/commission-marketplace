@@ -6,8 +6,11 @@ document.addEventListener("turbolinks:load", function() {
   $('#mycarousel').carousel();
 
   // Bounty board
-  $('#bounty-board-deadline').datetimepicker({
-    format: 'L'
+
+  $('#bounty-board-deadline').on('blur', function(e) {
+    if (new Date(this.value) < new Date()) {
+      this.value = new Date().toISOString().slice(0,10);
+    }
   });
 
   $('.textarea-autoresize').on('input', function() {
@@ -24,23 +27,44 @@ document.addEventListener("turbolinks:load", function() {
   });
 
   function removeRole() {
+    let addRoleBtn = $('#addRole').detach();
     $(this).closest('.role-container').remove();
-    console.log('remove');
+    $('.role-container').last().find('.role-btns').append(addRoleBtn);
+    disableRemoveIfNecessary();
+  }
+
+  function disableRemoveIfNecessary() {
+    if ($('.role-container').length <= 2) {
+      $('.removeRole').attr('disabled', true).addClass('disabled');
+    } else {
+      $('.removeRole').attr('disabled', false).removeClass('disabled');
+    }
   }
 
   $('#addRole').on('click', function() {
-    let newRole = $($(this).data('target')).clone()
-    $(this).before(newRole.removeClass('d-none').removeAttr('id'));
-    $(newRole).find('.removeRole').on('click', removeRole);
+    $(this).data('role-count', $(this).data('role-count') + 1);
+    let roleCount = $(this).data('role-count');
+    $(this).detach();
+
+    let newRole = $($(this).data('target'))
+      .clone()
+      .attr('id', `role-${$(this).data('role-count')}`)
+      .removeClass('d-none');
+
+    newRole.find('.role-name').attr('id', `name-${roleCount}`).attr('name', `roles[${roleCount}][name]`);
+    newRole.find('.role-name-label').attr('for', `name-${roleCount}`);
+    newRole.find('.role-category').attr('id', `category-${roleCount}`).attr('name', `roles[${roleCount}][category]`);
+    newRole.find('.role-category-label').attr('for', `category-${roleCount}`);
+    newRole.find('.role-description').attr('id', `description-${roleCount}`).attr('name', `roles[${roleCount}][description]`);
+    newRole.find('.role-description-label').attr('for', `description-${roleCount}`);
+    newRole.find('.removeRole').on('click', removeRole);
+
+    $('.role-container').last().after(newRole);
+    newRole.find('.role-btns').append($(this));
+    disableRemoveIfNecessary();
   });
 
-  $('#addRole').click()
-  //todo put addrole button within a role-container
-  //keep count of # of roles at any one time inside data-number-of-roles/some data attribute OR
-  //just add to the data attribute (keep inside addRole button) - use this to define new ID/for
-  //for created form elements
-  //make form submissions work
-  //make form submission through ajax
+  //new post button at top
 });
 
 window.addEventListener("turbolinks:load", function() {

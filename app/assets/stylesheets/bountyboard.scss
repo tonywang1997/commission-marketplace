@@ -56,7 +56,7 @@
     max-width: none;
   }
 
-  &.btn {
+  &.fav-btn {
     background-color: transparent;
     color: #ff6363;
     opacity: .75;
@@ -164,6 +164,20 @@
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  &.btn.role-btn {
+    min-width: 120px;
+    flex-grow: 1;
+  }
+
+  &.removeRole {
+    border-color: transparent;
+    background-color: #dc3545e3;
+
+    &:hover, &:focus, &:active {
+      background-color: #dc3545;
+    }
   }
 
   &.navbar-padding {
