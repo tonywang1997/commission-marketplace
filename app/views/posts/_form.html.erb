@@ -1,5 +1,87 @@
-<%= simple_form_for @post do |sub| %>
-  <%= sub.input :title %>
-  <%= sub.input :content %>
-  <%= sub.submit %>
+<%= form_with(model: @post, local: true) do |f| %>
+  <div class="form-group">
+    <h2 class="bounty-board headline mb-2"><%= f.label(:title, class: 'm-0') %></h2>
+    <%= f.text_field(:title, class: 'dark-text-input form-control m-0') %> 
+  </div>
+
+  <div class="bounty-board container red px-4 px-md-5 py-3 my-4">
+    <h3 class="bounty-board headline">Summary</h3>
+
+    <div class="form-group">
+      <h4 class="bounty-board mb-2"><%= f.label(:price, "Price", class: 'm-0') %></h4>
+      <div class="input-group w-100">
+        <div class="input-group-prepend" data-target="#post_price">
+          <div class="dark-input-group-text input-group-text px-2" style="cursor:pointer;">
+            <%= material_icon.monetization_on %>
+          </div>
+        </div>
+        <%= f.number_field(:price, in: 0..Float::INFINITY, step: 0.5, class: 'dark-text-input form-control mb-0', id: 'post_price') %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <h4 class="bounty-board mb-2"><%= f.label(:deadline, "Deadline", class: 'm-0') %></h4>
+      <%= f.date_field(:deadline, class: 'form-control dark-text-input', id: 'bounty-board-deadline', selected: 7.days.from_now, min: Date.today) %>
+    </div>
+    
+    <% if false %>
+    <div class="form-group">
+      <h4 class="bounty-board mb-2"><%= f.label(:deadline, "Deadline", class: 'm-0') %></h4>
+      <div class="input-group date" id="bounty-board-deadline" data-target-input="nearest">
+        <input type="text" class="dark-text-input form-control datetimepicker-input" data-target="#bounty-board-deadline" data-toggle="datetimepicker" id="post_deadline" name="post[deadline]" />
+        <div class="input-group-append" data-target="#bounty-board-deadline" data-toggle="datetimepicker">
+            <div class="bounty-board dark-input-group-text input-group-text"><i class="fa fa-calendar"></i></div>
+        </div>
+      </div>
+    </div>
+    <% end %>
+
+  </div>
+  
+  <div class="bounty-board container yellow px-4 px-md-5 py-3 my-4">
+    <div class="form-group">
+      <h3 class="headline bounty-board mb-2"><%= f.label(:content, "Details", class: 'mb-0') %></h3>
+      <%= f.text_area(:content, class: 'textarea-autoresize dark-text-input form-control') %>
+    </div>
+  </div>
+
+  <h2 class="headline bounty-board mb-n3">Roles</h2>
+
+  <%= render partial: 'roles/form', locals: { 
+    display: false, 
+    show_errors: false, 
+    show_add: false,
+    role_num: 'template', 
+    role_name: '', 
+    role_category: '', 
+    role_description: '',
+  } %>
+
+  <% if params[:roles] %>
+    <% params[:roles].keys.each_with_index do |role_num, idx| %>
+      <% if role_num.to_i.to_s == role_num # role_num is not integer (template) %>
+        <%= render partial: 'roles/form', locals: {
+          display: true,
+          show_errors: true,
+          show_add: idx == params[:roles].keys.size - 1,
+          role_num: role_num,
+          role_name: params[:roles][role_num][:name],
+          role_category: params[:roles][role_num][:category],
+          role_description: params[:roles][role_num][:description],
+        } %>
+      <% end %>
+    <% end %>
+  <% else %>
+    <%= render partial: 'roles/form', locals: {
+      display: true, 
+      show_errors: false, 
+      show_add: true,
+      role_num: 0, 
+      role_name: '', 
+      role_category: '', 
+      role_description: '',
+    } %>
+  <% end %>
+
+  <%= f.submit class: 'btn btn-primary' %>
 <% end %>

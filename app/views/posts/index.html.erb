@@ -1,12 +1,14 @@
 <h1 class="mb-4">Bounty Board</h1>
 
+<%= button_to "New Post", { :action => "new" }, :method => :get, class: 'btn btn-primary px-5 mb-4 w-auto' %>
+
 <div class="bounty-board">
   <% @posts.each do |post| %>
     <div class="bounty-board navbar-padding" id="post-<%= post.id %>"></div>
     <div class="bounty-board bg-image">
       <div class="bounty-board container yellow px-4 px-md-5 py-3 my-4">
         <div class="bounty-board headline">
-          <button class="bounty-board btn">
+          <button class="bounty-board btn fav-btn">
             <%= material_icon.favorite_border %>
           </button>
           <h3 class="bounty-board title">
@@ -51,6 +53,5 @@
     </div>
   <% end %>
 </div>
-<%= link_to "New Post", new_post_path %>
 
 

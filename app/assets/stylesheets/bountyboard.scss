@@ -56,7 +56,7 @@
     max-width: none;
   }
 
-  &.btn {
+  &.fav-btn {
     background-color: transparent;
     color: #ff6363;
     opacity: .75;
@@ -166,10 +166,28 @@
     justify-content: center;
   }
 
+  &.btn.role-btn {
+    min-width: 120px;
+    flex-grow: 1;
+  }
+
+  &.removeRole {
+    border-color: transparent;
+    background-color: #dc3545e3;
+
+    &:hover, &:focus, &:active {
+      background-color: #dc3545;
+    }
+  }
+
   &.navbar-padding {
     height: 2rem;
     margin-top: -3.5rem;
   }
+}
+
+h4.bounty-board {
+  color: rgba(255, 255, 255, 0.5);
 }
 
 p.bounty-board {
