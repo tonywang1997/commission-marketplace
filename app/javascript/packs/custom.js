@@ -64,6 +64,8 @@ document.addEventListener("turbolinks:load", function() {
     disableRemoveIfNecessary();
   });
 
+  disableRemoveIfNecessary();
+  $('.removeRole').on('click', removeRole);
   //new post button at top
 });
 
