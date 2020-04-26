@@ -1,7 +1,7 @@
 class Image < ApplicationRecord
   has_many :has_images
   has_many :fav_images
-  has_many :favorites, through: :fav_images
+  has_many :favorited_by, through: :fav_images, source: :user
   has_many :portfolios, through: :has_images
   has_one_attached :file, dependent: :purge
 
