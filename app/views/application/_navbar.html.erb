@@ -1,13 +1,13 @@
 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContents" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 <span class="navbar-toggler-icon"></span>
 </button>
-<div class="collapse navbar-collapse justify-content-between" id="navbarContents">
-  <ul class="navbar-nav text-nowrap mt-2">
-    <li class="nav-item"><%= link_to 'Comm. Market', root_url, class: 'nav-link btn-block' %></li>
-    <li class="nav-item"><%= link_to 'Bounty Board', posts_path, class: 'nav-link btn-block' %></li>
-  </ul>
+<ul class="navbar-nav text-nowrap flex-row">
+  <li class="nav-item mx-2 mx-sm-0"><%= link_to 'Comm. Market', root_url, class: 'nav-link btn-block' %></li>
+  <li class="nav-item mx-2 mx-sm-0"><%= link_to 'Bounty Board', posts_path, class: 'nav-link btn-block' %></li>
+</ul>
 
-  <ul class="navbar-nav text-nowrap">
+<div class="collapse navbar-collapse flex-grow-0" id="navbarContents">
+  <ul class="navbar-nav text-nowrap mt-2 mt-sm-0">
     <% if logged_in? %>
       <li class="nav-item"><%= link_to "Hi, #{current_user.user_name}!", dashboard_url, class: 'nav-link btn-block' %></li>
 
