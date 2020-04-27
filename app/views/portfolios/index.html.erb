@@ -12,12 +12,12 @@
     </div>  
 
     <div class="profile-info">
-        <div style="flex">
+        <div style="display: flex">
           <div class="username">
             <%= @user.user_name %>
           </div>
-          <%= link_to "Send Message", "#", 
-            class: "btn btn-success btn-xs start-conversation",
+          <%= link_to fa_icon("comments lg"), "#", 
+            class: "start-conversation",
             data: {
               sid: current_user.id,
               rip: @user.id,

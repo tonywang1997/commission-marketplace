@@ -13,8 +13,7 @@ class MessagesController < ApplicationController
   	if @message.save
   		ActionCable.server.broadcast 'room_channel',
   		                             content: @message.content,
-  		                             sender_id: @message.sender_id,
-  		                             receiver_id: @message.receiver_id
+  		                             sname: params[:message][:sname]
   	end
   end
 

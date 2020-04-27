@@ -16,7 +16,7 @@
   <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 mx-n2 mt-1">
     <% @hidden_images.each do |img| %>
       <% if img.file.attached? %>
-        <%= link_to(@image_portfolios[img[:id]] ? portfolio_path(@image_portfolios[img[:id]].first) : '#',
+        <%= link_to(@image_portfolios[img[:id]] ? portfolio_path(@image_portfolios[img[:id]].first, img_id: img[:id]) : '#',
           class: 'col-view img-wrapper my-3 btn-block position-relative', 
           id: "img-#{img[:id]}",
           data: {
@@ -44,7 +44,7 @@
 
     <% @images.each_with_index do |img, idx| %>
       <% if img.file.attached? %>
-        <%= link_to(@image_portfolios[img[:id]] ? portfolio_path(@image_portfolios[img[:id]].first) : '#',
+        <%= link_to(@image_portfolios[img[:id]] ? portfolio_path(@image_portfolios[img[:id]].first, img_id: img[:id]) : '#',
           class: 'col-view img-wrapper my-3 btn-block position-relative', 
           id: "img-#{img[:id]}",
           data: {

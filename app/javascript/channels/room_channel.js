@@ -15,10 +15,9 @@ consumer.subscriptions.create("RoomChannel", {
   received(data) {
     // Called when there's incoming data on the websocket for this channel
     console.log("data received")
-    var sender = $('.start-conversation').data('sname');
     $('#messages-table').append(
       '<div class="message">' +
-      sender + ":" + data.content + 
+      data.sname + ":" + data.content + 
       '</div>')
   	console.log(data)
   }

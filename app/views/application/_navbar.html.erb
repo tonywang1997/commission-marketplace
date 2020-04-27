@@ -9,7 +9,11 @@
   <ul class="navbar-nav w-100 text-nowrap">
     <% if logged_in? %>
       <li class="nav-item"><%= link_to "Hi, #{current_user.user_name}!", dashboard_url, class: 'nav-link btn-block' %></li>
-      <li class="nav-item"><%= link_to "Storefront", "/storefront/#{current_user.id}", class: 'nav-link btn-block' %></li>
+
+      <li class="nav-item"><%= link_to "Storefront", 
+          "/storefront?user_id=#{current_user.id}", 
+          class: 'nav-link btn-block' %>
+      </li>
       <li class="nav-item"><%= link_to 'Logout', logout_url, method: :delete, remote: true, class: 'nav-link btn-block' %></li>
     <% else %>
       <li class="nav-item"><%= link_to 'Login', login_url, class: 'nav-link btn-block', remote: true %></li>
