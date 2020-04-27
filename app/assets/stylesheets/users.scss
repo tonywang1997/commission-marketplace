@@ -89,5 +89,12 @@ img#profile-img {
   background: #34404f;
 }
 
+.portfolio-panel {
+  border: none;
+}
+
+.portfolio-panel:hover {
+  box-shadow: 0 0 10px grey;
+}
 
 

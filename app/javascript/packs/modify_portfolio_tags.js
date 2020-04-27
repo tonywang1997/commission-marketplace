@@ -1,9 +1,10 @@
-var tags = ["3D", "Adoptables", "Animation", "Anime and Manga", "Artisan Crafts",
-        "Comics", "Cosplay", "Customization", "Digital Art", "Drawings and Paintings",
-        "Emoji and Emotion", "Fan Art", "Fan Fiction", "Fantasy", "Fractal", "Game Art",
-        "Horror", "Kinky", "Literature", "Nude Art", "Photo Manipulation", "Photography",
-        "Pixel Art", "Poetry", "Resources", "Science Fiction", "Sculpture", "Street Art",
-        "Street Photography", "Traditional Art", "Tutorials", "Wallpaper"];
+var tags =  
+["half-body", "full-body", "icon", "headshot", 
+ "bust", "portrait", "chibi", "realistic", "painterly", 
+ "cel", "anime", "manga", "shade", "sketch", "line", 
+ "base-color", "bright", "dark", "background", 
+ "landscape", "fanart", "oc", "character", "boy", "girl",
+ "animation", "drawings", "paintings"];
 
 $(document).on("change", "#img-input", function(event) {
     // clear previous uploaded images
@@ -68,7 +69,8 @@ $(document).on('click', '.add_tag', function(event) {
        <input type="text" \
        class="tag-input" \
        name="portfolio[tags_attributes][${id}][tag_name]" \
-       id="portfolio_tags_attributes_${id}_tag_name"> \
+       id="portfolio_tags_attributes_${id}_tag_name"
+       required="required"> \
        <a class="remove_tag" href="#"><i class="fa fa-minus-square fa-lg"></i></a>\
     </fieldset>`
   $(this).before(tag_input);

@@ -4,7 +4,7 @@
 </div>
 <hr>
 <% @portfolios.each do |portfolio| %>
-	<div class="panel panel-default border">
+	<div class="panel panel-default portfolio-panel">
 		<%= render partial: '/users/portfolio', 
 		    locals: {portfolio: portfolio} %>
 	</div>
