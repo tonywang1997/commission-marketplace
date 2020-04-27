@@ -20,7 +20,7 @@
             </h3>
           </div>
         </div>
-        <p class="bounty-board by">posted by <%= link_to post.user.user_name, "/storefront/#{post.user.id}", class: 'bounty-board' %> on <%= post.created_at.to_date.to_s %></p>
+        <p class="bounty-board by">posted by <%= link_to post.user.user_name, "/storefront?user_id=#{post.user.id}", class: 'bounty-board', data: {turbolinks: "false"} %> on <%= post.created_at.to_date.to_s %></p>
         <p class="bounty-board content truncate mb-2"><%= post.content %></p>
         <!-- roles -->
         <% roles = roles_to_hash(post.roles) %>
