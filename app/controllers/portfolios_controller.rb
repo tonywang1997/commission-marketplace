@@ -19,9 +19,6 @@ class PortfoliosController < ApplicationController
     img_id = params[:img_id].to_i
     # puts the img_id in the first of portfolio images
     target_idx = find_target_idx(@images, img_id)
-    puts "#*********debugging**********"
-    puts @images.length
-    puts target_idx
     # swap the first with img_idx
     @images = @images.to_a
     @images[0], @images[target_idx] = @images[target_idx], @images[0]

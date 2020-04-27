@@ -14,6 +14,11 @@
 </div>
 
 <div class="chatboxcontent" id="messages-table">
+  <% Message.order({ created_at: :asc }).limit(10).each do |msg|%>
+    <div class="message">
+      <%= "#{msg.sname}:#{msg.content}" %>
+    </div>
+  <% end %>
 </div>
 <div class="chatboxinput">
   <%= form_for(@message, :remote => true) do |f| %>
