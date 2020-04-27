@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
-  get 'messages/index'
-  get 'messages/create'
+  get 'roles/new'
   resources :tags
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   root 'application#home'
@@ -32,6 +31,11 @@ Rails.application.routes.draw do
   get '/conversation', to: 'messages#index'
 
   mount ActionCable.server, at: '/cable'
+
+  resources :images do
+    put :favorite, on: :member
+  end
+
 end
 
 

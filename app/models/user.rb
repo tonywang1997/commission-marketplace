@@ -6,7 +6,8 @@ class User < ApplicationRecord
 
   has_many :portfolios
   has_many :posts
-  has_many :favorites
+  has_many :fav_images
+  has_many :favorites, through: :fav_images, source: :image
   
   # a user has one avatar image
   has_one_attached :avatar
@@ -25,6 +26,11 @@ class User < ApplicationRecord
     format: { with: VALID_EMAIL_REGEX },
     uniqueness: true
 
+  validates :password,
+    presence: true,
+    length: { minimum: 6 },
+    if: :password_validation_required?
+
   has_secure_password
 
   # Returns the hash digest of the given string.
@@ -32,5 +38,9 @@ class User < ApplicationRecord
     cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST :
                                                   BCrypt::Engine.cost
     BCrypt::Password.create(string, cost: cost)
+  end
+
+  def password_validation_required?
+    self.password_digest.blank? or !(self.password.nil? or self.password.empty?)
   end
 end

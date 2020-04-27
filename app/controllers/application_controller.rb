@@ -10,8 +10,8 @@ class ApplicationController < ActionController::Base
     action_start = Process.clock_gettime(Process::CLOCK_MONOTONIC)
     @sort = (sort_options.include? params[:sort].downcase) ? params[:sort].downcase : 'none'
     @dir = (dir_options.include? params[:dir].downcase) ? params[:dir].downcase : 'asc'
-    @tags = session[:tags]
-    @price_range = session[:price_range]
+    @tags = params[:tags]
+    @price_range = params[:price_range]
     @image_tags = Image.tags
     @image_portfolios = Image.portfolios
 
@@ -109,41 +109,46 @@ class ApplicationController < ActionController::Base
   private
 
     def set_session_params
-      params[:sort] ||= (session[:sort] ||= 'none')
-      session[:sort] = params[:sort]
+      params[:sort] ||= 'none'
+      # params[:sort] ||= (session[:sort] ||= 'none')
+      # session[:sort] = params[:sort]
 
-      params[:dir] ||= (session[:dir] ||= 'asc')
-      session[:dir] = params[:dir]
+      params[:dir] ||= 'asc'
+      # params[:dir] ||= (session[:dir] ||= 'asc')
+      # session[:dir] = params[:dir]
 
-      params[:search] ||= (session[:search] ||= '')
-      session[:search] = params[:search]
-      session[:tags] = []
-      session[:price_range] = []
+      params[:search] ||= ''
+      params[:tags] = []
+      params[:price_range] = []
+      # params[:search] ||= (session[:search] ||= '')
+      # session[:search] = params[:search]
+      # session[:tags] = []
+      # session[:price_range] = []
 
       price_range_regex = /\A\$?(\d*(?:\.\d*)?)-\$?(\d*(?:\.\d*)?)\Z/
       params[:search].split(' ').each do |tag|
         md = price_range_regex.match tag
-        if md and session[:price_range].empty?
+        if md and params[:price_range].empty?
           # lower limit
           if md.captures[0] == ''
-            session[:price_range].push(0)
+            params[:price_range].push(0)
           else
-            session[:price_range].push(md.captures[0].to_f)
+            params[:price_range].push(md.captures[0].to_f)
           end
           # upper limit
           if md.captures[1] == ''
-            session[:price_range].push(Float::INFINITY)
+            params[:price_range].push(Float::INFINITY)
           else
-            session[:price_range].push(md.captures[1].to_f)
+            params[:price_range].push(md.captures[1].to_f)
           end
         else
-          session[:tags] |= [tag.downcase]
+          params[:tags] |= [tag.downcase]
         end
       end
 
       puts '*****'
-      p session[:tags]
-      p session[:price_range]
+      p params[:tags]
+      p params[:price_range]
       puts '*****'
     end
 

@@ -14,6 +14,7 @@ class PostsController < ApplicationController
 
   def create
     @post = current_user.posts.build(post_params)
+    @post.roles = post_roles
 
     if @post.save
       redirect_to @post
@@ -46,7 +47,24 @@ class PostsController < ApplicationController
   private
 
   def post_params
-   params.require(:post).permit(:title, :content)
+    params.require(:post).permit(:title, :deadline, :price, :content)
+  end
+
+  def post_roles
+    roles = []
+    if params[:roles]
+      params[:roles].keys.each do |key|
+        if key.to_i.to_s == key
+          role_info = params[:roles][key]
+          roles.push(Role.new({
+            category: role_info[:category],
+            name: role_info[:name],
+            description: role_info[:description],
+          }))
+        end
+      end
+    end
+    roles
   end
 
   def find_post

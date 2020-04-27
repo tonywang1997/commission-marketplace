@@ -60,7 +60,7 @@ class UsersController < ApplicationController
   def avatar
     @user = current_user
     @user.avatar.attach(params[:user][:avatar])
-    if @user.save
+    if @user.avatar.attached?
       head 200, content_type: "text/html"
     else
       render @user.errors.full_messages, :status => 500
@@ -69,8 +69,7 @@ class UsersController < ApplicationController
 
   def biography
     @user = current_user
-    @user.biography = params[:user][:bio]
-    if @user.save
+    if @user.update({ biography: params[:user][:bio] })
       head 200, content_type: "text/html"
     else
       render @user.errors.full_messages, :status => 500
