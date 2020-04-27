@@ -6,7 +6,7 @@ class PortfoliosController < ApplicationController
   before_action :logged_in_user
   before_action :set_portfolio, only: [:show, :edit, :update, :destroy]
 
-  # /storefront/:user_id
+  # /storefront?user_id=1
   def index
     @user ||= User.find(params[:user_id])
   end
@@ -14,7 +14,18 @@ class PortfoliosController < ApplicationController
   # GET /portfolios/1
   # GET /portfolios/1.json
   def show
-    @portfolio = Portfolio.find(params[:id])
+    portfolio = Portfolio.find(params[:id])
+    @images = portfolio.images
+    img_id = params[:img_id].to_i
+    # puts the img_id in the first of portfolio images
+    target_idx = find_target_idx(@images, img_id)
+    puts "#*********debugging**********"
+    puts @images.length
+    puts target_idx
+    # swap the first with img_idx
+    @images = @images.to_a
+    @images[0], @images[target_idx] = @images[target_idx], @images[0]
+
   end
 
   # GET /submit
@@ -96,5 +107,14 @@ class PortfoliosController < ApplicationController
 
     def portfolio_files
       params.require(:portfolio).permit(files: [])
+    end
+
+    def find_target_idx(images, img_id)
+      images.each_with_index do |img, idx|
+        if img.id == img_id
+          return idx
+        end
+      end
+      return -1
     end
 end

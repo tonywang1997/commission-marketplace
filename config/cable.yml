@@ -1,10 +1,11 @@
 development:
-  adapter: async
+  adapter: redis
+  url: redis://localhost:6379/1
 
 test:
   adapter: test
 
 production:
   adapter: redis
-  url: <%= ENV.fetch("REDIS_URL") { "redis://localhost:6379/1" } %>
+  url: redis://redistogo:6f8b01f3bf6776a47613dbeca2ab159b@barb.redistogo.com:10154/
   channel_prefix: commission_marketplace_production

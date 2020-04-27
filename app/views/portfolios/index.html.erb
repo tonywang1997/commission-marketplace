@@ -12,9 +12,18 @@
     </div>  
 
     <div class="profile-info">
-        <div class="username">
-          <%= @user.user_name %>
+        <div style="display: flex">
+          <div class="username">
+            <%= @user.user_name %>
+          </div>
+          <%= link_to fa_icon("comments lg"), "#", 
+            class: "start-conversation",
+            data: {
+              sid: current_user.id,
+              rip: @user.id,
+              sname: current_user.user_name } %>
         </div>
+        
         <div class="email">
           <%= @user.email_address %>         
         </div>

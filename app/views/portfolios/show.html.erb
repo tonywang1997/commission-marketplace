@@ -4,23 +4,32 @@
       <div class="carousel-item row no-gutters active">
         <div class="col d-flex justify-content-center">
           <div class="show-image-container">
-            <%= image_tag(@portfolio.images[0].file, 
+            <%= image_tag(@images[0].file, 
              class: "show-image") %>
             <div class="show-overlay">
               <div class="show-info">
                 <%= simple_format("Price: #{number_to_currency(
-                 @portfolio.images[0].price)}\n
-                 Published: #{@portfolio.images[0].date}\n") %>
+                 @images[0].price)}\n
+                 Published: #{@images[0].date}\n") %>
               </div>  
             </div>
           </div>
         </div>
       </div>
-      <% @portfolio.images[1..-1].each do |img| %>
+      <% @images[1..-1].each do |img| %>
     	    <div class="carousel-item row no-gutters">
             <div class="col d-flex justify-content-center">
-            	<%= image_tag(img.file, style: 'width:auto; height:500px', 
-            	              class: "img-fluid") %>
+              <div class="show-image-container">
+                <%= image_tag(img.file, style: 'width:auto; height:500px',
+                 class: "show-image img-fluis") %>
+                <div class="show-overlay">
+                  <div class="show-info">
+                    <%= simple_format(
+                      "Price: #{number_to_currency(img.price)}\n
+                       Published: #{img.date}\n") %>
+                  </div>  
+                </div>
+              </div>
             </div>
           </div>
 		  <% end %>
@@ -58,7 +67,7 @@
           <div class="author_container" style="margin-bottom: 10px">
             <div>
             	<span>By</span>
-            	<a href=<%="/storefront/#{@portfolio.user.id}"%> 
+            	<a href=<%="/storefront?user_id=#{@portfolio.user.id}"%> 
             		 class='user_link_show'><%= @portfolio.user.user_name %></a>
             </div>
           </div>
