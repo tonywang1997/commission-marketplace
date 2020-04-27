@@ -6,7 +6,7 @@ class PortfoliosController < ApplicationController
   before_action :logged_in_user
   before_action :set_portfolio, only: [:show, :edit, :update, :destroy]
 
-  # /storefront/:user_id
+  # /storefront?user_id=1
   def index
     @user ||= User.find(params[:user_id])
   end
