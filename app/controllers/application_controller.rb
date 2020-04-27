@@ -4,19 +4,15 @@ require 'set'
 
 class ApplicationController < ActionController::Base
   include SessionsHelper
-  before_action :set_session_params, only: :home
+  before_action :set_variables, only: :home
 
   def home
     action_start = Process.clock_gettime(Process::CLOCK_MONOTONIC)
-    @sort = (sort_options.include? params[:sort].downcase) ? params[:sort].downcase : 'none'
-    @dir = (dir_options.include? params[:dir].downcase) ? params[:dir].downcase : 'asc'
-    @tags = params[:tags]
-    @price_range = params[:price_range]
     @image_tags = Image.tags
     @image_portfolios = Image.portfolios
 
     # sort by similarity
-    if params[:sim_sort] and params[:sim_sort].to_i.to_s == params[:sim_sort]
+    if @sim_sort and @sim_sort.to_i.to_s == @sim_sort
       # calculate matrix for comparison image
       # todo put analyzed attribute in image table
       puts '*****'
@@ -27,7 +23,7 @@ class ApplicationController < ActionController::Base
                 tagged(@tags).with_attached_file
       puts 'Retrieving comparison matrix:'
       start = Time.now
-      id_comp = params[:sim_sort].to_i
+      id_comp = @sim_sort.to_i
       image_comp = Image.find_by(id: id_comp)
       matrix_comp = nil
       if image_comp and image_comp.analyzed
@@ -95,7 +91,7 @@ class ApplicationController < ActionController::Base
                       tagged(@tags).with_attached_file.all.shuffle
     else
       @images = Image.in_price_range(@price_range).tagged(@tags).
-                      order(params[:sort] => @dir).with_attached_file.all
+                      order(@sort => @dir).with_attached_file.all
     end
 
     @hidden_images = Image.select(:id, :price, :date).where('images.id NOT IN (?)', @images.pluck(:id)).with_attached_file
@@ -108,52 +104,47 @@ class ApplicationController < ActionController::Base
 
   private
 
-    def set_session_params
-      params[:sort] ||= 'none'
-      # params[:sort] ||= (session[:sort] ||= 'none')
-      # session[:sort] = params[:sort]
+    def set_variables
+      @sort = params[:sort] || 'none'
+      @sort = (sort_options.include? @sort.downcase) ? @sort.downcase : 'none'
 
-      params[:dir] ||= 'asc'
-      # params[:dir] ||= (session[:dir] ||= 'asc')
-      # session[:dir] = params[:dir]
+      @dir = params[:dir] || 'asc'
+      @dir = (dir_options.include? @dir.downcase) ? @dir.downcase : 'asc'
 
-      params[:search] ||= ''
-      params[:tags] = []
-      params[:price_range] = []
-      # params[:search] ||= (session[:search] ||= '')
-      # session[:search] = params[:search]
-      # session[:tags] = []
-      # session[:price_range] = []
+      @search = params[:search] || ''
+      @sim_sort = params[:sim_sort]
+      @tags = []
+      @price_range = []
 
       price_range_regex = /\A\$?(\d*(?:\.\d*)?)-\$?(\d*(?:\.\d*)?)\Z/
-      params[:search].split(' ').each do |tag|
+      @search.split(' ').each do |tag|
         md = price_range_regex.match tag
-        if md and params[:price_range].empty?
+        if md and @price_range.empty?
           # lower limit
           if md.captures[0] == ''
-            params[:price_range].push(0)
+            @price_range.push(0)
           else
-            params[:price_range].push(md.captures[0].to_f)
+            @price_range.push(md.captures[0].to_f)
           end
           # upper limit
           if md.captures[1] == ''
-            params[:price_range].push(Float::INFINITY)
+            @price_range.push(Float::INFINITY)
           else
-            params[:price_range].push(md.captures[1].to_f)
+            @price_range.push(md.captures[1].to_f)
           end
         else
-          params[:tags] |= [tag.downcase]
+          @tags |= [tag.downcase]
         end
       end
 
       puts '*****'
-      p params[:tags]
-      p params[:price_range]
+      p @tags
+      p @price_range
       puts '*****'
     end
 
     def sort_options
-      ['none', 'date', 'price', 'sim']
+      ['none', 'date', 'price']
     end
     
     def dir_options

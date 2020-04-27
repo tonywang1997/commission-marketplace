@@ -1,0 +1,27 @@
+<% if img.file.attached? %>
+  <%= content_tag(:div, 
+    class: 'img-wrapper col-view my-3 btn-block position-relative',
+    id: "img-#{img[:id]}",
+    data: {
+      content: "",
+      html: true,
+      price: img[:price],
+      date: img[:date],
+      order: idx,
+    },
+    style: "line-height: 0; visibility: #{css_vis}; display: #{css_disp};") do %>
+    <div class="img-overlay">
+      <%= link_to('', @image_portfolios[img[:id]] ? portfolio_path(@image_portfolios[img[:id]].first) : '#', class: 'w-100 h-100')%>
+      <div>
+        <%= simple_format("#{number_to_currency(img[:price])}\n#{img[:date]}\n#{@image_tags[img[:id]] ? @image_tags[img[:id]].join(', ') : 'No tags found.'}") %>
+        <%= form_with(url: root_path, remote: true) do |f| %>
+          <%= f.hidden_field(:sim_sort, value: img[:id], id: "sim_sort_#{img[:id]}") %>
+          <%= f.button(:button, class: 'btn dark-btn w-100') do %>
+            <i class="material-icons md-18">search</i><span>Find similar images</span>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+    <%= image_tag(img.file, class: 'img-fluid', size: ("#{img.file.metadata[:width]}x#{img.file.metadata[:height]}" if img.file.analyzed?)) %>
+  <% end %>
+<% end %>

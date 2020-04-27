@@ -117,7 +117,7 @@ window.addEventListener("turbolinks:load", function() {
       }
     });
 
-    $('#sort-select').on('click', function(e) {
+    $('#sort-select').on('change', function(e) {
       if ($(this).val() == 'none') {
         $('.m-sort-dir').attr('disabled', 'disabled');
       } else {
