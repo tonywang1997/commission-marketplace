@@ -32,8 +32,8 @@
           <%= @user.email_address %>
           <button class="storefront-button">
             <img src="/store-solid.svg">
-            <a href=<%= "/storefront?user_id=#{@user.id}"%> 
-              style="margin-left:10px;">see my storefront</a> 
+            <a href='<%= "/storefront?user_id=#{@user.id}"%>' 
+              style="margin-left:10px;" data-turbolinks="false">see my storefront</a> 
           </button>
           
         </div>
