@@ -94,6 +94,7 @@ window.addEventListener("turbolinks:load", function() {
       col_heights.push(0)
     }
     $('.img-wrapper.col-view:visible')
+      .css('visibility', 'visible')
       .sort((a, b) => $(a).attr('data-order') - $(b).attr('data-order'))
       .each(function() {
         // append to shortest column
@@ -108,7 +109,7 @@ window.addEventListener("turbolinks:load", function() {
   }
 
   window.applySortButtonFuncs = function() {
-    $('input[type=radio].submit-form').on('change', function(e) {
+    $('input[type=radio].submit-form').on('click', function(e) {
       $(this).parent().siblings().removeClass('active');
       $(this).parent().addClass('active');
       if (Rails.fire($(this).closest('form')[0], 'submit')) {
@@ -116,8 +117,8 @@ window.addEventListener("turbolinks:load", function() {
       }
     });
 
-    $('#sort-select').on('change', function(e) {
-      if ($(this).val() == '') {
+    $('#sort-select').on('click', function(e) {
+      if ($(this).val() == 'none') {
         $('.m-sort-dir').attr('disabled', 'disabled');
       } else {
         $('.m-sort-dir').removeAttr('disabled');
