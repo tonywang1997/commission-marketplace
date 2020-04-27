@@ -16,11 +16,11 @@
     
     <div class="custom-control custom-radio align-middle my-1">
       <%= radio_button_tag('dir', 'asc', checked = (@dir == 'asc'), id: 'mSortAsc', disabled: (@sort == 'none'), class: 'custom-control-input m-sort-dir')%>
-      <%= f.label :mSortAsc, 'Ascending', class: 'custom-control-label ml-2' %>
+      <%= f.label :mSortAsc, 'Ascending', class: 'custom-control-label ml-2 pt-1' %>
     </div>
     <div class="custom-control custom-radio align-middle my-1">
       <%= radio_button_tag('dir', 'desc', checked = (@dir == 'desc'), id: 'mSortDesc', disabled: (@sort == 'none'), class: 'custom-control-input m-sort-dir') %>
-      <%= f.label :mSortDesc, 'Descending', class: 'custom-control-label ml-2' %>
+      <%= f.label :mSortDesc, 'Descending', class: 'custom-control-label ml-2 pt-1' %>
     </div>
   </div>
 

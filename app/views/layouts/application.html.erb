@@ -23,11 +23,11 @@
     </div>
 
     <header>
-        <nav class="navbar navbar-expand-sm fixed-top navbar-dark">
-          <div class="collapse navbar-collapse justify-content-between container" id="navbar">
-            <%= render 'navbar' %>
-          </div>
-        </nav>
+      <nav class="navbar navbar-expand-sm fixed-top navbar-dark">
+        <div class="container px-1" id="navbar">
+          <%= render 'navbar' %>
+        </div>
+      </nav>
     </header>
     <div class="container below-navbar">
       <% flash.each do |message_type, message| %>
