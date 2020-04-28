@@ -16,9 +16,6 @@ require("./custom")
 require("./modify_portfolio_tags")
 require("./chatbox")
 require("./message")
-require("moment");
-require("tempusdominus-bootstrap-4");
-
 
 
 // Uncomment to copy all static images under ../images to the output folder and reference
