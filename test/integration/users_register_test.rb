@@ -33,9 +33,9 @@ class UsersRegisterTest < ActionDispatch::IntegrationTest
     assert !!flash[:success]
   end
 
-  test 'redirect and modal appears' do
+  test 'redirect and flash appears' do
     get register_path
     assert_redirected_to root_path
-    assert flash[:misc_params][:show_register]
+    assert flash[:danger] = 'Please register.'
   end
 end
