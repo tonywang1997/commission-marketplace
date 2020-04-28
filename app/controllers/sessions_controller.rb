@@ -4,8 +4,7 @@ class SessionsController < ApplicationController
   def new
     respond_to do |format|
       format.html {
-        flash[:misc_params] = { show_login: true }
-        redirect_to root_url
+        redirect_to root_url, flash: { danger: "Please log in." }
       }
       format.js
     end

@@ -27,8 +27,7 @@ class UsersController < ApplicationController
   def new
     respond_to do |format|
       format.html {
-        flash[:misc_params] = { show_register: true }
-        redirect_to root_url
+        redirect_to root_url, flash: { danger: 'Please register.' }
       }
       format.js
     end
