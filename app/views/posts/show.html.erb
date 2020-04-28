@@ -15,7 +15,7 @@
         <div class="mx-2 mt-1 d-inline-block">
           <%= get_icon category %>
         </div>
-        <p class="my-0 mb-1 mt-0 mr-2">
+        <p class="my-0 mt-0 mr-2">
           <%= link_to(pluralize(@roles[category].count, category), "##{category}", class: 'bounty-board') %>
         </p>
       </div>

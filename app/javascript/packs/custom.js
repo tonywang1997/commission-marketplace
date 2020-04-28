@@ -27,9 +27,7 @@ document.addEventListener("turbolinks:load", function() {
   });
 
   function removeRole() {
-    let addRoleBtn = $('#addRole').detach();
     $(this).closest('.role-container').remove();
-    $('.role-container').last().find('.role-btns').append(addRoleBtn);
     disableRemoveIfNecessary();
   }
 
@@ -44,7 +42,6 @@ document.addEventListener("turbolinks:load", function() {
   $('#addRole').on('click', function() {
     $(this).data('role-count', $(this).data('role-count') + 1);
     let roleCount = $(this).data('role-count');
-    $(this).detach();
 
     let newRole = $($(this).data('target'))
       .clone()
@@ -60,7 +57,6 @@ document.addEventListener("turbolinks:load", function() {
     newRole.find('.removeRole').on('click', removeRole);
 
     $('.role-container').last().after(newRole);
-    newRole.find('.role-btns').append($(this));
     disableRemoveIfNecessary();
   });
 

@@ -1,4 +1,7 @@
 <div class="bounty-board container green role-container px-4 px-md-5 py-3 my-4 <%= 'd-none' if !display %>" id="role-<%= role_num %>">
+  <button type="button" class="btn bounty-board icon-btn removeRole">
+    <%= material_icon.indeterminate_check_box %>
+  </button>
   <div class="form-group <%= 'field_with_errors' if (show_errors && (role_category.nil? or role_category.empty?)) %>">
     <h4 class="bounty-board mb-2"><%= label_tag(:category, "Category", class: 'mb-0 role-category-label', for: "category-#{role_num}" ) %></h4>
     <select name='roles[<%= role_num %>][category]' class='dark-text-input form-control m-0 role-category' id='category-<%= role_num %>'>
@@ -17,16 +20,5 @@
   <div class="form-group <%= 'field_with_errors' if (show_errors && (role_description.nil? or role_description.empty?)) %>">
     <h4 class="bounty-board mb-2"><%= label_tag(:description, "Description", class: 'mb-0 role-description-label', for: "description-#{role_num}" ) %></h4>
     <%= text_area_tag(:description, role_description, class: 'textarea-autoresize dark-text-input form-control role-description', id: "description-#{role_num}", name: "roles[#{role_num}][description]" ) %>
-  </div>
-
-  <div class="d-flex justify-content-between mx-n2 role-btns">
-    <button type="button" class="btn bounty-board role-btn btn-danger m-2 removeRole">
-      Remove role
-    </button>
-    <% if show_add %>
-      <button type="button" class="btn bounty-board role-btn dark-btn m-2" id="addRole" data-target="#role-template" data-role-count="0">
-        Add a role
-      </button>
-    <% end %>
   </div>
 </div>
