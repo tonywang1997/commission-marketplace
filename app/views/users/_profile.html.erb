@@ -92,15 +92,19 @@
             src="https://assets.currencycloud.com/wp-content/uploads/2018/01/profile-placeholder.gif"  
             width="100" height="100">
           <% end %>
-          <div style="margin-top: 10px">
-            <%= f.file_field :avatar, id: "avatar-input", accept: "image/*",
-                class: "inputfiles", onchange: "loadAvatar(event)", 
-                style: "margin-top: 10px;"%>
+          <div style="margin-top: 10px; display: flex"> 
+            <div style="margin-top: 15px; margin-right: 10px">
+              upload new profile picture
+            </div>   
+            <div>
+              <%= f.file_field :avatar, id: "avatar-input", accept: "image/*",
+                  class: "inputfiles", onchange: "loadAvatar(event)", 
+                  style: "margin-top: 10px;"%>
 
-            <label for="avatar-input" style="color:black; margin-top: 10px">
-              <i class="material-icons" style="margin-top: 10px">add_a_photo</i>    
-            </label>
-            upload new profile picture
+              <label for="avatar-input" style="color:grey; margin-top: 10px">
+                <i class="material-icons">add_a_photo</i>    
+              </label>
+            </div> 
           </div>
         </div>
 
