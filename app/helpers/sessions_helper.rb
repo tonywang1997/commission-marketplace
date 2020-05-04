@@ -22,7 +22,7 @@ module SessionsHelper
     if logged_in_actions[params[:controller].to_sym] and 
       logged_in_actions[params[:controller].to_sym].include? params[:action].to_sym
       unless logged_in?
-        redirect_to login_url
+        redirect_back fallback_location: root_url, flash: { danger: 'Please log in.' }
       end
     end
   end
