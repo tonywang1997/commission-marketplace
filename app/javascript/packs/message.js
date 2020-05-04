@@ -19,9 +19,9 @@ var ready = function () {
 
     $(document).on('click', '.toggleChatBox', function (e) {
         e.preventDefault();
-  
+       
         var id = $(this).data('cid');
-        chatBox.toggleChatBoxGrowth(id);
+        chatBox.toggleChatBoxGrowth(0);
     });
 
     /**
