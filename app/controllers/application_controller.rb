@@ -4,94 +4,36 @@ require 'set'
 
 class ApplicationController < ActionController::Base
   include SessionsHelper
+  include ApplicationHelper
   before_action :set_variables, only: :home
 
   def home
-    action_start = Process.clock_gettime(Process::CLOCK_MONOTONIC)
-    @image_tags = Image.tags
-    @image_portfolios = Image.portfolios
-
     # sort by similarity
     if @sim_sort and @sim_sort.to_i.to_s == @sim_sort
-      # calculate matrix for comparison image
-      # todo put analyzed attribute in image table
-      puts '*****'
-      sort_start = Time.now
       @sort = nil
       @dir = nil
-      @images = Image.in_price_range(@price_range).
-                tagged(@tags).with_attached_file
-      puts 'Retrieving comparison matrix:'
-      start = Time.now
+      # todo keep existing filters (price range and tags)
+      # retrieve comparison matrix
       id_comp = @sim_sort.to_i
-      image_comp = Image.find_by(id: id_comp)
-      matrix_comp = nil
-      if image_comp and image_comp.analyzed
-        matrix_comp = MessagePack.unpack(image_comp.binary_matrix)
-      end
-
+      matrix_comp = get_matrix(id_comp)
+      # todo handle properly/disable button
+      raise "Failed to retrieve comparison matrix!" unless matrix_comp
       if matrix_comp
-        puts "\t#{id_comp}: #{matrix_comp.first[0..5]}"
-        puts "Retrieved comparison matrix in: #{Time.now - start} s."
-
         # split up db calls into smaller chunks
-        puts "Retrieving DB image matrices:"
-        start = Time.now
-        id_matrix_array = []
-        @images.pluck(:id).each_slice(50).each do |slice|
-          if (Process.clock_gettime(Process::CLOCK_MONOTONIC) - action_start) > 15
-            break
-          end
-          id_matrix_array += Image.where('images.id IN (?)', slice).pluck(:id, :binary_matrix)
-        end
-        puts "Retrieved DB image matrices in: #{Time.now - start} s."
-
+        matrices_db = get_matrices(id_comp, batch_size: 50, timeout: 15)
         # for each image, calculate its sim with comparison image and sum
-        puts "Unpacking DB image matrices:"
-        start = Time.now
-        sim_sums = {}
-        matrices_db = {}
-        id_matrix_array.each do |image_db_id, binary_matrix|
-          if image_db_id != id_comp and binary_matrix
-            matrix_db = MessagePack.unpack(binary_matrix)
-            puts "\t#{image_db_id}: #{matrix_db.first[0..5]}"
-            matrices_db[image_db_id] = matrix_db
-          end
-        end
-        puts "Unpacked DB image matrices in: #{Time.now - start} s."
-
-        puts "Calculating sim values:"
-        start = Time.now
-        matrices_db.keys.each do |image_db_id|
-          puts "\tAnalyzing #{image_db_id}"
-          matrix_db = matrices_db[image_db_id]
-          sim_sums[image_db_id] = Cv.new(matrix_db, matrix_comp).sim
-        end
-        sim_sums[id_comp] = 0
-        puts "Calculated sim values in: #{Time.now - start} s."
-        puts sim_sums
-
-        # sort by sum of similarity values
-        filtered_ids = sim_sums.keys.filter { |id| sim_sums[id] < 550000000 }
-        if filtered_ids.size < 5
-          filtered_ids = sim_sums.keys.min(5) { |a, b| sim_sums[a] <=> sim_sums[b] }
-        end
-        @images = @images.select(:id, :price, :date).
-          where('images.id IN (?)', filtered_ids).
-          sort do |a, b| 
-            (sim_sums[a.id] || Float::INFINITY) <=> (sim_sums[b.id] || Float::INFINITY)
-          end
-        puts "Completed similarity sort in #{Time.now - sort_start} s."
-        puts '*****'
-      else
-        puts "Failed to retrieve comparison matrix!"
+        sim_sums = calc_similarities(matrix_comp, matrices_db)
+        sim_sums[id_comp] = 0 # similarity with self is 0
+        # sort and filter by sum of similarity values
+        filtered_sim_sums = filter_hash(sim_sums, max_val: 550000000, min_size: 5)
+        @images = get_sorted_images(filtered_sim_sums, [:id, :price, :date])
       end
     elsif @sort == 'none'
-      @images = Image.in_price_range(@price_range).
-                      tagged(@tags).with_attached_file.all.shuffle
+      @images = Image.in_price_range(@price_range).tagged(@tags)
+                  .order("RANDOM()").with_attached_file
     else
-      @images = Image.in_price_range(@price_range).tagged(@tags).
-                      order(@sort => @dir).with_attached_file.all
+      @images = Image.in_price_range(@price_range).tagged(@tags)
+                  .order(@sort => @dir).with_attached_file
     end
 
     @hidden_images = Image.select(:id, :price, :date).where('images.id NOT IN (?)', @images.pluck(:id)).with_attached_file
@@ -102,9 +44,15 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # helper methods
+  # todo put these somewhere else - PORO?
+
   private
 
     def set_variables
+      @image_tags = Image.tags
+      @image_portfolios = Image.portfolios
+
       @sort = params[:sort] || 'none'
       @sort = (sort_options.include? @sort.downcase) ? @sort.downcase : 'none'
 
@@ -113,34 +61,9 @@ class ApplicationController < ActionController::Base
 
       @search = params[:search] || ''
       @sim_sort = params[:sim_sort]
-      @tags = []
-      @price_range = []
-
-      price_range_regex = /\A\$?(\d*(?:\.\d*)?)-\$?(\d*(?:\.\d*)?)\Z/
-      @search.split(' ').each do |tag|
-        md = price_range_regex.match tag
-        if md and @price_range.empty?
-          # lower limit
-          if md.captures[0] == ''
-            @price_range.push(0)
-          else
-            @price_range.push(md.captures[0].to_f)
-          end
-          # upper limit
-          if md.captures[1] == ''
-            @price_range.push(Float::INFINITY)
-          else
-            @price_range.push(md.captures[1].to_f)
-          end
-        else
-          @tags |= [tag.downcase]
-        end
-      end
-
-      puts '*****'
-      p @tags
-      p @price_range
-      puts '*****'
+      parsed = parse_search_string(@search)
+      @tags = parsed[:tags]
+      @price_range = parsed[:price_range]
     end
 
     def sort_options
@@ -151,43 +74,4 @@ class ApplicationController < ActionController::Base
       ['asc', 'desc']
     end
 
-    def sort_by(image_array, attribute, asc=true)
-      image_array.sort! do |x, y|
-        if asc
-          x[attribute.to_sym] <=> y[attribute.to_sym]
-        else
-          y[attribute.to_sym] <=> x[attribute.to_sym]
-        end
-      end
-
-      image_array
-    end
-
-    def create_placeholder
-      width = rand(3999) + 1
-      height = rand(3999) + 1
-      bg_color = "%06x" % (rand * 0xffffff)
-      return  { url: "https://via.placeholder.com/#{width}x#{height}/#{bg_color}/000000",
-                artist: "Artist_#{rand(4000)}",
-                portfolio: "Portfolio_#{rand(4000)}",
-                price: rand(4000),
-                width: width,
-                height: height,
-                date: Time.at(Time.now.to_f * rand).to_date,
-              }
-    end
-
-    def create_placeholder_array
-      # placeholders = []
-      # (0...100).each do |id|
-      #   ph = create_placeholder
-      #   ph[:id] = id
-      #   placeholders.push(ph)
-      # end
-      # File.open('app/assets/images/placeholders.txt', 'w') do |file|
-      #   file.write(placeholders.to_yaml)
-      # end
-      # placeholders
-      YAML.load(File.read('app/assets/images/placeholders.txt'))
-    end
 end

@@ -11,10 +11,11 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     @posts.save
   end
 
-  test "get post title" do
-    x = @posts.title
-    assert_response :success  
-  end
+
+  # test "get post title" do
+  #   x = @posts.title
+  #   assert_response :success
+  # end
 
   test "post title accuracy" do
     y = @posts.title
