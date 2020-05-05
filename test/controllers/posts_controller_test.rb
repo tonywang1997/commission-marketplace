@@ -13,7 +13,7 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
 
   test "get post title" do
     x = @posts.title
-    assert_response :success
+    assert_response :success  
   end
 
   test "post title accuracy" do

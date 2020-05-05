@@ -51,8 +51,7 @@ class PortfoliosControllerTest < ActionDispatch::IntegrationTest
     assert flash[:danger] = 'Please register.'
   end
 
-  test "logged-in user can post a portfolio
-        and get redirected to show" do  
+  test "logged-in user can post a portfolio" do  
     post login_url, params: { session: { user_name:  "aria",
                                          password:   "123456"} }
     assert_difference('Portfolio.count') do
@@ -72,6 +71,7 @@ class PortfoliosControllerTest < ActionDispatch::IntegrationTest
     end
     # puts Portfolio.last.images.length
     assert_redirected_to portfolio_url(Portfolio.last) 
+    assert flash[:notice] = 'Portfolio was successfully created.'
     delete logout_url
   end
 
