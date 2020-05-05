@@ -16,12 +16,14 @@
           <div class="username">
             <%= @user.user_name %>
           </div>
-          <%= link_to fa_icon("comments lg"), "#", 
-            class: "start-conversation",
-            data: {
-              sid: current_user.id,
-              rip: @user.id,
-              sname: current_user.user_name } %>
+          <% if logged_in? %>
+            <%= link_to fa_icon("comments lg"), "#", 
+              class: "start-conversation",
+              data: {
+                sid: current_user.id,
+                rip: @user.id,
+                sname: current_user.user_name } %>
+          <% end %>
         </div>
         
         <div class="email" style="margin-bottom: 10px">

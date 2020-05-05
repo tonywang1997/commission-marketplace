@@ -1,47 +1,49 @@
 <div class="portfolio_carousal">
-  <div id="myCarousel" class="carousel slide w-100">
-    <div class="carousel-inner w-100" role="listbox">
-      <div class="carousel-item row no-gutters active">
-        <div class="col d-flex justify-content-center">
-          <div class="show-image-container">
-            <%= image_tag(@images[0].file, 
-             class: "show-image") %>
-            <div class="show-overlay">
-              <div class="show-info">
-                <%= simple_format("Price: #{number_to_currency(
-                 @images[0].price)}\n
-                 Published: #{@images[0].date}\n") %>
-              </div>  
-            </div>
-          </div>
-        </div>
-      </div>
-      <% @images[1..-1].each do |img| %>
-    	    <div class="carousel-item row no-gutters">
-            <div class="col d-flex justify-content-center">
-              <div class="show-image-container">
-                <%= image_tag(img.file, style: 'width:auto; height:500px',
-                 class: "show-image img-fluis") %>
-                <div class="show-overlay">
-                  <div class="show-info">
-                    <%= simple_format(
-                      "Price: #{number_to_currency(img.price)}\n
-                       Published: #{img.date}\n") %>
-                  </div>  
-                </div>
+  <% if @images.length != 0 %>
+    <div id="myCarousel" class="carousel slide w-100">
+      <div class="carousel-inner w-100" role="listbox">
+        <div class="carousel-item row no-gutters active">
+          <div class="col d-flex justify-content-center">
+            <div class="show-image-container">
+              <%= image_tag(@images[0].file, 
+               class: "show-image") %>
+              <div class="show-overlay">
+                <div class="show-info">
+                  <%= simple_format("Price: #{number_to_currency(
+                   @images[0].price)}\n
+                   Published: #{@images[0].date}\n") %>
+                </div>  
               </div>
             </div>
           </div>
-		  <% end %>
-        
+        </div>
+        <% @images[1..-1].each do |img| %>
+      	    <div class="carousel-item row no-gutters">
+              <div class="col d-flex justify-content-center">
+                <div class="show-image-container">
+                  <%= image_tag(img.file, style: 'width:auto; height:500px',
+                   class: "show-image img-fluis") %>
+                  <div class="show-overlay">
+                    <div class="show-info">
+                      <%= simple_format(
+                        "Price: #{number_to_currency(img.price)}\n
+                         Published: #{img.date}\n") %>
+                    </div>  
+                  </div>
+                </div>
+              </div>
+            </div>
+  		  <% end %>
+          
+      </div>
+      <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
+      	<span class="_3g6BC _33ljh"><img src="/left-arrow.svg"></span>
+      </a>
+      <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
+          <span><img src="/right-arrow.svg"></span>
+      </a>
     </div>
-    <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
-    	<span class="_3g6BC _33ljh"><img src="/left-arrow.svg"></span>
-    </a>
-    <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
-        <span><img src="/right-arrow.svg"></span>
-    </a>
-  </div>
+  <% end %>
 </div>
 
 <div class="details_container">

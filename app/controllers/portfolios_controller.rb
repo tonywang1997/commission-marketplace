@@ -9,6 +9,10 @@ class PortfoliosController < ApplicationController
   # /storefront?user_id=1
   def index
     @user ||= User.find(params[:user_id])
+    # invalid user_id
+    if @user == nil
+      render "The user is not found", :status => 404
+    end
   end
 
   # GET /portfolios/1
@@ -16,13 +20,14 @@ class PortfoliosController < ApplicationController
   def show
     portfolio = Portfolio.find(params[:id])
     @images = portfolio.images
-    img_id = params[:img_id].to_i
-    # puts the img_id in the first of portfolio images
-    target_idx = find_target_idx(@images, img_id)
-    # swap the first with img_idx
-    @images = @images.to_a
-    @images[0], @images[target_idx] = @images[target_idx], @images[0]
-
+    if params[:img_id] != nil
+      img_id = params[:img_id].to_i
+      # puts the img_id in the first of portfolio images
+      target_idx = find_target_idx(@images, img_id)
+      # swap the first with img_idx
+      @images = @images.to_a
+      @images[0], @images[target_idx] = @images[target_idx], @images[0]
+    end
   end
 
   # GET /submit

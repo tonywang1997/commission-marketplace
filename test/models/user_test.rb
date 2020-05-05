@@ -88,13 +88,13 @@ class UserTest < ActiveSupport::TestCase
     assert_equal mixed_case_user_name.downcase, @user.reload.user_name
   end
 
-  # test 'password should be present (nonblank)' do
-  #   @user.password = @user.password_confirmation = ' ' * 6
-  #   assert_not @user.valid?
-  # end
+  test 'password should be present (nonblank)' do
+    @user.password = @user.password_confirmation = ' ' * 6
+    assert_not @user.valid?
+  end
 
-  # test 'password should be >= 6 characters' do
-  #   @user.password = @user.password_confirmation = 'a' * 5
-  #   assert_not @user.valid?
-  # end
+  test 'password should be >= 6 characters' do
+    @user.password = @user.password_confirmation = 'a' * 5
+    assert_not @user.valid?
+  end
 end

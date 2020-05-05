@@ -5,7 +5,7 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     @posts = Post.new(
       title: 'name',
       content: 'things inside',
-      user_id: '3'
+      user_id: '3',
       price: '100'
     )
     @posts.save

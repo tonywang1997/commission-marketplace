@@ -17,7 +17,7 @@ Rails.application.routes.draw do
   patch '/avatar', to: 'users#avatar'
   patch '/biography', to: 'users#biography'
 
-  resources :portfolios
+  resources :portfolios, only: [:index, :show, :new, :create]
   get '/submit', to: 'portfolios#new', as: :user_submit
   get '/storefront', to: 'portfolios#index'
 

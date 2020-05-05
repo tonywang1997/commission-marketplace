@@ -10,6 +10,12 @@ class Portfolio < ApplicationRecord
   # https://guides.rubyonrails.org/form_helpers.html#configuring-the-model
   accepts_nested_attributes_for :tags, allow_destroy: true
 
+  # do not allow dangling portfolios
+  validates :user_id, 
+    presence: true
+
+
+
   def files
     attached_files = []
     self.images.each do |img|
