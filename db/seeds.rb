@@ -9,6 +9,7 @@
 require 'faker'
 require 'activerecord-import'
 
+Message.destroy_all
 Post.destroy_all
 PostTag.destroy_all
 Role.destroy_all
@@ -29,7 +30,7 @@ users = []
 users_c = [:user_name, :email_address, :password_digest, :profile_thumbnail]
 
 portfolios = []
-portfolios_c = [:user_id, :description, :price_low, :price_high , :date_created]
+portfolios_c = [:user_id, :description, :title, :date_created]
 
 tags = []
 tags_c = [:tag_name]
@@ -102,8 +103,7 @@ User.all.each do |user|
     portfolios << {
       :user_id => user.id, 
       :description => Faker::ChuckNorris.fact, 
-      :price_low => 0,
-      :price_high => 0,
+      :title => "#{user.user_name}'s portfolio",
       :date_created => Time.at(Time.now.to_f * rand).to_date,
     }
   end
