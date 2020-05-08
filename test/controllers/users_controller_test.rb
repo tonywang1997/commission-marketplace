@@ -26,4 +26,10 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "logged out user cannot access dashboard" do
+    delete logout_url
+    get dashboard_url
+    assert_redirected_to root_url
+  end
+
 end

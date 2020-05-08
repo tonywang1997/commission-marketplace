@@ -12,6 +12,7 @@ require 'benchmark'
 
 Benchmark.bm(30) do |bm|
   bm.report("Destroy records in database:") do
+    Message.destroy_all
     Post.destroy_all
     PostTag.destroy_all
     Role.destroy_all
@@ -24,14 +25,15 @@ Benchmark.bm(30) do |bm|
     Portfolio.destroy_all
     HasImage.destroy_all
     HasTag.destroy_all
+    HasPost.destroy_all
     Faker::UniqueGenerator.clear
   end
 
   bm.report("Create users and tags:") do
     users = []
-    users_c = [:user_name, :email_address, :password_digest, :profile_thumbnail]
+    users_cols = [:user_name, :email_address, :password_digest, :profile_thumbnail]
     tags = []
-    tags_c = [:tag_name]
+    tags_cols = [:tag_name]
     tags_file_lines = File.open('db/seed_tags.txt').readlines.map(&:chomp)
     (0...25).to_a.each do |x|
       users << {
@@ -43,16 +45,15 @@ Benchmark.bm(30) do |bm|
 
       tags << { :tag_name => tags_file_lines[x] }
     end
-    User.import users_c, users, validate: false
-    Tag.import tags_c, tags, validate: false
+    res_users = User.import users_cols, users, validate: false
+    puts "ERROR in User import: #{res_users.failed_instances}" if res_users.failed_instances.any?
+    res_tags = Tag.import tags_cols, tags, validate: false
+    puts "ERROR in Tag import: #{res_tags.failed_instances}" if res_tags.failed_instances.any?
   end
 
   bm.report("Create images, attach files:") do
-    has_images = []
-    has_images_c = [:portfolio_id, :image_id]
     image_paths = Dir.glob('app/assets/images/**/*.png')
-    images_c = [:id, :price, :date, :binary_matrix]
-    image_prices = []
+    images_cols = [:id, :price, :date, :binary_matrix]
 
     image_paths.each do |path|
       image_info = Img.new(path).to_matrix
@@ -74,49 +75,41 @@ Benchmark.bm(30) do |bm|
         content_type: 'image/png',
       })
       if not image.file.attached?
-        puts "\t\t\tFailed to attach image #{File.basename(path)}"
+        puts "ERROR: Failed to attach image #{File.basename(path)}"
       elsif not image.save
-        puts "\t\t\tFailed to save image #{File.basename(path)}"
+        puts "ERROR: Failed to save image #{File.basename(path)}"
         image.file.purge
-      else
-        image_prices.push({
-          id: image.id,
-          price: price,
-        })
       end
     end
   end
 
   bm.report("Create portfolios:") do
     portfolios = []
-    portfolios_c = [:user_id, :title, :description, :date_created]
+    portfolios_cols = [:user_id, :title, :description, :date_created]
     User.all.each do |user|
       num_ports = rand(5)
-      num_ports.times do
+      (1..num_ports).to_a.each do |port_num|
         portfolios << {
           :user_id => user.id, 
-          :title => Faker::Kpop.girl_groups,
+          :title => "#{user.user_name}'s portfolio #{port_num}",
           :description => Faker::ChuckNorris.fact, 
           :date_created => Time.at(Time.now.to_f * rand).to_date,
         }
       end
     end
-    Portfolio.import portfolios_c, portfolios, validate: false
+    res_ports = Portfolio.import portfolios_cols, portfolios, validate: false
+    puts "ERROR in Portfolio import: #{res_ports.failed_instances}" if res_ports.failed_instances.any?
   end
 
-  bm.report("Create HasImage and HasTag relationships:") do
+  bm.report("Create HasImages, HasTags:") do
+    has_images = []
+    has_images_cols = [:portfolio_id, :image_id]
     has_tags = []
-    has_tags_c = [:portfolio_id, :tag_id]
-    Portfolio.all.each do |portfolio|
-      images_sample = image_prices.sample(rand(10) + 1)
-      minmax = images_sample.minmax do |a, b|
-        a[:price] <=> b[:price]
-      end
-      portfolio.price_low = minmax[0][:price]
-      portfolio.price_high = minmax[1][:price]
-      portfolio.save
+    has_tags_cols = [:portfolio_id, :tag_id]
 
-      images_sample.each do |image|
+    Portfolio.all.each do |portfolio|
+      images = Image.all.sample(rand(10) + 1)
+      images.each do |image|
         has_images << {
           :portfolio_id => portfolio.id,
           :image_id => image[:id],
@@ -131,13 +124,17 @@ Benchmark.bm(30) do |bm|
         }
       end
     end
-    HasImage.import has_images_c, has_images, validate: false
-    HasTag.import has_tags_c, has_tags, validate: false
+
+    res_hasimages = HasImage.import has_images_cols, has_images, validate: false
+    puts "ERROR in HasImage import: #{res_hasimages.failed_instances}" if res_hasimages.failed_instances.any?
+    res_hastags = HasTag.import has_tags_cols, has_tags, validate: false
+    puts "ERROR in HasTag import: #{res_hastags.failed_instances}" if res_hastags.failed_instances.any?
   end
 
   bm.report("Create bounty board posts:") do
     posts = []
-    posts_c = [:title, :content, :price, :deadline, :user_id]
+    posts_cols = [:title, :content, :price, :deadline, :user_id]
+
     User.all.each do |u|
       rand(5).times do # 0 to 4 posts per user
         verbs = ['Draw', 'Sketch', 'Paint']
@@ -164,12 +161,13 @@ Benchmark.bm(30) do |bm|
         })
       end
     end
-    Post.import posts_c, posts, validate: false
+    res_posts = Post.import posts_cols, posts, validate: false
+    puts "ERROR in Post import: #{res_posts.failed_instances}" if res_posts.failed_instances.any?
   end
 
   bm.report("Add tags and roles to posts:") do
     posttags = []
-    posttags_c = [:post_id, :tag_id]
+    posttags_cols = [:post_id, :tag_id]
     Post.all.each do |p|
       p.tags = Tag.all.sample(rand(8) + 1) # 1 to 8 tags
 
@@ -185,19 +183,15 @@ Benchmark.bm(30) do |bm|
         p.roles = roles
       end
     end
-    puts "Added tags and roles to posts."
+  end
 
-    puts "Creating test user..."
+  bm.report("Create test user:") do
     u = User.new({
       user_name: 'testuser',
       email_address: 'testuser@test.com',
       password: '123456',
       password_confirmation: '123456',
     })
-    if u.save
-      puts "Created test user."
-    else
-      puts "Error(s) creating test user: ", u.errors.messages
-    end
+    puts "ERROR creating test user: ", u.errors.messages unless u.save
   end
 end

@@ -11,10 +11,8 @@ class Portfolio < ApplicationRecord
   accepts_nested_attributes_for :tags, allow_destroy: true
 
   # do not allow dangling portfolios
-  validates :user_id, 
-    presence: true
-
-
+  validates :user_id, presence: true
+  validates :title, presence: true
 
   def files
     attached_files = []
