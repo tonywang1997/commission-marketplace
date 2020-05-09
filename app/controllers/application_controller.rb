@@ -15,25 +15,20 @@ class ApplicationController < ActionController::Base
       # todo keep existing filters (price range and tags)
       # retrieve comparison matrix
       id_comp = @sim_sort.to_i
-      matrix_comp = get_matrix(id_comp)
-      # todo handle properly/disable button
+      matrices = get_matrices(batch_size: 50, timeout: 15)
+      matrix_comp = matrices.delete(id_comp)
+      # todo handle properly and disable button
       raise "Failed to retrieve comparison matrix!" unless matrix_comp
       if matrix_comp
-        # split up db calls into smaller chunks
-        matrices_db = get_matrices(id_comp, batch_size: 50, timeout: 15)
-        # for each image, calculate its sim with comparison image and sum
-        sim_sums = calc_similarities(matrix_comp, matrices_db)
+        sim_sums = calc_similarities(matrix_comp, matrices) # for each image, calculate its sim with comparison image and sum
         sim_sums[id_comp] = 0 # similarity with self is 0
-        # sort and filter by sum of similarity values
-        filtered_sim_sums = filter_hash(sim_sums, max_val: 550000000, min_size: 5)
-        @images = get_sorted_images(filtered_sim_sums, [:id, :price, :date])
+        filtered_sim_sums = filter_hash(sim_sums, max_val: 550000000, min_size: 5) # filter by sum of similarity values
+        @images = get_sorted_images(filtered_sim_sums, [:id, :price, :date]) # sort filtered images
       end
     elsif @sort == 'none'
-      @images = Image.in_price_range(@price_range).tagged(@tags)
-                  .order("RANDOM()").with_attached_file
+      @images = Image.in_price_range(@price_range).tagged(@tags).order("RANDOM()").with_attached_file
     else
-      @images = Image.in_price_range(@price_range).tagged(@tags)
-                  .order(@sort => @dir).with_attached_file
+      @images = Image.in_price_range(@price_range).tagged(@tags).order(@sort => @dir).with_attached_file
     end
 
     @hidden_images = Image.select(:id, :price, :date).where('images.id NOT IN (?)', @images.pluck(:id)).with_attached_file

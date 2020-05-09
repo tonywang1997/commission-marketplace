@@ -29,22 +29,15 @@ module ApplicationHelper
     {tags: tags, price_range: price_range}
   end
 
-  # retrieve and unpack matrix from ID
-  # nil if doesn't exist OR not analyzed yet
-  def get_matrix id
-    image = Image.find_by(id: id)
-    matrix = nil
-    if image and image.analyzed
-      matrix = MessagePack.unpack(image.binary_matrix)
-    end
-    matrix
-  end
-
-  def get_matrices except_id, opts={}
+  def get_matrices opts={}
+    exclude = opts[:exclude] || false
+    ids = opts[:ids]
     timeout = opts[:timeout] || 30
+    batch_size = opts[:batch_size] || 50
+    
     start = Process.clock_gettime(Process::CLOCK_MONOTONIC)
     matrices = {}
-    Image.where('images.id <> ?', except_id).in_batches(of: opts[:batch_size]) do |image_batch|
+    Image.with_ids(exclude, ids).in_batches(of: batch_size) do |image_batch|
       image_batch.pluck(:id, :binary_matrix).each do |id, binary_matrix|
         # check timed out
         if Process.clock_gettime(Process::CLOCK_MONOTONIC) - start >= timeout
@@ -70,7 +63,7 @@ module ApplicationHelper
   def filter_hash h, opts={}
     max_val = opts[:max_val] || 100
     min_size = opts[:min_size] || 5
-    filtered = h.filter { |id, val| val < max_val }
+    filtered = h.filter { |id, val| val <= max_val }
     if filtered.size < min_size
       filtered = h.min(min_size) { |(akey, aval), (bkey, bval)| aval <=> bval }.to_h
     end

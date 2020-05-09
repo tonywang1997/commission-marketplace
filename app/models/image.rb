@@ -25,6 +25,16 @@ class Image < ApplicationRecord
     where('price > ? and price < ?', price_range[0], price_range[1])
   end
 
+  def self.with_ids(exclude, ids)
+    if ids.nil? or ids.empty?
+      all
+    elsif exclude
+      where('images.id not in (?)', ids)
+    else
+      where('images.id in (?)', ids)
+    end
+  end
+
   def self.tags(*image_ids)
     tag_hash = {}
     if image_ids.any?
