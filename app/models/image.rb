@@ -26,7 +26,7 @@ class Image < ApplicationRecord
   end
 
   def self.with_ids(exclude, ids)
-    if ids.nil? or ids.empty?
+    if ids.nil? || (exclude && ids.empty?)
       all
     elsif exclude
       where('images.id not in (?)', ids)

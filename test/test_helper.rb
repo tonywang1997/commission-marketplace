@@ -15,35 +15,32 @@ end
 module ImageTestHelper
   def seed_test_images(num=10)
     Image.destroy_all
-    image_paths = Dir.glob('app/assets/images/**/*.png').sample(num)
-    images_cols = [:id, :price, :date, :binary_matrix]
+    images_cols = [:id, :price, :date, :binary_matrix, :analyzed]
 
-    image_paths.each do |path|
-      image_info = Img.new(path).to_matrix
+    num.times do
       price = rand(50000) / 100.0
-      price = 5.0 if File.basename(path) == 'anime_and_manga_15.png'
       image = Image.new({
         price: price,
         date: Time.at(Time.now.to_f * rand).to_date,
-        binary_matrix: MessagePack.pack(Img.sample(image_info[:matrix], 128)),
-        r_hist: MessagePack.pack(image_info[:rHist]),
-        b_hist: MessagePack.pack(image_info[:bHist]),
-        g_hist: MessagePack.pack(image_info[:gHist]),
-        color_var: MessagePack.pack(image_info[:colarVar]),
-        analyzed: true,
+        binary_matrix: MessagePack.pack(create_matrix),
+        analyzed: (rand(5) >= 3) ? false : true,
       })
-      image.file.attach({
-        io: File.open(path),
-        filename: File.basename(path),
-        content_type: 'image/png',
-      })
-      if not image.file.attached?
-        puts "ERROR: Failed to attach image #{File.basename(path)}"
-      elsif not image.save
-        puts "ERROR: Failed to save image #{File.basename(path)}"
-        image.file.purge
+      if not image.save
+        puts "ERROR: Failed to save test image."
       end
     end
+  end
+
+  def create_matrix(dim=128)
+    matrix = []
+    dim.times do
+      row = []
+      dim.times do
+        row.push(rand(1000))
+      end
+      matrix.push(row)
+    end
+    matrix
   end
 end
 

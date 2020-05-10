@@ -1,6 +1,9 @@
 module ApplicationHelper
   # given a search string, parse into tags and price range
   def parse_search_string search
+    if search.nil? or search.empty?
+      return {tags: [], price_range: []}
+    end
     price_range_regex = /\A\$?(\d*(?:\.\d*)?)-\$?(\d*(?:\.\d*)?)\Z/
     price_range = []
     tags = []
@@ -37,22 +40,22 @@ module ApplicationHelper
     
     start = Process.clock_gettime(Process::CLOCK_MONOTONIC)
     matrices = {}
-    Image.with_ids(exclude, ids).in_batches(of: batch_size) do |image_batch|
+    Image.with_ids(exclude, ids).where(analyzed: true).in_batches(of: batch_size) do |image_batch|
       image_batch.pluck(:id, :binary_matrix).each do |id, binary_matrix|
         # check timed out
         if Process.clock_gettime(Process::CLOCK_MONOTONIC) - start >= timeout
           return matrices
         end
         # unpack matrix
-        if binary_matrix
-          matrices[id] = MessagePack.unpack(binary_matrix)
-        end
+        matrices[id] = MessagePack.unpack(binary_matrix)
       end
     end
     matrices
   end
 
   def calc_similarities matrix_comp, matrices_db
+    raise "Comparison matrix should not be nil or empty" if (matrix_comp.nil? || matrix_comp.empty?)
+    raise "Matrices hash should not be nil" if matrices_db.nil?
     sim_sums = {}
     matrices_db.each do |id_db, matrix_db|
       sim_sums[id_db] = Cv.new(matrix_db, matrix_comp).sim
@@ -61,6 +64,7 @@ module ApplicationHelper
   end
 
   def filter_hash h, opts={}
+    raise "Hash parameter in filter_hash should not be nil" if h.nil?
     max_val = opts[:max_val] || 100
     min_size = opts[:min_size] || 5
     filtered = h.filter { |id, val| val <= max_val }
@@ -71,6 +75,8 @@ module ApplicationHelper
   end
 
   def get_sorted_images sorter, attributes
+    raise "Sorter should not be nil or empty" if (sorter.nil? || sorter.empty?)
+    raise "Attributes list should not be nil or empty" if (attributes.nil? || attributes.empty?)
     Image.select(*attributes)
       .where('images.id IN (?)', sorter.keys)
       .sort do |a, b| 
