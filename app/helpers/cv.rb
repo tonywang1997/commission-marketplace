@@ -1,42 +1,78 @@
-class Cv
+require_relative 'img'
+require 'chunky_png'
+
+class CV
 	@matrix
 	@other
-	def initialize(matrix,other)
-		@matrix = matrix
-		@other = other
+	@hist1
+	@hist2
+	@var1
+	@var2
+	@dims1
+	@dims2
+	def initialize(img1,other)
+		@matrix = img1[:matrix]
+		@other = other[:matrix]
+		@hist1 = img1[:hist]
+		@hist2 = other[:hist]
+		@var1=img1[:colorVar]
+		@var2=other[:colorVar]
+		@dims1=img1[:size].to_f
+		@dims2=other[:size].to_f
 	end
 	
 	def sim
-		x=sample(@matrix)
-		y=sample(@other)
+		return Math.sqrt(histDiff+colorVar**2+gramDiff)
+	end
+	
+	def colorVar
+		v1 = @var1
+		v2 = @var2
+		x = v1.zip(v2).map{|x,y| (y-x)**2}	
+		return x.sum
+	end
+	
+	def histDiff
+		h1 = @hist1
+		h2 = @hist2
+		diff = 0
+		for i in 0..4
+			for j in 0..4
+				for k in 0..4
+					bucket1 = h1[i][j][k]
+					bucket2 = h2[i][j][k]
+					if bucket1+bucket2 != 0
+						diff += (bucket1-bucket2)**2/(bucket1+bucket2)
+					end
+					#print bucket1
+					#print ' '
+					#print bucket2
+					#puts ''
+				end
+			end
+		end
+		return diff
+	end
+	
+	def gramDiff
+		x=@matrix
+		y=@other
 		diff = 0
 		for i in 0..127
 			for j in 0..127
-				xrbg = [0, 0, 0]
-				yrbg = [0, 0, 0]
-				if x[i] and x[i][j]
-					xrbg = dot(x[i][j])
-				end
-				if y[i] and y[i][j]
-					yrbg = dot(y[i][j])
-				end
+				xrbg=to_rbg(x[i][j])
+				yrbg=to_rbg(y[i][j])
 				z=xrbg.zip(yrbg).map { |x, y| (y - x)**2 }
 				diff += z.sum
 			end
 		end
 		return diff
 	end
-	def sample(matrix)
-		sMatrix=matrix.sample(128)
-		asdf = []
-		sMatrix.each {|x| asdf << x.sample(128)}
-		return asdf
-	end
 	def to_rbg(input)
 		ret = []
-		ret << (input || 0)/(256**3)
-		ret << (input || 0)/(256**2)%256
-		ret << (input || 0)/256%256
+		ret << input/(256**3)
+		ret << input/(256**2)%256
+		ret << input/256%256
 		return ret
 	end
 	def dot(input)
@@ -44,45 +80,24 @@ class Cv
 		x.map{|x| x**2}
 		return x
 	end
-	def colorVar
-		x1=sample(@matrix)
-		x2=sample(@other)
-		y1=sample(@matrix.transpose)
-		y2=sample(@other.transpose)
-		x1Dist=x1.each_cons(2).map{|a,b| b-a}.sort!
-		x2Dist=x2.each_cons(2).map{|a,b| b-a}.sort!
-		y1Dist=y1.each_cons(2).map{|a,b| b-a}.sort!
-		y2Dist=y2.each_cons(2).map{|a,b| b-a}.sort!
-		
-		if x1Dist.length > x2Dist.length
-			while x1Dist.length > x2Dist.length do
-				x2Dist >> 0
-			end
-		elsif x2Dist > x1Dist.length
-			while x2Dist.length > x1Dist.length do
-				x1Dist >> 0
-			end
-		end
-		if y1Dist.length > y2Dist.length
-			while y1Dist.length > y2Dist.length do
-				y2Dist >> 0
-			end
-		elsif y2Dist > y1Dist.length
-			while y2Dist.length > y1Dist.length do
-				y1Dist >> 0
-			end
-		end
-		
-		xDif = x1Dist.zip(x2Dist).map{|x,y| (y-x)**2}
-		yDif = y1Dist.zip(y2Dist).map{|x,y| (y-x)**2}
-		tDist = 0
-		xDif.each{|x| tDist+=x}
-		yDif.each{|x| tDist+=x}
-		return tDist
-	end
+	#def subt(first, second)
+	#	x1 = to_rbg(first)
+	#	x2 = to_rbg(second)
+	#	totalDif = x1.zip(x2).map{|x,y| (y-x)**2}
+	#	return totalDif.sum
+	#end	
 end
-	
-	
+
+
+
+x= Img.new('asdf.png').to_matrix
+y=Img.new('pixel1.png').to_matrix
+z=CV.new(x,y)
+#puts Math.sqrt(z.gramDiff), 'gram'
+#puts Math.sqrt(z.colorVar), 'var'
+puts z.sim, 'hist'
+puts "finish"
+
 
 		
 		
