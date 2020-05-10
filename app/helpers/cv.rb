@@ -90,13 +90,13 @@ end
 
 
 
-x= Img.new('asdf.png').to_matrix
-y=Img.new('pixel1.png').to_matrix
-z=CV.new(x,y)
+#x= Img.new('asdf.png').to_matrix
+#y=Img.new('pixel1.png').to_matrix
+#z=CV.new(x,y)
 #puts Math.sqrt(z.gramDiff), 'gram'
 #puts Math.sqrt(z.colorVar), 'var'
-puts z.sim, 'hist'
-puts "finish"
+#puts z.sim, 'hist'
+#puts "finish"
 
 
 		
