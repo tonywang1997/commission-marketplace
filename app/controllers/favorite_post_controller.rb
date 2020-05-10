@@ -1,3 +1,0 @@
-class FavoritePostController < ApplicationController
-
-end

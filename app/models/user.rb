@@ -5,8 +5,7 @@ class User < ApplicationRecord
   }
 
   has_many :portfolios
-  has_many :favorite_posts
-  has_many :posts, through: :favorite_posts
+  has_many :posts
   
   # a user has one avatar image
   has_one_attached :avatar
