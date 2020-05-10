@@ -11,14 +11,24 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     @posts.save
   end
 
-
-  # test "get post title" do
-  #   x = @posts.title
-  #   assert_response :success
-  # end
-
   test "post title accuracy" do
     y = @posts.title
     assert_equal 'name', y
   end 
+
+  test "user id accuracy" do
+    x = @posts.user_id
+    assert_equal '3', x
+  end
+
+  test "user content accuracy" do
+    z = @posts.content
+    assert_equal 'things inside', z
+  end
+
+  test "user price accuracy" do
+    z = @posts.price
+    assert_equal '300', z
+  end
+  
 end
