@@ -2,6 +2,9 @@ class AnalyzeImagesJob < ApplicationJob
   queue_as :default
 
   def perform(image_ids, *args)
+    raise "Array of image IDs should not be nil" if image_ids.nil?
+    return if image_ids.empty?
+    
     images = Image.where('images.id IN (?)', image_ids).with_attached_file.all
     images.each do |image|
       if !image.analyzed and image.file.attached?

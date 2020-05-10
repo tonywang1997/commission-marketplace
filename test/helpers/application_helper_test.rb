@@ -216,7 +216,7 @@ class ApplicationHelperTest < ActionView::TestCase
 
   test "calc similarities empty matrices" do
     seed_test_images
-    id_comp = Image.all.sample.id
+    id_comp = Image.where(analyzed: true).sample.id
     matrix = get_matrices(ids: [id_comp])[id_comp]
     sim_sums = calc_similarities(matrix, {})
     assert_equal({}, sim_sums)

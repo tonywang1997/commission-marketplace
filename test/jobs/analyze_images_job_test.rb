@@ -4,7 +4,7 @@ class AnalyzeImagesJobTest < ActiveJob::TestCase
   test "works with empty image ids array" do
     begin
       AnalyzeImagesJob.perform_now([])
-    raise
+    rescue
       assert false, "Empty ids array should not raise exception"
     end
   end
