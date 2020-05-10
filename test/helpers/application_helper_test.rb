@@ -3,6 +3,16 @@ require 'test_helper'
 class ApplicationHelperTest < ActionView::TestCase
   # todo search string ignore punctuation?
 
+  test "parse search string empty" do
+    parsed = parse_search_string("")
+    assert_equal({tags: [], price_range: []}.sort, parsed.sort)
+  end
+
+  test "parse search string nil" do
+    parsed = parse_search_string(nil)
+    assert_equal({tags: [], price_range: []}.sort, parsed.sort)
+  end
+
   test "parse search string tags" do
     tags = "these are some basic tags"
     parsed = parse_search_string(tags)
@@ -76,9 +86,64 @@ class ApplicationHelperTest < ActionView::TestCase
     assert_equal [3, 5], parsed[:price_range]
   end
 
+  test "get matrices empty DB" do
+    Image.destroy_all
+    matrices = get_matrices
+    assert_equal({}, matrices)
+  end
+
+  test "get matrices include image that doesn't exist in DB" do
+    Image.destroy_all
+    matrices = get_matrices(exclude: false, ids: [1, 2, 3])
+    assert_equal({}, matrices)
+  end
+
+  test "get matrices exclude image that doesn't exist in DB" do
+    Image.destroy_all
+    matrices = get_matrices(exclude: true, ids: [1, 2, 3])
+    assert_equal({}, matrices)
+  end
+
+  test "get matrices include empty ids" do
+    seed_test_images
+    matrices = get_matrices(exclude: false, ids: [])
+    assert_equal({}, matrices)
+  end
+
+  test "get matrices exclude empty ids" do
+    seed_test_images
+    matrices = get_matrices(exclude: true, ids: [])
+    assert_equal Image.where(analyzed: true).pluck(:id).sort, matrices.keys.sort
+  end
+
+  test "get matrices include nil ids" do
+    seed_test_images
+    matrices = get_matrices(exclude: false)
+    assert_equal Image.where(analyzed: true).pluck(:id).sort, matrices.keys.sort
+  end
+
+  test "get matrices exclude nil ids" do
+    seed_test_images
+    matrices = get_matrices(exclude: true)
+    assert_equal Image.where(analyzed: true).pluck(:id).sort, matrices.keys.sort
+  end
+
+  test "get matrices incorrect parameters" do
+    seed_test_images
+    matrices = get_matrices(blah: 123, blahblah: "blah")
+    assert_equal Image.where(analyzed: true).pluck(:id).sort, matrices.keys.sort
+  end
+
+  test "get matrices exclude is nil (should include by default)" do
+    seed_test_images
+    ids = Image.where(analyzed: true).sample(5).pluck(:id)
+    matrices = get_matrices(ids: ids)
+    assert_equal ids.sort, matrices.keys.sort
+  end
+
   test "get matrices exclude specified ids" do
     seed_test_images
-    all_ids = Image.all.where(analyzed: true).pluck(:id)
+    all_ids = Image.where(analyzed: true).pluck(:id)
     ids = Image.all.sample(5).pluck(:id)
     matrices = get_matrices(exclude: true, ids: ids)
     assert_equal (all_ids - ids).sort, matrices.keys.sort
@@ -127,6 +192,66 @@ class ApplicationHelperTest < ActionView::TestCase
     assert is_int
   end
 
+  test "calc similarities empty comparison matrix" do
+    seed_test_images
+    matrices = get_matrices
+
+    begin
+      sim_sums = calc_similarities([], matrices)
+      assert false, "Should raise exception with empty comparison matrix"
+    rescue
+    end
+  end
+
+  test "calc similarities nil comparison matrix" do
+    seed_test_images
+    matrices = get_matrices
+
+    begin
+      sim_sums = calc_similarities(nil, matrices)
+      assert false, "Should raise exception with nil comparison matrix"
+    rescue
+    end
+  end
+
+  test "calc similarities empty matrices" do
+    seed_test_images
+    id_comp = Image.all.sample.id
+    matrix = get_matrices(ids: [id_comp])[id_comp]
+    sim_sums = calc_similarities(matrix, {})
+    assert_equal({}, sim_sums)
+  end
+
+  test "calc similarities nil matrices" do
+    seed_test_images
+    id_comp = Image.all.sample.id
+    matrix = get_matrices(ids: [id_comp])[id_comp]
+    begin
+      sim_sums = calc_similarities(matrix, nil)
+      assert false, "Should raise exception with nil matrices"
+    rescue
+    end
+  end
+
+  test "filter hash with empty hash" do
+    filtered = filter_hash({})
+    assert_equal({}, filtered)
+  end
+
+  test "filter hash with nil hash" do
+    begin
+      filtered = filter_hash(nil)
+      assert false, "Passing nil hash into filter_hash should raise exception"
+    rescue
+    end
+  end
+
+  test "filter hash with min size > hash size" do
+    h = {a: 1, b: 2, c: 3}
+    filtered = filter_hash(h, min_size: 10)
+    assert_equal h.sort, filtered.sort
+  end
+
   test "filter hash works with default values" do
     h = {}
     (0..500).to_a.each { |int| h[int] = int }
@@ -161,10 +286,52 @@ class ApplicationHelperTest < ActionView::TestCase
     assert_equal expected_h.sort, filtered.sort
   end
 
+  test "get sorted images raises exception with empty attributes" do
+    seed_test_images
+    sorter = {}
+    ids = Image.where(analyzed: true).all.sample(5).pluck(:id)
+    ids.each { |id| sorter[id] = 0 }
+    begin
+      images = get_sorted_images sorter, []
+      assert false, "Should raise exception with empty attributes list"
+    rescue
+    end
+  end
+
+  test "get sorted images raises exception with nil attributes" do
+    seed_test_images
+    sorter = {}
+    ids = Image.where(analyzed: true).all.sample(5).pluck(:id)
+    ids.each { |id| sorter[id] = 0 }
+    begin
+      images = get_sorted_images sorter, nil
+      assert false, "Should raise exception with nil attributes list"
+    rescue
+    end
+  end
+
+  test "get sorted images raises exception with empty sorter" do
+    seed_test_images
+    sorter = {}
+    begin
+      images = get_sorted_images, sorter, [:id]
+      assert false, "Should raise exception with empty sorter"
+    rescue
+    end
+  end
+
+  test "get sorted images raises exception with nil sorter" do
+    begin
+      images = get_sorted_images, nil, [:id]
+      assert false, "Should raise exception with nil sorter"
+    rescue
+    end
+  end
+
   test "get sorted images gets correct images" do
     seed_test_images
     sorter = {}
-    ids = Image.all.sample(5).pluck(:id)
+    ids = Image.where(analyzed: true).all.sample(5).pluck(:id)
     ids.each { |id| sorter[id] = 0 }
     images = get_sorted_images sorter, [:id]
     images.each do |image|
@@ -186,12 +353,12 @@ class ApplicationHelperTest < ActionView::TestCase
         image.price
         image.analyzed
       rescue
-        assert false
+        assert false, "Should not throw error"
       end
 
       begin
         image.date
-        assert false
+        assert false, "Should throw error since 'date' is not an included attribute"
       rescue
       end
     end
