@@ -1,7 +1,7 @@
 <h1> Favorites </h1>
 
 <div class="bounty-board">
-  <% current_user.favorites.each do |postie| %>
+  <% current_user.favorites.each do |postie|%>
     <%= post = postie.post%>
     <div class="bounty-board navbar-padding" id="post-<%= post.id %>"></div>
     <div class="bounty-board bg-image">
