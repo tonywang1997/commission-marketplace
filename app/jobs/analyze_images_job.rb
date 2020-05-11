@@ -10,11 +10,11 @@ class AnalyzeImagesJob < ApplicationJob
       if !image.analyzed and image.file.attached?
         image.file.open do |file|
           image_info = Img.new(file).to_matrix
+          # todo put all this into a helper
           image.binary_matrix = MessagePack.pack(Img.sample(image_info[:matrix], 128))
-          image.r_hist = MessagePack.pack(image_info[:rHist])
-          image.b_hist = MessagePack.pack(image_info[:bHist])
-          image.g_hist = MessagePack.pack(image_info[:gHist])
+          image.binary_hist = MessagePack.pack(image_info[:hist])
           image.color_var = MessagePack.pack(image_info[:colorVar])
+          image.size = image_info[:size]
           image.analyzed = true
           if image.save
             puts '*****'
