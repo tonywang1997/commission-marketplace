@@ -30,7 +30,7 @@ module SessionsHelper
 
   def logged_in_actions
     return {
-      posts: [:new, :edit, :create],
+      posts: [:new, :edit, :create, :fav],
       users: [:edit, :update, :dashboard],
       portfolios: [:new, :edit, :create],
     }

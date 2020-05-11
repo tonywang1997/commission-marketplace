@@ -16,7 +16,7 @@
       <% end %>
         <%= form_with(url: root_path, remote: true, class: 'w-100') do |f| %>
           <%= f.hidden_field(:sim_sort, value: img[:id], id: "sim_sort_#{img[:id]}") %>
-          <%= f.button(:button, class: 'btn dark-btn w-100') do %>
+          <%= f.button(:button, class: "btn dark-btn w-100 #{'disabled' if !img.analyzed}", disabled: ('disabled' if !img.analyzed)) do %>
             <i class="material-icons md-18">search</i><span>Find similar images</span>
           <% end %>
         <% end %>

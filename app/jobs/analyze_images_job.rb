@@ -11,7 +11,7 @@ class AnalyzeImagesJob < ApplicationJob
         image.file.open do |file|
           image_info = Img.new(file).to_matrix
           # todo put all this into a helper
-          image.binary_matrix = MessagePack.pack(Img.sample(image_info[:matrix], 128))
+          image.binary_matrix = MessagePack.pack(Cv.dot_matrix(Img.sample(image_info[:matrix], 128)))
           image.binary_hist = MessagePack.pack(image_info[:hist])
           image.color_var = MessagePack.pack(image_info[:colorVar])
           image.size = image_info[:size]

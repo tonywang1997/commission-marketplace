@@ -60,25 +60,45 @@ class Cv
 		diff = 0
 		for i in 0..127
 			for j in 0..127
-				xrbg=to_rbg(x[i].nil? ? 0 : x[i][j])
-				yrbg=to_rbg(y[i].nil? ? 0 : y[i][j])
+				xrbg = [0, 0, 0]
+				if !(x[i].nil? || x[i][j].nil?)
+					xrbg = x[i][j]
+				end
+
+				yrbg = [0, 0, 0]
+				if !(y[i].nil? || y[i][j].nil?)
+					yrbg = y[i][j]
+				end
+				
 				z=xrbg.zip(yrbg).map { |x, y| (y - x)**2 }
 				diff += z.sum
 			end
 		end
 		return diff
 	end
-	def to_rbg(input)
+	def self.to_rbg(input)
 		ret = []
 		ret << (input || 0)/(256**3)
 		ret << (input || 0)/(256**2)%256
 		ret << (input || 0)/256%256
 		return ret
 	end
-	def dot(input)
+	def self.dot(input)
 		x=to_rbg(input)
 		x.map{|x| x**2}
 		return x
+	end
+
+	def self.dot_matrix(matrix)
+		dotted_matrix = []
+		matrix.each do |row|
+			dotted_row = []
+			row.each do |elt|
+				dotted_row.push(dot(elt))
+			end
+			dotted_matrix.push(dotted_row)
+		end
+		dotted_matrix
 	end
 	#def subt(first, second)
 	#	x1 = to_rbg(first)

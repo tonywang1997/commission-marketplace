@@ -60,7 +60,7 @@ Benchmark.bm(30) do |bm|
       image = Image.new({
         price: price,
         date: Time.at(Time.now.to_f * rand).to_date,
-        binary_matrix: MessagePack.pack(Img.sample(image_info[:matrix], 128)),
+        binary_matrix: MessagePack.pack(Cv.dot_matrix(Img.sample(image_info[:matrix], 128))),
         binary_hist: MessagePack.pack(image_info[:hist]),
         color_var: MessagePack.pack(image_info[:colorVar]),
         size: image_info[:size],

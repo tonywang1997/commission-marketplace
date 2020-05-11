@@ -17,7 +17,7 @@ class ApplicationController < ActionController::Base
       id_comp = @sim_sort.to_i
       matrices = get_matrices(batch_size: 50, timeout: 15)
       matrix_comp = matrices.delete(id_comp)
-      # todo handle properly and disable button
+      # todo handle properly (flash?)
       raise "Failed to retrieve comparison matrix!" unless matrix_comp
       if matrix_comp
         sim_sums = calc_similarities(matrix_comp, matrices) # for each image, calculate its sim with comparison image and sum
@@ -31,7 +31,7 @@ class ApplicationController < ActionController::Base
       @images = Image.in_price_range(@price_range).tagged(@tags).order(@sort => @dir).with_attached_file
     end
 
-    @hidden_images = Image.select(:id, :price, :date).where('images.id NOT IN (?)', @images.pluck(:id)).with_attached_file
+    @hidden_images = Image.select(:id, :price, :date, :analyzed).where('images.id NOT IN (?)', @images.pluck(:id)).with_attached_file
 
     respond_to do |format|
       format.html

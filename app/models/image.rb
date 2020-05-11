@@ -10,11 +10,11 @@ class Image < ApplicationRecord
       return all
     end
     # select(:id).joins(:portfolios => :tags).where("tags.tag_name IN (?)", tags).distinct.group(:id).having('count(*) = ?', tags.count)
-    select(:id, :price, :date).from(Image.joins(:portfolios => :tags).
+    select(:id, :price, :date, :analyzed).from(Image.joins(:portfolios => :tags).
       where("tags.tag_name IN (?)", tags).
       select('"tags"."tag_name", images.id, images.price, images.date').
       distinct, :images).
-    group(:id, :price, :date).
+    group(:id, :price, :date, :analyzed).
     having('count(*) = ?', tags.count)
   end
 

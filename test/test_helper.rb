@@ -37,7 +37,11 @@ module ImageTestHelper
     dim.times do
       row = []
       dim.times do
-        row.push(rand(1000))
+        color = []
+        3.times do
+          color.push(rand(255))
+        end
+        row.push(color)
       end
       matrix.push(row)
     end
