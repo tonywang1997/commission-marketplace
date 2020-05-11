@@ -26,12 +26,13 @@ Rails.application.routes.draw do
   get '/post', to: 'posts#index'
 
   resources :favorites
-  get '/favorite', to: 'favorite#index'
+  get '/favorite', to: 'posts#fav'
 
   resources :messages, only: [:index, :new, :create]
   get '/conversation', to: 'messages#index'
 
   mount ActionCable.server, at: '/cable'
+
 
   resources :images do
     put :favorite, on: :member

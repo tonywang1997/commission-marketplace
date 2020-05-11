@@ -28,6 +28,10 @@ class PostsController < ApplicationController
     @roles = roles_to_hash(@post.roles)
   end
 
+  def showfav
+    @favorite_exists = Favorite.where(post: @post, user: current_user) == [] ? false : true
+  end
+
   def edit
   end
 

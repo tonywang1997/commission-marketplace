@@ -19,7 +19,7 @@
               <%= number_to_currency(post[:price]) %>
             </h3>
           </div>
-          <%= link_to favorite_text, favorites_update_path(post: post), id:'favorite_link' %>
+          <%= link_to favorite_text, favorites_update_path(post: post), id:'favorite_link', remote: true %>
           <button class="bounty-board fav-btn btn">
             <%= material_icon.favorite_border %>
           </button>

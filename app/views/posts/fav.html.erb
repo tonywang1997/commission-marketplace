@@ -1,0 +1,55 @@
+<h1> Favorites </h1>
+
+<div class="bounty-board">
+  <% current_user.favorites.each do |postie| %>
+    <%= post = postie.post%>
+    <div class="bounty-board navbar-padding" id="post-<%= post.id %>"></div>
+    <div class="bounty-board bg-image">
+      <div class="bounty-board container yellow px-4 px-md-5 py-3 my-4">
+        <div class="bounty-board headline">
+          <h3 class="bounty-board title">
+            <%= link_to post.title, post, class: 'bounty-board' %>
+          </h3>
+          <div class="bounty-board price">
+            <h3 class="bounty-board">
+              <%= number_to_currency(post[:price]) %>
+            </h3>
+          </div>
+          <%= link_to favorite_text, favorites_update_path(post: post), id:'favorite_link', remote: true %>
+          <button class="bounty-board fav-btn btn">
+            <%= material_icon.favorite_border %>
+          </button>
+        </div>
+        <p class="bounty-board by">posted by <%= link_to post.user.user_name, "/storefront?user_id=#{post.user.id}", class: 'bounty-board', data: {turbolinks: "false"} %> on <%= post.created_at.to_date.to_s %></p>
+        <p class="bounty-board content truncate mb-2"><%= post.content %></p>
+        <!-- roles -->
+        <% roles = roles_to_hash(post.roles) %>
+        <div class="d-flex flex-row flex-wrap mx-n2">
+          <% roles.keys.sort.each do |category| %>
+            <div class="bounty-board role">
+              <div class="mx-1 mt-1 d-inline-block">
+                <%= get_icon category %>
+              </div>
+              <p class="my-0 mt-0 mx-1">
+                <%= link_to(pluralize(roles[category].count, category), "#{post_path(post)}##{category}", class: 'bounty-board') %>
+              </p>
+            </div>
+          <% end %>
+        </div>
+        <!-- todo tags, use this later when we have bb searching implemented -->
+        <% if false %>
+        <p class="bounty-board tags">
+          <% tags = post.tags.pluck(:id, :tag_name).sort %>
+          <% tags.each_with_index do |tag_info, idx| %>
+            <% if idx < tags.size - 1 %>
+              <%= link_to "#{tag_info[1]}, ", tag_path(tag_info[0]), class: 'bounty-board' %>
+            <% else %>
+              <%= link_to "#{tag_info[1]}", tag_path(tag_info[0]), class: 'bounty-board' %>
+            <% end %>
+          <% end %>
+        </p>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>
