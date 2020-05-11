@@ -5,8 +5,8 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     @posts = Post.new(
       title: 'name',
       content: 'things inside',
-      user_id: '3',
-      price: '100'
+      user_id: 3,
+      price: 100,
     )
     @posts.save
   end
@@ -18,7 +18,7 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
 
   test "user id accuracy" do
     x = @posts.user_id
-    assert_equal '3', x
+    assert_equal 3, x
   end
 
   test "user content accuracy" do
@@ -28,7 +28,7 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
 
   test "user price accuracy" do
     z = @posts.price
-    assert_equal '300', z
+    assert_equal 100, z
   end
   
 end

@@ -53,8 +53,6 @@ Benchmark.bm(30) do |bm|
 
   bm.report("Create images, attach files:") do
     image_paths = Dir.glob('app/assets/images/**/*.png')
-    images_cols = [:id, :price, :date, :binary_matrix]
-
     image_paths.each do |path|
       image_info = Img.new(path).to_matrix
       price = rand(50000) / 100.0
@@ -63,10 +61,9 @@ Benchmark.bm(30) do |bm|
         price: price,
         date: Time.at(Time.now.to_f * rand).to_date,
         binary_matrix: MessagePack.pack(Img.sample(image_info[:matrix], 128)),
-        r_hist: MessagePack.pack(image_info[:rHist]),
-        b_hist: MessagePack.pack(image_info[:bHist]),
-        g_hist: MessagePack.pack(image_info[:gHist]),
-        color_var: MessagePack.pack(image_info[:colarVar]),
+        binary_hist: MessagePack.pack(image_info[:hist]),
+        color_var: MessagePack.pack(image_info[:colorVar]),
+        size: image_info[:size],
         analyzed: true,
       })
       image.file.attach({

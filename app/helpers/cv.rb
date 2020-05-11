@@ -1,7 +1,7 @@
 require_relative 'img'
 require 'chunky_png'
 
-class CV
+class Cv
 	@matrix
 	@other
 	@hist1
@@ -28,7 +28,7 @@ class CV
 	def colorVar
 		v1 = @var1
 		v2 = @var2
-		x = v1.zip(v2).map{|x,y| (y-x)**2}	
+		x = v1.zip(v2).map{|x,y| ((y || 0)-(x || 0))**2}	
 		return x.sum
 	end
 	
@@ -60,8 +60,8 @@ class CV
 		diff = 0
 		for i in 0..127
 			for j in 0..127
-				xrbg=to_rbg(x[i][j])
-				yrbg=to_rbg(y[i][j])
+				xrbg=to_rbg(x[i].nil? ? 0 : x[i][j])
+				yrbg=to_rbg(y[i].nil? ? 0 : y[i][j])
 				z=xrbg.zip(yrbg).map { |x, y| (y - x)**2 }
 				diff += z.sum
 			end
@@ -70,9 +70,9 @@ class CV
 	end
 	def to_rbg(input)
 		ret = []
-		ret << input/(256**3)
-		ret << input/(256**2)%256
-		ret << input/256%256
+		ret << (input || 0)/(256**3)
+		ret << (input || 0)/(256**2)%256
+		ret << (input || 0)/256%256
 		return ret
 	end
 	def dot(input)

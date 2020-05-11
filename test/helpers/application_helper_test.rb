@@ -163,17 +163,18 @@ class ApplicationHelperTest < ActionView::TestCase
     assert_equal ids.sort, matrices.keys.sort
   end
 
-  test "get matrices all values are 3d arrays" do
+  test "get matrices returns expected format" do
     seed_test_images
     Image.create # create blank image; should not exist in matrices
     matrices = get_matrices
-    is_2d_array = true
+    is_correct_format = true
     matrices.each do |id, matrix|
-      is_2d_array = false unless !matrix.nil? and matrix.class == Array and 
-        matrix[0].class == Array and matrix[0][0].class == Integer
-      break unless is_2d_array
+      is_correct_format = false unless !matrix.nil? and matrix.class == Hash and 
+        matrix[:matrix].class == Array and matrix[:hist].class == Array and
+        matrix[:colorVar].class == Array and matrix[:size].class == Integer
+      break unless is_correct_format
     end
-    assert is_2d_array
+    assert is_correct_format, "get_matrices returned incorrect format"
   end
 
   test "calc similarities returns expected format" do
@@ -186,7 +187,7 @@ class ApplicationHelperTest < ActionView::TestCase
     assert_equal sim_sums.keys.sort, matrices.keys.sort
     is_int = true
     sim_sums.each do |id, sim|
-      is_int = false unless sim.class == Integer
+      is_int = false unless (sim.class == Float || sim.class == Integer)
       break unless is_int
     end
     assert is_int

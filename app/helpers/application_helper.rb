@@ -41,13 +41,18 @@ module ApplicationHelper
     start = Process.clock_gettime(Process::CLOCK_MONOTONIC)
     matrices = {}
     Image.with_ids(exclude, ids).where(analyzed: true).in_batches(of: batch_size) do |image_batch|
-      image_batch.pluck(:id, :binary_matrix).each do |id, binary_matrix|
+      image_batch.pluck(:id, :binary_matrix, :binary_hist, :color_var, :size).each do |id, binary_matrix, binary_hist, color_var, size|
         # check timed out
         if Process.clock_gettime(Process::CLOCK_MONOTONIC) - start >= timeout
           return matrices
         end
-        # unpack matrix
-        matrices[id] = MessagePack.unpack(binary_matrix)
+        # unpack matrix, hist, and color_var
+        matrices[id] = {
+          matrix: MessagePack.unpack(binary_matrix),
+          hist: MessagePack.unpack(binary_hist),
+          colorVar: MessagePack.unpack(color_var),
+          size: size,
+        }
       end
     end
     matrices
