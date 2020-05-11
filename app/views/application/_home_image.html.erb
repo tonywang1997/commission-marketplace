@@ -14,7 +14,7 @@
       <%= link_to(@image_portfolios[img[:id]] ? portfolio_path(@image_portfolios[img[:id]].first, img_id: img[:id]) : '#', class: 'w-100 h-100') do %>
         <%= simple_format("#{number_to_currency(img[:price])}\n#{img[:date]}\n#{@image_tags[img[:id]] ? @image_tags[img[:id]].join(', ') : 'No tags found.'}") %>
       <% end %>
-        <%= form_with(url: root_path, remote: true, class: 'w-100') do |f| %>
+        <%= form_with(url: root_path, method: :get, remote: true, class: 'w-100') do |f| %>
           <%= f.hidden_field(:sim_sort, value: img[:id], id: "sim_sort_#{img[:id]}") %>
           <%= f.button(:button, class: "btn dark-btn w-100 #{'disabled' if !img.analyzed}", disabled: ('disabled' if !img.analyzed)) do %>
             <i class="material-icons md-18">search</i><span>Find similar images</span>
