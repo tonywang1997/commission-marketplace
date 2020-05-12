@@ -117,7 +117,7 @@ window.addEventListener("turbolinks:load", function() {
   }
 
   window.applySortButtonFuncs = function() {
-    $('input[type=radio].submit-form').on('click', function(e) {
+    $('input[type=radio].submit-form').on('change', function(e) {
       $(this).parent().siblings().removeClass('active');
       $(this).parent().addClass('active');
       if (Rails.fire($(this).closest('form')[0], 'submit')) {
@@ -132,6 +132,20 @@ window.addEventListener("turbolinks:load", function() {
         $('.m-sort-dir').removeAttr('disabled');
       }
     });
+
+    // clear search button
+    if (!$._data($('#clear-btn').get(0), 'events')) {
+      $('#clear-btn').on('click', function () {
+        $('#sort-select').val('none');
+        $('.search-bar input[type="text"]').val('')
+        Turbolinks.clearCache();
+        if ($('#sortByNone').parent().hasClass('active')) {
+          $('#sortByNone').change();
+        } else {
+          $('#sortByNone').click();
+        }
+      });
+    }
   }
 
   window.orderImages();
