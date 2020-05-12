@@ -67,15 +67,12 @@ input[type=submit] {
   float: left;
 }
 
-.price_range {
+.price {
   display: flex;
-  width: 50%;
-  .price_low {
-    margin-right: 10px;
-  }
-  .price_high {
-    margin-left: 10px;
-  }
+}
+
+.price-input {
+  height: 30px;
 }
 
 .range_sign {

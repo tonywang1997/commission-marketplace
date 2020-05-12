@@ -1,9 +1,6 @@
 <ul class="navbar-nav text-nowrap flex-row">
   <li class="nav-item mx-2 mx-sm-0"><%= link_to 'Comm. Market', root_url, class: 'nav-link btn-block', data: {turbolinks: "false"} %></li>
   <li class="nav-item mx-2 mx-sm-0"><%= link_to 'Bounty Board', posts_path, class: 'nav-link btn-block' %></li>
-  <% if logged_in? %>
-    <li class="nav-item mx-2 mx-sm-0"><%= link_to 'Favorite Posts', posts_fav_path, class: 'nav-link btn-block' %></li>
-  <% end %>
 </ul>
 
 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContents" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">

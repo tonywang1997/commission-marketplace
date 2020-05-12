@@ -40,10 +40,21 @@ $(document).on("change", "#img-input", function(event) {
 
       // price div
       var price_div = document.createElement('div')
-      price_div.setAttribute("class", "price_low")
+      price_div.setAttribute("class", "price")
+      price_div.innerHTML = 
+      `<div class="input-group-prepend">
+          <div class="dark-input-group-text 
+               input-group-text px-2" 
+               style="cursor:pointer;">
+            <i class="material-icons"> \
+              monetization_on\
+            </i>\
+          </div>
+        </div>`
       var price_input = document.createElement('input');
       price_input.setAttribute("name", "img-"+i+"-price");
       price_input.setAttribute("placeholder", "100.00");
+      price_input.setAttribute("class", "form-control mb-0");
       price_div.appendChild(price_input);
 
 
