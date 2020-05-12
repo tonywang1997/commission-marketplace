@@ -5,11 +5,6 @@ class TagsControllerTest < ActionDispatch::IntegrationTest
     @tag = tags(:one)
   end
 
-  test "should get index" do
-    get tags_url
-    assert_response :success
-  end
-
   test "should get new" do
     get new_tag_url
     assert_response :success

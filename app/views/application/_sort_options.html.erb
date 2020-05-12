@@ -44,9 +44,9 @@
     <% end %>
   </div>
 
-  <div class="pl-1 d-flex align-items-center w-100">
-    <%= f.text_field :search, class: 'dark-text-input search-input form-control mb-0 h-100 w-100', value: @search, placeholder: "Search (eg, 'full-body sketch $20-30')" %>
-    <div class="search-btn">
+  <div class="px-1 d-flex align-items-center w-100">
+    <div class="search-bar">
+      <%= f.text_field :search, class: 'dark-text-input search-input form-control mb-0 h-100 w-100', value: @search, placeholder: "Search (eg, 'full-body sketch $20-30')" %>
       <!-- todo upload image for similarity sort: disabled due to heroku timeout -->
       <% if false %>
       <%= f.file_field :files, 
@@ -57,10 +57,16 @@
         <%= material_icon.add_a_photo %>
       <% end %>
       <% end %>
+
       <%= f.button :submit, class: 'btn form-control text-light w-auto px-1 mr-1' do %>
-          <%= material_icon.search %>
+        <%= material_icon.search %>
       <% end %>
     </div>
+  </div>
+  <div class="pl-1">
+    <%= f.button(name: :clear, type: :button, id: 'clear-btn', class: 'px-2 btn form-control btn-secondary w-auto') do %>
+      <%= material_icon.clear %>
+    <% end %>
   </div>
 
 <% end %>
