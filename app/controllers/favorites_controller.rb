@@ -3,19 +3,17 @@ class FavoritesController < ApplicationController
     fave = Favorite.where(post: Post.find(params[:post]), user: current_user)
     if fave == [] 
       begin
+        # when the current_user == nil, create will fail
         Favorite.create!(post: Post.find(params[:post]), user: current_user)
         @favorite_exists = true
       rescue
-        render "Failed to favorite the post", :status => 500
+        respond_to do |format|
+          format.js { flash.now[:notice] = "Failed to favorite. Please Log in!" }
+        end
       end
     else
       fave.destroy_all
       @favorite_exists = false
-    end
-
-    respond_to do |format|
-      format.html {}
-      format.js {}
     end
   end
 

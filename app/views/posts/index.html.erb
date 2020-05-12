@@ -21,11 +21,11 @@
           </div>
           <button class="bounty-board fav-btn btn">
             <%= link_to favorites_update_path(post: post), 
-              id:'favorite_link', remote: true do %>
+                remote: true do %>
               <% if current_user != nil and post.fave_exists?(current_user.id) %>
-                <%= material_icon.favorite %>
+                <i class="material-icons favorite_link">favorite</i>
               <% else %>
-                <%= material_icon.favorite_border %>
+                <i class="material-icons favorite_link">favorite_border</i>
               <% end %>
             <% end %>
           </button>
