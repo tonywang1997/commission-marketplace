@@ -52,7 +52,7 @@ Benchmark.bm(30) do |bm|
   end
 
   bm.report("Create images, attach files:") do
-    image_paths = Dir.glob('app/assets/images/**/*.png')
+    image_paths = Dir.glob('app/assets/seed_images/**/*.png')
     image_paths.each do |path|
       image_info = Img.new(path).to_matrix
       price = rand(50000) / 100.0
