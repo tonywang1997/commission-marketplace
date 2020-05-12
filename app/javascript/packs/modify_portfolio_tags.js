@@ -177,18 +177,7 @@ function autocomplete(inp, arr) {
   });
 }
 
-/*$(document).ready(function(){
-  console.log("add autocomplete to tag input");
-  var tag_inputs = document.getElementsByClassName("tag-input");
-
-  for (i = 0; i < tag_inputs.length; i++) {
-    autocomplete(tag_inputs[i], tags);
-  }
-  $('.carousel').carousel('pause');
-});*/
-
 $(document).on('turbolinks:load', function () {
-  console.log("add autocomplete to tag input");
   var tag_inputs = document.getElementsByClassName("tag-input");
 
   for (i = 0; i < tag_inputs.length; i++) {

@@ -63,6 +63,19 @@ document.addEventListener("turbolinks:load", function() {
   disableRemoveIfNecessary();
   $('.removeRole').on('click', removeRole);
   //new post button at top
+
+  // toggle favorite icon
+  $('#favorite_link').on("click", function () {
+    console.log("click on favorite");
+    var fav_icon = $(this).find('i')[0]; 
+    console.log(fav_icon.innerHTML);
+    if (fav_icon.innerHTML == "favorite") {
+      fav_icon.innerHTML = "favorite_border"
+    } else {
+      fav_icon.innerHTML = "favorite"
+    }
+   });
+
 });
 
 window.addEventListener("turbolinks:load", function() {

@@ -19,9 +19,15 @@
               <%= number_to_currency(post[:price]) %>
             </h3>
           </div>
-          <%= link_to favorite_text, favorites_update_path(post: post), id:'favorite_link', remote: true %>
           <button class="bounty-board fav-btn btn">
-            <%= material_icon.favorite_border %>
+            <%= link_to favorites_update_path(post: post), 
+              id:'favorite_link', remote: true do %>
+              <% if current_user != nil and post.fave_exists?(current_user.id) %>
+                <%= material_icon.favorite %>
+              <% else %>
+                <%= material_icon.favorite_border %>
+              <% end %>
+            <% end %>
           </button>
         </div>
         <p class="bounty-board by">posted by <%= link_to post.user.user_name, "/storefront?user_id=#{post.user.id}", class: 'bounty-board', data: {turbolinks: "false"} %> on <%= post.created_at.to_date.to_s %></p>
