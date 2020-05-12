@@ -73,5 +73,5 @@ gem 'gravatar_image_tag'
 gem 'bootstrap4-datetime-picker-rails'
 
 gem 'devise', '~> 4.4', '>= 4.4.3'
-gem 'simple_form', '~> 4.0', '>= 4.0.1'
+gem 'simple_form', '~> 5.0'
 gem 'redis', '3.3.1'
