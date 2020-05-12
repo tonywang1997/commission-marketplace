@@ -68,7 +68,6 @@ document.addEventListener("turbolinks:load", function() {
   $('.favorite_link').on("click", function () {
     // var fav_icon = $(this).find('i')[0]; 
     var fav_icon = $(this)[0];
-    console.log(fav_icon);
     if (fav_icon.innerHTML == "favorite") {
       fav_icon.innerHTML = "favorite_border"
     } else {
