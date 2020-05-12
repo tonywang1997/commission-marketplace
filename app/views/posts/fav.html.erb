@@ -2,7 +2,7 @@
 
 <div class="bounty-board">
   <% current_user.favorites.each do |postie|%>
-    <%= post = postie.post%>
+    <% post = postie.post%>
     <div class="bounty-board navbar-padding" id="post-<%= post.id %>"></div>
     <div class="bounty-board bg-image">
       <div class="bounty-board container yellow px-4 px-md-5 py-3 my-4">
