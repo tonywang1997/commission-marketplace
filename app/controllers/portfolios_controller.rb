@@ -30,10 +30,6 @@ class PortfoliosController < ApplicationController
     end
   end
 
-  def fav
-    @favorite.exists = Favorite.where(post: @post, user: current_user) == [] ? false : true
-  end
-
   # GET /submit
   def new
     @portfolio = Portfolio.new

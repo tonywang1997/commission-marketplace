@@ -30,15 +30,12 @@
         </div>
         <div class="email">
           <%= @user.email_address %>
-          <button class="storefront-button">
-            <img src="/store-solid.svg">
-            <a href='<%= "/storefront?user_id=#{@user.id}"%>' 
-              style="margin-left:10px;" data-turbolinks="false">see my storefront</a> 
-          </button>
-          
         </div>
         <div class="bio">
-          <p id="bio_text"><%= @user.biography %></p> 
+          <p id="bio_text">
+            <%= @user.biography == nil || @user.biography.empty? ? 
+            "The user doesn't have a biography yet." : @user.biography %>   
+          </p> 
           <%= link_to fa_icon("edit lg"), '#', class: "edit_bio",
             'data-toggle' => "modal", 'data-target' => "#bioModal",
             'onclick' => "bioDefaultValue()" %>

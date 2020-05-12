@@ -26,7 +26,7 @@ Rails.application.routes.draw do
   get '/post', to: 'posts#index'
 
   resources :favorites
-  get '/favorite', to: 'posts#fav'
+  get '/favorite', to: 'posts#fav', as: :posts_fav
 
   resources :messages, only: [:index, :new, :create]
   get '/conversation', to: 'messages#index'
