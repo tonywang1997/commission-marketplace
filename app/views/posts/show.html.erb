@@ -50,9 +50,12 @@
 
 <div class="bounty-board footer mb-3">
   <%= link_to "<< Bounty Board", "#{posts_path}#post-#{@post.id}" %>
+  <!-- todo implement editing/deleting posts -->
+  <% if false %>
   <% if logged_in? and current_user.id == @post.user.id %>
     |<%= link_to " Edit ", edit_post_path(@post) %>
     |<%= link_to " Delete", post_path(@post), method: :delete, data: { confirm: "Are you sure you want to do this ?" } %>
+  <% end %>
   <% end %>
 </div>
 <!-- roles -->
