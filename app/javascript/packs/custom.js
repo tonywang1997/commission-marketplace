@@ -134,17 +134,19 @@ window.addEventListener("turbolinks:load", function() {
     });
 
     // clear search button
-    if (!$._data($('#clear-btn').get(0), 'events')) {
-      $('#clear-btn').on('click', function () {
-        $('#sort-select').val('none');
-        $('.search-bar input[type="text"]').val('')
-        Turbolinks.clearCache();
-        if ($('#sortByNone').parent().hasClass('active')) {
-          $('#sortByNone').change();
-        } else {
-          $('#sortByNone').click();
-        }
-      });
+    if ($('#clear-btn').length > 0) {
+      if (!$._data($('#clear-btn').get(0), 'events')) {
+        $('#clear-btn').on('click', function () {
+          $('#sort-select').val('none');
+          $('.search-bar input[type="text"]').val('')
+          Turbolinks.clearCache();
+          if ($('#sortByNone').parent().hasClass('active')) {
+            $('#sortByNone').change();
+          } else {
+            $('#sortByNone').click();
+          }
+        });
+      }
     }
   }
 
